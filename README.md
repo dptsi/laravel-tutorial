@@ -30,7 +30,10 @@
 ## Petunjuk
 
 1. *Fork* repository ini.
-2. *Edit* materi sesuai dengan pembagian dan menggunakan template yang telah disediakan.
+
+    ![fork](img/fork.png)
+
+2. Pada repository hasil fork lakukan perubahan sesuai dengan materi yang telah dibagi dan menggunakan template yang telah disediakan. Kemudian commit dan push.
     > Contoh struktur
 
     ```bash
@@ -43,4 +46,10 @@
         └── laravel-response.md
     ```
 
-3. Lakukan *Pull Request* sebelum presentasi.
+    ![fork](img/edit.png)
+
+3. Pada repository hasil fork lakukan *Pull Request* sebelum presentasi.
+
+    ![fork](img/pr-1.png)
+
+    ![fork](img/pr-2.png)
