@@ -29,7 +29,7 @@
 
 ## Petunjuk
 
-1. *Fork* repository ini.
+1. Fork repository ini.
 
     ![fork](img/fork.png)
 
