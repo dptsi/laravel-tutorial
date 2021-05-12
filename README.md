@@ -22,10 +22,10 @@
 
 ## Catatan
 
-- Pembagian kelompok dan materi dapat dilihat di [link ini](https://docs.google.com/spreadsheets/d/1veoJvnwTS8INEodXPWJ65GWscV7bupEIdI65GZVa6GU/edit?usp=sharing)
-- Jika 1 materi terdiri dari lebih dari 1 topik, buat markdown baru dengan sesuai dengan nama topik
-- Presentasi langsung menggunakan `readme.md` pada masing-masing materi
-- Cara pembuatan markdown dapat dilihat di [link ini](https://www.markdownguide.org/cheat-sheet/) atau [link ini](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+- Pembagian kelompok dan materi dapat dilihat di [link ini](https://docs.google.com/spreadsheets/d/1veoJvnwTS8INEodXPWJ65GWscV7bupEIdI65GZVa6GU/edit?usp=sharing).
+- Jika 1 materi terdiri dari lebih dari 1 topik, buat markdown baru dengan sesuai dengan nama topik.
+- Presentasi langsung menggunakan `readme.md` pada masing-masing materi.
+- Cara pembuatan markdown dapat dilihat di [link ini](https://www.markdownguide.org/cheat-sheet/) atau [link ini](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
 
 ## Petunjuk
 
@@ -34,18 +34,19 @@
     ![fork](img/fork.png)
 
 2. Pada repository hasil fork lakukan perubahan sesuai dengan materi yang telah dibagi dan menggunakan template yang telah disediakan. Kemudian commit dan push.
-    > Contoh struktur
+    - Contoh struktur
 
-    ```bash
-    .
-    └── Laravel-request-validation-and-response
-        ├── readme.md
-        ├── src
-        ├── laravel-request.md
-        ├── laravel-validation.md
-        └── laravel-response.md
-    ```
+        ```bash
+        .
+        └── Laravel-request-validation-and-response
+            ├── readme.md
+            ├── src
+            ├── laravel-request.md
+            ├── laravel-validation.md
+            └── laravel-response.md
+        ```
 
+    - Contoh perubahan
     ![fork](img/edit.png)
 
 3. Pada repository hasil fork lakukan *Pull Request* sebelum presentasi.
@@ -58,3 +59,6 @@
 
     - Isi `Title` dengan nama materi yang dipresentasi (nama direktori yang kebab case) dan tambahkan ricesky dan ersadishla pada reviewers,  kemudian klik `Create pull request`.
     ![fork](img/pr-3.png)
+
+    - Pada repository asli ketika reviewer telah ACC pull request yang dilakukan, maka riwayat pull request akan muncul pada tab `Closed`.
+    ![fork](img/pr-4.png)
