@@ -50,6 +50,11 @@
 
 3. Pada repository hasil fork lakukan *Pull Request* sebelum presentasi.
 
+    - Buka repository hasil fork klik pada tab `Pull requests`, kemudian klik tombol `New pull request`.
     ![fork](img/pr-1.png)
 
+    - Pastikan reposity benar, kemudian klik `Create pull request`.
     ![fork](img/pr-2.png)
+
+    - Isi `Title` dengan nama materi yang dipresentasi (nama direktori yang kebab case) dan tambahkan ricesky dan ersadishla pada reviewers,  kemudian klik `Create pull request`.
+    ![fork](img/pr-3.png)
