@@ -1,14 +1,14 @@
-# Topik 2
+# Pull Request
 
 [Kembali](readme.md)
 
 ## Latar belakang topik
 
-Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
+Tutorial ini dilakukan untuk menjelaskan cara melakukan pull request.
 
 ## Konsep-konsep
 
-Misal: jelaskan mengenai pengertian, konsep, alur, dll.
+- Pull Request dapat diartikan dengan permintaan untuk menggabungkan kode. Ketika sudah membuat perubahan di repository hasil fork, lalu ingin menggabungkan dengan repository sumber.
 
 ## Langkah-langkah tutorial
 
