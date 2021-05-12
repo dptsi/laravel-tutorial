@@ -1,4 +1,4 @@
-# Object oriented PHP 1
+# Laravel localization and file storage
 
 [Kembali](../readme.md)
 

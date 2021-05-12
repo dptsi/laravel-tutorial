@@ -1,4 +1,4 @@
-# Object oriented PHP 1
+# Laravel event and listener
 
 [Kembali](../readme.md)
 

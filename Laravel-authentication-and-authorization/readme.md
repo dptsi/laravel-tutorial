@@ -1,4 +1,4 @@
-# Object oriented PHP 1
+# Laravel authentication and authorization
 
 [Kembali](../readme.md)
 

@@ -1,4 +1,4 @@
-# Object oriented PHP 1
+# Laravel view and blade component
 
 [Kembali](../readme.md)
 

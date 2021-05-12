@@ -1,4 +1,4 @@
-# Object oriented PHP 1
+# Laravel model, eloquent and query builder
 
 [Kembali](../readme.md)
 

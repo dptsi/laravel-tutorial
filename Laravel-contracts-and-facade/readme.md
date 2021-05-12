@@ -1,4 +1,4 @@
-# Object oriented PHP 1
+# Laravel contracts and facade
 
 [Kembali](../readme.md)
 

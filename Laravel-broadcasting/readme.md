@@ -1,4 +1,4 @@
-# Object oriented PHP 1
+# Laravel broadcasting
 
 [Kembali](../readme.md)
 

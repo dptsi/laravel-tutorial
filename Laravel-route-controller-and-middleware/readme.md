@@ -1,4 +1,4 @@
-# Object oriented PHP 1
+# Laravel route, controller and middleware
 
 [Kembali](../readme.md)
 

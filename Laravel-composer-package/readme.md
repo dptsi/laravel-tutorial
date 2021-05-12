@@ -1,4 +1,4 @@
-# Object oriented PHP 1
+# Laravel composer package
 
 [Kembali](../readme.md)
 

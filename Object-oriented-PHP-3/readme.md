@@ -1,4 +1,4 @@
-# Object oriented PHP 1
+# Object oriented PHP 3
 
 [Kembali](../readme.md)
 
