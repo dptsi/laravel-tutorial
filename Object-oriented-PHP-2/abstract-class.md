@@ -1,4 +1,4 @@
-# Topik 2
+# Abstract Class
 
 [Kembali](readme.md)
 

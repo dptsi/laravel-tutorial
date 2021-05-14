@@ -2,7 +2,7 @@
 
 [Kembali](readme.md)
 
-## Latar belakang topik
+## Type Hinting
 
 Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
 
