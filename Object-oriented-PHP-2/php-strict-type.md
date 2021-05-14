@@ -10,7 +10,7 @@ Sebagai contoh :
 
 ```php
 <?php
-    function tambah(int $a, int $b) {
+    function tambah(int $a, int $b): int {
         return $a + $b;
     };
     var_dump(tambah(9, '5.3'));
@@ -27,7 +27,7 @@ Strict typing pada PHP akan membuat setiap variabel yang dipassing ke fungsi, di
 
 ```php
 <?php
-    function tambah(int $a, int $b) {
+    function tambah(int $a, int $b): int {
         return $a + $b;
     };
     var_dump(tambah(9, '5.3'));
@@ -44,7 +44,7 @@ Pada potongan kode diatas, fungsi `tambah()` akan melakukan casting `'5.3'` menj
 
 ```php
 <?php
-    function tambah(int $a, int $b) {
+    function tambah(int $a, int $b): int {
         return $a + $b;
     };
     var_dump(tambah(9, '5.3'));
@@ -60,7 +60,7 @@ Kemudian, program akan menjadi seperti berikut :
 ```php
 <?php
     declare(strict_types = 1);
-    function tambah(int $a, int $b) {
+    function tambah(int $a, int $b): int {
         return $a + $b;
     };
     var_dump(tambah(9.99, '5'));
