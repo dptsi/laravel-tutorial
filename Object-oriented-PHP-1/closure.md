@@ -1,4 +1,4 @@
-# Topik 1
+# Closure
 
 [Kembali](readme.md)
 
