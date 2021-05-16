@@ -10,11 +10,13 @@ Sebagai contoh :
 
 ```php
 <?php
-    function tambah(int $a, int $b): int {
-        return $a + $b;
-    };
-    var_dump(tambah(9, '5.3'));
-?>
+
+
+function tambah(int $a, int $b): int {
+    return $a + $b;
+};
+var_dump(tambah(9, '5.3'));
+
 ```
 
 Meskipun telah menggunakan type hinting, namun potongan kode tersebut akan mengeluarkan output berupa `int` dengan nilai `14` tanpa mengeluarkan error apapun. Hal ini tentu menimbulkan masalah apabila programmer tidak menyadari ini. Bisa saja programmer berekspektasi output berupa 14.3 (`float`) namun yang keluar tidak seperti itu. Efek samping dari weakly typed ini membuat software yang dibuat berpotensi menimbulkan bug yang tidak disadari.
@@ -27,11 +29,11 @@ Strict typing pada PHP akan membuat setiap variabel yang dipassing ke fungsi, di
 
 ```php
 <?php
-    function tambah(int $a, int $b): int {
-        return $a + $b;
-    };
-    var_dump(tambah(9, '5.3'));
-?>
+
+function tambah(int $a, int $b): int {
+    return $a + $b;
+};
+var_dump(tambah(9, '5.3'));
 ```
 
 Pada potongan kode diatas, fungsi `tambah()` akan melakukan casting `'5.3'` menjadi `int` bernilai `5`. Sehingga ketika kode dijalankan, `var_dump()` akan menampilkan nilai `14` berupa `int`. Namun, apabila strict typing dinyalakan. Potongan kode tersebut akan menampilkan error sehingga tidak dapat dieksekusi.
@@ -44,11 +46,11 @@ Pada potongan kode diatas, fungsi `tambah()` akan melakukan casting `'5.3'` menj
 
 ```php
 <?php
-    function tambah(int $a, int $b): int {
-        return $a + $b;
-    };
-    var_dump(tambah(9, '5.3'));
-?>
+
+function tambah(int $a, int $b): int {
+    return $a + $b;
+};
+var_dump(tambah(9, '5.3'));
 ```
 
 ### Langkah kedua
@@ -58,13 +60,12 @@ Pada potongan kode diatas, fungsi `tambah()` akan melakukan casting `'5.3'` menj
 Kemudian, program akan menjadi seperti berikut : 
 
 ```php
-<?php
-    declare(strict_types = 1);
-    function tambah(int $a, int $b): int {
-        return $a + $b;
-    };
-    var_dump(tambah(9.99, '5'));
-?>
+<?php declare(strict_types = 1);
+
+function tambah(int $a, int $b): int {
+    return $a + $b;
+};
+var_dump(tambah(9.99, '5'));
 ```
 
 ### Hasil

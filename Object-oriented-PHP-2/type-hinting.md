@@ -22,12 +22,12 @@ Konsep dari *type hinting* cukup sederhana, programmer hanya perlu untuk menamba
 
 ```php
 <?php
-    function tambah($a, $b) {
-        return $a + $b;
-    };
 
-    var_dump(tambah(5, 9));
-?>
+function tambah($a, $b) {
+    return $a + $b;
+};
+
+var_dump(tambah(5, 9));
 ```
 
 ### Langkah kedua
@@ -36,12 +36,12 @@ Konsep dari *type hinting* cukup sederhana, programmer hanya perlu untuk menamba
 
 ```php
 <?php
-    function tambah(int $a, int $b): int {
-        return $a + $b;
-    };
 
-    var_dump(tambah(5, 9));
-?>
+function tambah(int $a, int $b): int {
+    return $a + $b;
+};
+
+var_dump(tambah(5, 9));
 ```
 
 ### Hasil
