@@ -97,7 +97,7 @@ $employee1 = new HourlyEmployee();
 
 ### Langkah keempat
 
-Coba menggunakan fungsi dan atribut yang diturunkan parent class.
+Coba gunakan fungsi dan atribut yang diturunkan parent class.
 
 ```
 <?php
@@ -117,7 +117,7 @@ Output yang dihasilkan dari langkah ini adalah `Steven`, sehingga dapat terlihat
 
 ### Langkah kelima
 
-Coba menggunakan fungsi dan atribut yang dimiliki child class sendiri.
+Coba gunakan fungsi dan atribut yang dimiliki child class sendiri.
 
 ```
 <?php
@@ -135,7 +135,7 @@ Hasil yang diperoleh dari langkah ini adalah tidak munculnya error. Hal ini mena
 
 ### Langkah keenam
 
-Coba menggunakan fungsi parent class yang telah di-override oleh child class.
+Coba gunakan fungsi parent class yang telah di-override oleh child class.
 
 ```
 <?php
