@@ -25,7 +25,7 @@ Private dapat digunakan apabila ingin mengakses atribut dan fungsi dari class te
 
 ### Langkah pertama
 
-Buat class `employee` dengan atribut dan fungi yang memiliki access modifier yang berbeda-beda.
+Buat class `Employee` dengan atribut dan fungi yang memiliki access modifier yang berbeda-beda.
 
 ```
 <?php
@@ -58,7 +58,7 @@ class Employee {
 
 ### Langkah kedua
 
-Membuat object `employee1` dari class `employee`.
+Buat object `employee1` dari class `Employee`.
 
 ```
 <?php
@@ -74,7 +74,7 @@ $employee1 = new Employee();
 
 ### Langkah ketiga
 
-Mencoba mengakses atribut public dari object.
+Coba akses atribut public dari object.
 
 ```
 <?php
@@ -94,7 +94,7 @@ Output dari langkah ini adalah `Steven`, sehingga dapat diketahui bahwa name dar
 
 ### Langkah keempat
 
-Mencoba mengakses atribut protected dari object.
+Coba akses atribut protected dari object.
 
 ```
 <?php
@@ -115,7 +115,7 @@ Hasil dari langkah ini adalah error, karena position merupakan protected sehingg
 
 ### Langkah kelima
 
-Mencoba mengakses atribut private dari object.
+Coba akses atribut private dari object.
 
 ```
 <?php
@@ -136,7 +136,7 @@ Hasil dari langkah ini adalah error, karena salary memiliki access modifier priv
 
 ### Langkah keenam
 
-Mencoba mengakses fungsi public dari object.
+Coba akses fungsi public dari object.
 
 ```
 <?php
@@ -156,7 +156,7 @@ Output dari langkah ini adalah `Steve`, sehingga dapat dibuktikan bahwa fungsi p
 
 ### Langkah ketujuh
 
-Mencoba mengakses fungsi protected dari object.
+Coba akses fungsi protected dari object.
 
 ```
 <?php
@@ -175,7 +175,7 @@ Hasil dari langkah ini adalah error, karena fungsi set_salary merupakan protecte
 
 ### Langkah kedelapan
 
-Mencoba mengakses fungsi private dari object.
+Coba akses fungsi private dari object.
 
 ```
 <?php
