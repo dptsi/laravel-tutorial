@@ -4,8 +4,7 @@
 
 ## Daftar isi
 
-- [Class](class.md)
-- [Object](object.md)
+- [Class dan Object](class-object.md)
 - [Access Modifier](access-modifier.md)
 - [Inheritance](inheritance.md)
 - [Constructor](constructor.md)
