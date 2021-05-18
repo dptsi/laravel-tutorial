@@ -16,7 +16,7 @@ Inheritance merupakan sebuah konsep dimana sebuah class dapat menurunkan semua a
 
 Buat parent class `Employee`. 
 
-```
+```php
 <?php
 class Employee {
   public $name;
@@ -50,7 +50,7 @@ class Employee {
 
 Buat child class `HourlyEmployee`. 
 
-```
+```php
 <?php
 
 ...
@@ -83,7 +83,7 @@ class HourlyEmployee extends Employee{
 
 Buat object `employee1` dari child class `HourlyEmployee`.
 
-```
+```php
 <?php
 
 ...
@@ -99,7 +99,7 @@ $employee1 = new HourlyEmployee();
 
 Coba gunakan fungsi dan atribut yang diturunkan parent class.
 
-```
+```php
 <?php
 
 ...
@@ -119,7 +119,7 @@ Output yang dihasilkan dari langkah ini adalah `Steven`, sehingga dapat terlihat
 
 Coba gunakan fungsi dan atribut yang dimiliki child class sendiri.
 
-```
+```php
 <?php
 
 ...
@@ -137,7 +137,7 @@ Hasil yang diperoleh dari langkah ini adalah tidak munculnya error. Hal ini mena
 
 Coba gunakan fungsi parent class yang telah di-override oleh child class.
 
-```
+```php
 <?php
 
 ...
