@@ -194,4 +194,4 @@ $employee->set_salary(0.5);
 ?>
 ```
 
-Pada langkah ini, object dari child class dapat mengakses fungsi yang telah di-override dari parent class dan fungsi protected get_salary dari parent class secara tidak langsung. Output yang diperoleh dari langkah ini adalah `16`, yang merupakan hasil perkalian salaryperhours yang diinputkan dan hours yang telah di-set sebelumnya. Hal ini menunjukkan bahwa object dengan child class menggunakan fungsi yang telah di-override, bukan fungsi asli dari parent class tersebut.
+Pada langkah ini, object dari child class dapat mengakses fungsi yang telah di-override dari parent class dan fungsi protected get_salary dari parent class secara tidak langsung. Output yang diperoleh dari langkah ini adalah `8`, yang merupakan hasil perkalian salaryperhours yang diinputkan dan hours yang telah di-set sebelumnya. Hal ini menunjukkan bahwa object dengan child class menggunakan fungsi yang telah di-override, bukan fungsi asli dari parent class tersebut.
