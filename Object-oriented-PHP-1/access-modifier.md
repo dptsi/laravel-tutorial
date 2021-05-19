@@ -19,176 +19,244 @@ Protected dapat digunakan apabila ingin memberikan akses atribut dan fungsi kepa
 
 * Private
 
-Private dapat digunakan apabila ingin mengakses atribut dan fungsi dari class tersebut saja.
+Private dapat digunakan apabila ingin mengakses atribut dan fungsi dari dalam class itu saja.
 
 ## Langkah-langkah tutorial
 
 ### Langkah pertama
 
-Buat class `Employee` dengan atribut dan fungi yang memiliki access modifier yang berbeda-beda.
+Buat class `Employee`.
 
 ```php
 <?php
+
 class Employee {
-  public $name;
-  protected $position;
-  private $salary;
 
-  function set_name($name) {
-    $this->name = $name;
-  }
-
-  public function get_name() {
-    return $this->name;
-  }
-
-  protected function set_salary() {
-    $this->salary = $this->salary;
-  }
-
-  private function get_salary() {
-    return $this->salary;
-  }
+  ...
+  
 }
-
-...
 
 ?>
 ```
 
 ### Langkah kedua
 
-Buat object `employee1` dari class `Employee`.
+Tambahan atribut dengan berbagai access modifier ke dalam class `Employee`.
 
 ```php
 <?php
 
-...
-
-$employee1 = new Employee();
-
-...
+class Employee {
+  public $name;
+  protected $position;
+  private $salary;
+  
+  ...
+  
+}
 
 ?>
 ```
 
 ### Langkah ketiga
 
-Coba akses atribut public dari object.
+Tambahan fungsi `set_name` dan `get_name` dengan access modifier public ke dalam class `Employee`, dimana fungsi set_name mengakses fungsi public get_name dari dalam class dan keduanya mengakses atribut public dari dalam class.
 
 ```php
 <?php
 
-...
+class Employee {
+  public $name;
+  protected $position;
+  private $salary;
+  
+  function set_name($name) {
+    $this->name = $name;
+    echo $this->get_name();
+    echo "\n";
+  }
 
-$employee1->name = "Steven";
-echo $employee1->name;
-echo "\n";
-
-...
+  public function get_name() {
+    return $this->name;
+  }
+  
+  ...
+  
+}
 
 ?>
 ```
-
-Output dari langkah ini adalah `Steven`, sehingga dapat diketahui bahwa name dari employee1 dapat diubah dan diakses dari object.
 
 ### Langkah keempat
 
-Coba akses atribut protected dari object.
+Tambahan fungsi `set_position` dan `get_position` dengan access modifier public dan protected ke dalam class `Employee`, dimana fungsi set_position mengakses fungsi protected get_position dari dalam class dan keduanya mengakses atribut protected dari dalam class.
 
 ```php
 <?php
 
-...
+class Employee {
+  public $name;
+  protected $position;
+  private $salary;
+  
+  function set_name($name) {
+    $this->name = $name;
+    echo $this->get_name();
+    echo "\n";
+  }
 
-// akan muncul error
-$employee1->position = "Manager";
-echo $employee1->position;
-echo "\n";
+  public function get_name() {
+    return $this->name;
+  }
+  
+  public function set_position($position) {
+    $this->position = $position;
+    echo $this->get_position();
+    echo "\n";
+  }
 
-...
+  protected function get_position() {
+    return $this->position;
+  }
+  
+  ...
+  
+}
 
 ?>
 ```
-
-Hasil dari langkah ini adalah error, karena position merupakan protected sehingga tidak dapat diubah dan diakses dari object.
 
 ### Langkah kelima
 
-Coba akses atribut private dari object.
+Tambahan fungsi `set_salary` dan `get_salary` dengan access modifier public dan private ke dalam class `Employee`, dimana fungsi set_salary mengakses fungsi private get_salary dari dalam class dan keduanya mengakses atribut private dari dalam class.
 
 ```php
 <?php
 
-...
+class Employee {
+  public $name;
+  protected $position;
+  private $salary;
+  
+  function set_name($name) {
+    $this->name = $name;
+    echo $this->get_name();
+    echo "\n";
+  }
 
-// akan muncul error
-$employee1->salary = 100.95;
-echo $employee1->salary;
-echo "\n";
+  public function get_name() {
+    return $this->name;
+  }
+  
+  public function set_position($position) {
+    $this->position = $position;
+    echo $this->get_position();
+    echo "\n";
+  }
 
-...
+  protected function get_position() {
+    return $this->position;
+  }
+  
+  public function set_salary($salary) {
+    $this->salary = $salary;
+    echo $this->get_salary();
+    echo "\n";
+  }
+
+  private function get_salary() {
+    return $this->salary;
+  }
+  
+}
 
 ?>
 ```
-
-Hasil dari langkah ini adalah error, karena salary memiliki access modifier private yang tidak dapat diubah dan diakses dari object.
 
 ### Langkah keenam
 
-Coba akses fungsi public dari object.
+Inisialisasi object `employee` dengan class `Employee`.
 
 ```php
 <?php
 
-...
-
-$employee1->set_name("Steve");
-echo $employee1->get_name();
-echo "\n";
-
-...
+$employee1 = new Employee();
 
 ?>
 ```
-
-Output dari langkah ini adalah `Steve`, sehingga dapat dibuktikan bahwa fungsi public dapat diakses dari object. Langkah ini juga dapat membuktikan bahwa atribut public dapat diakses dari dalam class.
 
 ### Langkah ketujuh
 
-Coba akses fungsi protected dari object.
+Coba akses atribut-atribut `employee` dari object.
 
 ```php
 <?php
 
-...
+$employee->name = "Steven";
+echo $employee->name;
+echo "\n";
 
 // akan muncul error
-$employee1->set_salary(100.45);
+$employee->position = "Manager";
+echo $employee->position;
+echo "\n";
 
-...
+// akan muncul error
+$employee->salary = 100.95;
+echo $employee->salary;
+echo "\n";
 
 ?>
 ```
 
-Hasil dari langkah ini adalah error, karena fungsi set_salary merupakan protected dan tidak dapat diakses dari object.
+Pada langkah ini, hanya atribut dengan access modifier public yang dapat diakses dari object, sedangkan lainnya tidak dapat diakses dan akan menampilkan pesan error ketika dijalankan.
 
 ### Langkah kedelapan
 
-Coba akses fungsi private dari object.
+Coba akses fungsi public `set_name`, yang mengakses fungsi public lainnya dari dalam class, beserta fungsi public `get_name` dari object.
 
-``` php
+```php
 <?php
 
-...
-
-// akan muncul error
-echo $employee1->get_salary();
+$employee->set_name("Steve");
+echo $employee->get_name();
 echo "\n";
-
-...
 
 ?>
 ```
 
-Hasil dari langkah ini adalah error, karena fungsi get_salary memiliki access modifier private yang tidak dapat diakses dari object.
+Pada langkah ini, kedua fungsi dengan access modifier public berhasil dijalankan.
+
+### Langkah kesembilan
+
+Coba akses fungsi public `set_position`, yang mengakses fungsi protected dari dalam class, beserta fungsi protected `get_position` dari object.
+
+```php
+<?php
+
+$employee->set_position("Programmer");
+// akan muncul error
+echo $employee->get_position();
+echo "\n";
+
+?>
+```
+
+Pada langkah ini, fungsi public `set_position` dapat dijalankan dengan baik, sedangkan fungsi protected `get_position` akan memunculkan pesan error karena kita berusaha mengakses fungsi dengan access modifier protected dari object.
+
+### Langkah kesepuluh
+
+Coba akses fungsi public `set_salary`, yang mengakses fungsi private dari dalam class, beserta fungsi private `get_position` dari object.
+
+```php
+<?php
+
+$employee->set_salary(100.45);
+// akan muncul error
+echo $employee->get_salary();
+echo "\n";
+
+?>
+```
+
+Pada langkah ini, fungsi public `set_salary` dapat dijalankan dengan baik, sedangkan fungsi private `get_salary` akan memunculkan pesan error karena kita berusaha mengakses fungsi dengan access modifier private dari luar class (object).
