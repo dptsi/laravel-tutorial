@@ -4,7 +4,6 @@
 
 ## Latar belakang topik
 
-Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
 Terkadang kita ingin menulis dan memanggil fungsi dengan mudah, terutama dalam fungsi callable, dimana kita ingin menuliskan fungsi secara langsung dalam parameternya, bukan menuliskan nama fungsi tersebut dalam parameter. Untuk mempermudahkan penulisan tersebut, kita dapat menggunakan closure pada parameter callable. Selain itu, variabel yang dapat digunakan untuk merujuk ke sebuah fungsi juga semakin mendukung penggunaan closure.
 
 ## Konsep-konsep
