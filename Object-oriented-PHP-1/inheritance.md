@@ -4,7 +4,9 @@
 
 ## Latar belakang topik
 
-Sering kali dalam pembuatan beberapa class terdapat kemiripan atribut dan fungsi yang dimiliki, dimana suatu class memiliki beberapa atribut dan fungsi yang sama dengan class yang lain. Biasanya kita akan menulis code untu atribut dan fungsi yang sama berulang kali pada class-class yang mirip tersebut. Namun, kita dapat mencegah penulisan atribut dan fungsi yang sama berulang-ulang kali dengan menggunakan inheritance.  
+Sering kali dalam pembuatan beberapa class terdapat kemiripan atribut dan fungsi yang dimiliki, dimana suatu class memiliki beberapa atribut dan fungsi yang sama dengan class yang lain. Misalnya seperti class HourlyEmployee yang memiliki atribut dan fungsi yang sama dengan class Employee, seperti name, salary, dan fungsi setter-getter nya. Namun, yang membedakan adalah class HourlyEmployee memiliki atribut lainnya yang berbeda dengan class Employee, yaitu hours dan salaryperhours. Cara perhitungan salary mereka pun berbeda, dimana class Employee menerima salary yang tetap, sedangkan class Employee menerima salary berdasarkan hasil perkalian jumlah jam mereka bekerja dengan salaryperhours.
+
+Biasanya kita akan menulis code untuk atribut dan fungsi yang sama berulang kali pada class-class yang mirip tersebut. Namun, kita dapat mencegah penulisan atribut dan fungsi yang sama berulang-ulang kali dengan menggunakan inheritance dan memanfaatkan override untuk mengubah isi fungsi yang berbeda, seperi set_salary dari class HourlyEmployee. Sehingga, untuk mencegah pengulangan penulisan code yang sama pada class Employee dan class HourlyEmployee, kita dapat meng-inharitance class HourlyEmployee dari class Employee.
 
 ## Konsep-konsep
 
@@ -18,6 +20,7 @@ Buat parent class `Employee`.
 
 ```php
 <?php
+
 class Employee {
   public $name;
   protected $salary;
@@ -39,21 +42,77 @@ class Employee {
   protected function get_salary() {
     return $this->salary;
   }
+  
 }
-
-...
 
 ?>
 ```
 
 ### Langkah kedua
 
-Buat child class `HourlyEmployee`. 
+Buat child class `HourlyEmployee` dengan menambahkan extends dan nama parent class di samping nama class nya.
 
 ```php
 <?php
 
-...
+class HourlyEmployee extends Employee{
+  
+  ...
+  
+}
+
+?>
+```
+
+### Langkah ketiga
+
+Tambahkan atribut `hours` dan `salaryperhours` pada child class `HourlyEmployee`. 
+
+```php
+<?php
+
+class HourlyEmployee extends Employee{
+  private $hours;
+  private $salaryperhours;
+
+  ...
+  
+}
+
+?>
+```
+
+### Langkah keempat
+
+Tambahkan fungsi `set_hours` dan `get_hours` pada child class `HourlyEmployee`. 
+
+```php
+<?php
+
+class HourlyEmployee extends Employee{
+  private $hours;
+
+  function set_hours($hours) {
+    $this->hours = $hours;
+  }
+
+  function get_hours() {
+    return $this->hours;
+  }
+
+  ...
+  
+}
+
+?>
+```
+
+### Langkah kelima
+
+Tambahkan fungsi `set_salary` yang sudah di-override pada child class `HourlyEmployee`. 
+
+```php
+<?php
 
 class HourlyEmployee extends Employee{
   private $hours;
@@ -68,70 +127,60 @@ class HourlyEmployee extends Employee{
 
   // override
   function set_salary($salary) {
-    $this->salary = $this->hours * $salary;
+    $this->salaryperhours = $salaryperhours;
+    $this->salary = $this->hours * $this->salaryperhours;
     echo $this->get_salary();
     echo "\n";
   }
+  
 }
 
-...
-
 ?>
 ```
 
-### Langkah ketiga
+### Langkah keenam
 
-Buat object `employee1` dari child class `HourlyEmployee`.
+Inisialisasi object `employee` dengan child class `HourlyEmployee`.
 
 ```php
 <?php
 
-...
-
-$employee1 = new HourlyEmployee();
-
-...
+$employee = new HourlyEmployee();
 
 ?>
 ```
 
-### Langkah keempat
+### Langkah ketujuh
 
-Coba gunakan fungsi dan atribut yang diturunkan parent class.
+Coba gunakan fungsi `set_name` dan atribut `name` yang diturunkan parent class.
 
 ```php
 <?php
 
-...
-
-$employee1->set_name("Steven");
-echo $employee1->name;
+$employee->set_name("Steven");
+echo $employee->name;
 echo "\n";
 
-...
-
 ?>
 ```
 
-Output yang dihasilkan dari langkah ini adalah `Steven`, sehingga dapat terlihat bahwa object dengan child class dapat mengakses atribut dan fungsi yang memiliki access modifier public dari parent class nya.
+Pada langkah ini, object dari child class dapat mengakses atribut dan fungsi public dari parent class.
 
-### Langkah kelima
+### Langkah kedelapan
 
-Coba gunakan fungsi dan atribut yang dimiliki child class sendiri.
+Coba gunakan fungsi `set_hours` dan `get_hours` serta atribut `hours` melalui kedua fungsi yang dimiliki child class tersebut.
 
 ```php
 <?php
 
-...
-
-$employee1->set_hours(16);
-
-...
+$employee->set_hours(16);
+echo $employee->get_hours();
+echo "\n";
 
 ?>
 ```
 
-Hasil yang diperoleh dari langkah ini adalah tidak munculnya error. Hal ini menandakan bahwa object dengan child class dapat membuat dan mengakses atribut dan fungsi yang dimilikinya sendiri.
+Pada langkah ini, object dari child class dapat mengakses fungsi yang dimiliki child class sendiri beserta atributnya secara tidak langsung.
 
 ### Langkah keenam
 
@@ -140,13 +189,9 @@ Coba gunakan fungsi parent class yang telah di-override oleh child class.
 ```php
 <?php
 
-...
-
-$employee1->set_salary(0.5);
-
-...
+$employee->set_salary(0.5);
 
 ?>
 ```
 
-Output yang diperoleh dari langkah ini adalah `16`, yang merupakan hasil perkalian salary yang diinputkan dan hours yang telah di-set sebelumnya. Hal ini membuktikan bahwa object dengan child class dapat menggunakan fungsi dari parent class yang telah di-override, bukan fungsi asli dari parent class tersebut.
+Pada langkah ini, object dari child class dapat mengakses fungsi yang telah di-override dari parent class dan fungsi protected get_salary dari parent class secara tidak langsung. Output yang diperoleh dari langkah ini adalah `16`, yang merupakan hasil perkalian salaryperhours yang diinputkan dan hours yang telah di-set sebelumnya. Hal ini menunjukkan bahwa object dengan child class menggunakan fungsi yang telah di-override, bukan fungsi asli dari parent class tersebut.
