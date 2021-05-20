@@ -4,36 +4,47 @@
 
 ## Latar belakang topik
 
-Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
+Exception handling adalah cara untuk mengatasi error dengan pendekatan object oriented. Exception handling akan mengubah alur kode jika terjadi suatu exception. Exception adalah kondisi error yang terjadi.
 
 ## Konsep-konsep
 
-Misal: jelaskan mengenai pengertian, konsep, alur, dll.
+Berikut adalah alur normal saat exception terjadi:
+1. state dari kode sekarang disimpan
+2. eksekusi kode akan diganti ke exception handler function
+3. handler dapat melanjutkan eksekusi kode dari state yang tersimpan atau terminasi eksekusi kode atau melanjutkan dari lokasi lain dalam kode
+
+Dalam tutorial ini akan dijelaskan mengenai:
+- penggunaan dasar exception
+- membuat suatu exception handler
+- multiple exception
+- rethrow exception
+- membuat top level exception handler
 
 ## Langkah-langkah tutorial
 
-### Langkah pertama
+### Penggunaan dasar exception
 
-Misal: Buat class `Contoh`
+Jika suatu exception tidak ditangkap, maka error akan dikabarkan dengan pesan "Uncaught Exception". Berikut adalah contoh exception yang tidak ditangkap.
 
 ```php
 <?php
 
-
-namespace DummyNamespace;
-
-
-class Contoh
-{
-    public function fungsi($request)
-    {
-        ...
-    }
-
+function check_num($num) {
+  if($num == 0) {
+    throw new Exception("value cannot be 0");
+  }
+  return true;
 }
+
+checkNum(0);
+?> 
 ```
 
-### Langkah kedua
+### Membuat suatu exception handler
+### Multiple exception
+### Rethrow exception
+### Membuat top level exception handler
+
 
 ## Referensi
 1. https://www.w3schools.com/php/php_exception.asp
