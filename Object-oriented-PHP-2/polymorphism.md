@@ -14,7 +14,7 @@ Salah satu kesamaan pada tiap makhluk hidup adalah bergerak, namun disini walaup
 <img align="centre" src="https://cdn.discordapp.com/attachments/804405775988555776/844841853908287518/Untitled_Diagram_7.png">
 </p>
 
-Polimorfisme dikatakan sebagai bentuk banyak, karena suatu class dapat membentuk class-class lainnya yang memiliki persamaan mendasar. Polimorfisme merupakan sebuah konsep dimana banyak class yang memiliki method yang sama, namun pengimplementasian method tersebut pada setiap class dapat berbeda-beda. Contohnya setiap hewan bisa bersuara, namun suara tersebut berbeda tergantung pada hewannya. Agar kita dapat memasukkan sebuah method yang sama pada banyak class, maka class tersebut harus diturunkan dari sebuah abstract class atau dari berbagai macam interface.
+Polimorfisme dikatakan sebagai bentuk banyak, karena suatu class dapat membentuk class-class lainnya yang memiliki persamaan mendasar. Polimorfisme merupakan sebuah konsep dimana banyak class yang memiliki method yang sama, namun pengimplementasian method tersebut pada setiap class dapat berbeda-beda. Contohnya setiap hewan bisa bersuara, namun suara tersebut berbeda tergantung pada hewannya. Kucing bisa mengeluarkan suara seperti "Meow...", Anjing  bisa mengeluarkan suara seperti "Guk... Guk..." sehingga Anjing dan Kucing dapat dikatakan sebagai bagian dari hewan. Dari contoh tersebut, bila diterapkan pada konteks OOP, bisa dikatakan bahwa class Anjing dan class Kucing merupakan extend dari sebuah class Hewan. Agar kita dapat memasukkan sebuah method yang sama pada banyak class, maka class tersebut harus diturunkan dari sebuah abstract class atau dari berbagai macam interface.
 
 ## Langkah-langkah tutorial
 
