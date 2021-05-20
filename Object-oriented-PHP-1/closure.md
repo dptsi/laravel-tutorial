@@ -100,7 +100,7 @@ Pada langkah ini, output yang dihasilkan adalah `Hello!`.
 
 ### Langkah ketujuh
 
-Buat associative array (array dengan named key) `fruits` dan panggil fungsi `array_walk` dengan parameter fruits dan closure. Fungsi array_walk merupakan fungsi yang menjalankan array dalam fungsi yang ditentukan pengguna. Value dan key array adalah parameter dalam fungsi dan tidak dapat diubah urutannya, namun untuk mengganti nama variabelnya diperbolehkan.
+Buat associative array (array dengan named key) `fruits` dan panggil fungsi `array_walk` dengan parameter fruits dan closure. Fungsi array_walk merupakan fungsi yang menjalankan setiap elemen array dalam fungsi yang ditentukan pengguna. Value dan key array adalah parameter dalam fungsi dan tidak dapat diubah urutannya, namun untuk mengganti nama variabelnya diperbolehkan.
 
 ```php
 <?php
