@@ -4,7 +4,7 @@
 
 ## Latar belakang topik
 
-Exception handling adalah cara untuk mengatasi error dengan pendekatan object oriented. Exception handling akan mengubah alur kode jika terjadi suatu exception. Exception adalah kondisi error yang terjadi.
+Exception handling adalah cara untuk mengatasi error dengan pendekatan object oriented. Exception handling akan mengubah alur kode jika terdapat suatu exception. Exception adalah kondisi error yang terjadi.
 
 ## Konsep-konsep
 
