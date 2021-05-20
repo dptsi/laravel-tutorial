@@ -34,3 +34,13 @@ class Contoh
 ```
 
 ### Langkah kedua
+
+## Referensi
+1. https://www.w3schools.com/php/php_exception.asp
+2. https://www.php.net/manual/en/language.exceptions.php
+3. https://stackify.com/php-try-catch-php-exception-tutorial/
+4. https://jagongoding.com/web/php/menengah/penanganan-exception/
+5. https://www.guru99.com/error-handling-and-exceptions.html
+6. https://netgen.io/blog/modern-error-handling-in-php
+7. https://www.codepolitan.com/belajar-exception-dalam-php
+8. https://www.tutorialspoint.com/php/php_error_handling.htm
