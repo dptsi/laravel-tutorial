@@ -1,4 +1,4 @@
-# Topik 2
+# Traits
 
 [Kembali](readme.md)
 
