@@ -6,9 +6,32 @@
 
 Laravel Controller merupakan salah satu bagian dimana seluruh fungsional web dibuat. Pada Controller dilakukan pengaturan untuk mengakses Model terkait dengan Database dan juga bagaimana mengirimkan datanya ke View dalam bentuk response. 
 
-[![mvc-laravel.png](https://i.postimg.cc/0jqb9f5V/mvc-laravel.png)](https://postimg.cc/ZBVTc6dN)
+![Konsep MVC Laravel](./img/mvc-laravel.png)
 
 Salah satu contoh aktivitas pada controller adalah aktivitas CRUD (Create, Read, Update, Delete).
+
+## Daftar Isi
+- [Laravel Controller](#laravel-controller)
+  * [Introduction](#introduction)
+  * [Daftar Isi](#daftar-isi)
+  * [Penulisan Controller](#penulisan-controller)
+    + [Dasar Controller](#dasar-controller)
+    + [Single Action Controllers](#single-action-controllers)
+  * [Controller Middleware](#controller-middleware)
+  * [Resource Controller](#resource-controller)
+    + [Partial Resource Routes](#partial-resource-routes)
+      - [API Resource Routes](#api-resource-routes)
+    + [Nested Resource](#nested-resource)
+      - [Scoping Nested Resource](#scoping-nested-resource)
+      - [Shallow Nesting](#shallow-nesting)
+    + [Penamaan Parameter Resource Routes](#penamaan-parameter-resource-routes)
+    + [Scoping Resources Routes](#scoping-resources-routes)
+    + [Localizing Resource URl](#localizing-resource-url)
+    + [Supplementing Resource Controllers](#supplementing-resource-controllers)
+  * [Dependency Injection & Controllers](#dependency-injection---controllers)
+    + [Apa Itu Dependency Injection?](#apa-itu-dependency-injection-)
+    + [Constructor Injection](#constructor-injection)
+    + [Method Injection](#method-injection)
 
 ## Penulisan Controller
 
@@ -80,7 +103,7 @@ use App\Http\Controllers\ProvisionServer;
 Route::post('/server', ProvisionServer::class);
 ```
 Untuk generate invokable controller tersebut menggunakan `--invokable` pada perintah `make :controller` Artisan :
-```php
+```shell
 php artisan make:controller ProvisionServer --invokable
 ```
 
@@ -112,7 +135,7 @@ class UserController extends Controller
 
 Di dalam aplikasi yang dibuat memiliki beberapa resource memiliki set aksi/metode yang sama seperti CRUD. Misal dalam sebuah aplikasi terdapat **photo** model **video** model. Resource routing Laravel menentapkan create, read, update, and delete ("CRUD") route ke sebuah controller dengan sebuah single line code.
 Membuat Controller dapat dilakukan dengan menggunakan perintah PHP Artisan yang disediakan Laravel atau dengan membuat secara manual di dalam folder `app/Http/Controllers`. Berikut adalah perintah PHP Artisan untuk membuat sebuah Controller melalui bash:
-```php
+```shell
 php artisan make:controller PhotoController --resource
 ```
 Perintah ini akan generate controller di `app/Http/Controllers/PhotoController.php`. Controller akan mengandung method untuk setiap resource yang tersedia. Langkah selanjutnya register resource route ke dalam controller :
@@ -127,11 +150,20 @@ Route::resources([
     'posts' => PostController::class,
 ]);
 ```
-**Aksi/method yang dapat dilakukan oleh resouce controller** :
-** TOLONG TABELNYA WIS**
+Berikut adalah aksi/method yang dapat dilakukan oleh resouce controller:
+| Verb      | URI                  | Action  | Route Name     |
+|-----------|----------------------|---------|----------------|
+| GET       | /photos              | index   | photos.index   |
+| GET       | /photos/create       | create  | photos.create  |
+| POST      | /photos              | store   | photos.store   |
+| GET       | /photos/{photo}      | show    | photos.show    |
+| GET       | /photos/{photo}/edit | edit    | photos.edit    |
+| PUT/PATCH | /photos/{photo}      | update  | photos.update  |
+| DELETE    | /photos/{photo}      | destroy | photos.destroy |
+
 
 Penetapan resource model dapat dilakukan saat generating controller dengan php artisan berikut :
-```php
+```shell
 php artisan make:controller PhotoController --resource --model=Photo
 ```
 
@@ -151,7 +183,7 @@ Route::resource('photos', PhotoController::class)->except([
 ```
 Pada syntax pertama mengandung aksi index dan show saja. Sedangkan pada syntax kedua mengandung aksi selain create, store, update, dan destroy. Kedua syntax tersebut memiliki tujuan yang sama.
 
-**API RESOURCE ROUTES**
+#### API Resource Routes
 Saat mendeklarasikan route resource yang akan digunakan oleh API, kita biasanya ingin mengecualikan rute yang menyajikan template HTML seperti `create` dan `edit`. Maka, kita dapat menggunakan api Resource metode ini untuk mengecualikan dua rute ini secara otomatis:
 ```php
 use App\Http\Controllers\PhotoController;
@@ -163,7 +195,7 @@ Route::apiResources([
 ]);
 ```
 Atau dapat melalui perintah berikut :
-```php
+```shell
 php artisan make:controller PhotoController --api
 ```
 
@@ -179,6 +211,28 @@ Route ini akan diregister saat kita mengakses URI dengan :
 ```php
 /photos/{photo}/comments/{comment}
 ```
+
+#### Scoping Nested Resource
+Konsep [Laravel implicit model binding](./laravel-route.md#implicit-binding) melakukan scope secara otomatis terhadap nested bindings sehingga child model dapat dikonfirmasi berasal dari parent model. Dengan menggunakan method `scoped`, kita dapat secara otomatis melakukan scoping child sebagaimana menginstruksikan Laravel di mana field dari child dikembalikan. Informasi mengenai penggunaanya, dapat dilihat pada [scoping resource routes](#scoping-resources-routes).
+
+#### Shallow Nesting
+Seringkali, tidak diharuskan untuk menggunakan parent dan child ID di dalam URI karena child ID sudah memiliki identifier unik. Makanya, ketika menggunakan identifier unik seperti auto-incrementing primary key untuk mengidentifikasi model dalam URI segment, kita bisa menggunakan "shallow nesting".
+```php
+use App\Http\Controllers\CommentController;
+
+Route::resource('photos.comments', CommentController::class)->shallow();
+```
+
+Sehingga route akan didefinisikan sebagai berikut.
+| Verb      | URI                             | Action  | Route Name             |
+|-----------|---------------------------------|---------|------------------------|
+| GET       | /photos/{photo}/comments        | index   | photos.comments.index  |
+| GET       | /photos/{photo}/comments/create | create  | photos.comments.create |
+| POST      | /photos/{photo}/comments        | store   | photos.comments.store  |
+| GET       | /comments/{comment}             | show    | comments.show          |
+| GET       | /comments/{comment}/edit        | edit    | comments.edit          |
+| PUT/PATCH | /comments/{comment}             | update  | comments.update        |
+| DELETE    | /comments/{comment}             | destroy | comments.destroy       |
 
 ### Penamaan Parameter Resource Routes
 

@@ -4,7 +4,11 @@
 
 ## Introduction
 
-Middleware menyediakan mekanisme yang mudah untuk memeriksa dan memfilter permintaan HTTP yang memasuki aplikasi kita. Misalnya, Laravel menyertakan middleware yang memverifikasi bahwa pengguna aplikasi kita telah diautentikasi. Jika pengguna tidak diautentikasi, middleware akan mengarahkan pengguna ke layar login aplikasi. Namun, jika pengguna diautentikasi, middleware akan mengizinkan permintaan untuk melanjutkan lebih jauh ke dalam aplikasi. Sesuai namanya ‘middle’ yang berarti tengah, maka letak Middleware adalah berada di tengah antara controller dan router. Ada pula yang mengartikan Middleware adalah software yang menengahi sebuah aplikasi dengan yang lain. Dengan begini, proses integrasi antar aplikasi dapat berjalan dengan lebih mudah. Semua middleware ini terletak di `app/Http/Middlewaredirektori`.
+Middleware menyediakan mekanisme yang mudah untuk memeriksa dan memfilter permintaan HTTP yang memasuki aplikasi kita. Misalnya, Laravel menyertakan middleware yang memverifikasi bahwa pengguna aplikasi kita telah diautentikasi. Jika pengguna tidak diautentikasi, middleware akan mengarahkan pengguna ke layar login aplikasi. Namun, jika pengguna diautentikasi, middleware akan mengizinkan permintaan untuk melanjutkan lebih jauh ke dalam aplikasi.
+
+![Middleware](./img/middleware.png)
+
+Sesuai namanya ‘middle’ yang berarti tengah, maka letak Middleware adalah berada di tengah antara controller dan router. Ada pula yang mengartikan Middleware adalah software yang menengahi sebuah aplikasi dengan yang lain. Dengan begini, proses integrasi antar aplikasi dapat berjalan dengan lebih mudah. Semua middleware ini terletak di `app/Http/Middlewaredirektori`.
 
 Fungsi-fungsi Middleware secara umum adalah:
 1. Authentication (seperti pada Laravel).
@@ -14,10 +18,24 @@ Fungsi-fungsi Middleware secara umum adalah:
 5. Sanitasi input.
 6. Meresponse handler, dan lain sebagainya.
 
+## Daftar Isi
+- [Laravel Middleware](#laravel-middleware)
+  * [Introduction](#introduction)
+  * [Daftar Isi](#daftar-isi)
+  * [Defining Middleware](#defining-middleware)
+    + [Middleware & Responses](#middleware---responses)
+  * [Registering Middleware](#registering-middleware)
+    + [Global Middleware](#global-middleware)
+    + [Assigning Middleware to Routes](#assigning-middleware-to-routes)
+    + [Middleware Groups](#middleware-groups)
+    + [Sorting Middleware](#sorting-middleware)
+  * [Middleware Parameters](#middleware-parameters)
+  * [Terminable Middleware](#terminable-middleware)
+
 ## Defining Middleware
 
 Untuk membuat middleware baru, gunakan `make:middleware` perintah Artisan:
-```php
+```shell
 php artisan make:middleware EnsureTokenIsValid
 ```
 Perintah ini akan menempatkan kelas `EnsureTokenIsValid` baru dalam direktori `app/Http/Middleware`. Di middleware ini, hanya akan mengizinkan akses ke route jika token input yang diberikan cocok dengan nilai yang ditentukan. Jika tidak, akan diarakan kembali pengguna ke home URI:

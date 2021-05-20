@@ -2,6 +2,8 @@
 
 [Kembali](readme.md)
 
+## Introduction
+
 Route adalah proses pengiriman data dari pengguna melalui permintaan/request menuju ke alamat yang sudah terdaftar, di mana alamat tersebut akan mengembalikan output proses dari permintaan tersebut.
 
 ![Website Route](./img/website-route.png)
@@ -10,6 +12,7 @@ Pada contoh di atas, setelah nama situs mywebsite.com, kita dapat menentukan rou
 
 ## Daftar Isi
 - [Laravel Route](#laravel-route)
+  * [Introduction](#introduction)
   * [Daftar Isi](#daftar-isi)
   * [Basic Routing](#basic-routing)
     + [The Default Route Files](#the-default-route-files)
@@ -50,7 +53,7 @@ Pada contoh di atas, setelah nama situs mywebsite.com, kita dapat menentukan rou
 
 ## Basic Routing
 Secara dasarnya, Laravel route menerima URI dan sebuah closure (fungsi anonim).
-```
+```php
 use Illuminate\Support\Facades\Route;
 
 Route::get('/greeting', function () {
@@ -71,7 +74,7 @@ Kita tinggal melakukan pengisian class Route pada kedua file tersebut. Perlu dii
 
 ### Available Router Methods
 Router pada Laravel juga menyediakan akses respond beberapa method HTTP, seperti:
-```
+```php
 Route::get($uri, $callback);
 Route::post($uri, $callback);
 Route::put($uri, $callback);
@@ -80,7 +83,7 @@ Route::delete($uri, $callback);
 Route::options($uri, $callback);
 ```
 Namun, khusus untuk seluruh route dengan method POST, PUT, PATCH, atau DELETE, jika digunakan pada file route web, diwajibkan untuk menambahkan CSRF Protection di dalam file view sebelum mengakses route tersebut.
-```
+```html
 <form method="POST" action="/profile">
     @csrf
     ...
@@ -91,23 +94,23 @@ Informasi lebih lanjut mengenai method dapat diakses pada [HTTP Request Method](
 
 ### Redirect Routes
 Jika kita ingin berpindah dari satu route ke URI lainnya, kita dapat menggunakan method `Route::redirect` yang secara default mengeluarkan kode status 302.
-```
+```php
 Route::redirect('/here', '/there');
 ```
 
 Kita dapat juga menambahkan parameter tambahan untuk mengganti kode status.
-```
+```php
 Route::redirect('/here', '/there', 301);
 ```
 
 Adapun method lain yang secara default mengeluarkan kode status 301 adalah berikut.
-```
+```php
 Route::permanentRedirect('/here', '/there');
 ```
 
 ### View Routes
 Jika kita hanya ingin menampilkan tampilan web, method `Route::view` dapat digunakan. Kita tidak perlu mendefinisikan route secara penuh beserta controller yang digunakan.
-```
+```php
 // tanpa passing array data
 Route::view('/welcome', 'welcome');
 
@@ -120,7 +123,7 @@ Terkadang dalam penggunaan routing, kita memerlukan cara untuk mengambil sebuah 
 
 ### Required Parameters
 Parameter ini digunakan ketika ingin mengambil segmen pada URI dan melakukan passing segmen tersebut dalam bentuk argument ke Closure. Kita juga dapat melakukan passing sebanyak mungkin route parameters yang dibutuhkan.
-```
+```php
 // route parameter tunggal
 Route::get('/user/{id}', function ($id) {
     return 'User '.$id;
@@ -135,7 +138,7 @@ Route::get('/posts/{post}/comments/{comment}', function ($postId, $commentId) {
 Route parameters akan selalu dimasukkan dalam `{}` (kurung kurawal) dan terdiri dari karakter alphanumeric.
 
 Jika kita ingin melakukan dependency injection pada route callback, kita dapat melakukan list route parameter setelah dependency kita.
-```
+```php
 use Illuminate\Http\Request;
 
 Route::get('/user/{id}', function (Request $request, $id) {
@@ -145,7 +148,7 @@ Route::get('/user/{id}', function (Request $request, $id) {
 
 ### Optional Parameters
 Terkadang sebuah route parameter tidak selalu hadir pada URI. Maka, kita dapat menambahkan `?` (tanda tanya) setelah nama parameter. Tak lupa, kita juga perlu memberikan nilai default pada variabel route yang bersangkutan.
-```
+```php
 Route::get('/user/{name?}', function ($name = null) {
     return $name;
 });
@@ -157,7 +160,7 @@ Route::get('/user/{name?}', function ($name = 'John') {
 
 ### Regular Expression (Regex) Constraints
 Kita juga dapat membatasi format karakter apa saja yang tersedia pada route parameter dengan method `where`. Method `where` menerima nama parameter dan regex dari bagaimana parameter dibatasi.
-```
+```php
 Route::get('/user/{name}', function ($name) {
     // kode program
 })->where('name', '[A-Za-z]+');
@@ -172,7 +175,7 @@ Route::get('/user/{id}/{name}', function ($id, $name) {
 ```
 
 Untuk kemudahan pula, pada kasus karakter number, alphabet, alphanumeric, maupun UUID (Universally Unique Identifier), Laravel menyediakan method bantuan, seperti:
-```
+```php
 Route::get('/user/{id}/{name}', function ($id, $name) {
     // kode program
 })->whereNumber('id')->whereAlpha('name');
@@ -189,7 +192,7 @@ Secara default, jika pola route tidak sesuai, maka response HTTP 404 akan dikemb
 
 #### Global Constraint
 Jika kita ingin menentukan secara menyeluruh sebuah route parameter akan selalu dibatasi sebuah regex, kita dapat memakai method `pattern`. Hal tersebut dapat didefinisikan dengan mengakses kelas `App\Providers\RouteServiceProvider` dan mengisi method `boot` sebagai berikut.
-```
+```php
 /**
  * Define your route model bindings, pattern filters, etc.
  *
@@ -202,7 +205,7 @@ public function boot()
 ```
 
 Selanjutnya, kita tidak perlu mendefinisikan kembali parameter route karena sudah secara otomatis diaplikasikan pada seluruh router.
-```
+```php
 Route::get('/user/{id}', function ($id) {
     // Only executed if {id} is numeric...
 });
@@ -210,14 +213,14 @@ Route::get('/user/{id}', function ($id) {
 
 #### Encoded Forward Slashes
 Laravel routing memperbolehkan seluruh karakter kecuali `/` (garis miring) pada parameter route. Namun, bagaimana untuk memperbolehkan tanda garis miring? Kita dapat mengizinkannya dengan menggunakan `where` pada regex.
-```
+```php
 Route::get('/search/{search}', function ($search) {
     return $search;
 })->where('search', '.*');
 ```
 ## Named Routes
 Kita dapat memberikan penamaan (yang harus selalu unik) dengan memberikan method `name` pada pendefinisian route.
-```
+```php
 // penamaan pada function closure
 Route::get('/user/profile', function () {
     //
@@ -232,7 +235,7 @@ Route::get(
 
 ### Generating URLs To Named Routes
 Sekarang kita coba memanggil url route yang telah diberikan nama. Kita cukup menggunakan fungsi pembantu `route` dan `redirect`.
-```
+```php
 // Generating URLs...
 $url = route('profile');
 
@@ -241,7 +244,7 @@ return redirect()->route('profile');
 ```
 
 Kita juga dapat melakukan passing parameter dengan menambahkan argumen kedua pada fungsi `route`.
-```
+```php
 // router yang dibuat
 Route::get('/user/{id}/profile', function ($id) {
     //
@@ -252,7 +255,7 @@ $url = route('profile', ['id' => 1]);
 ```
 
 Jika parameter yang ditambahkan terlalu banyak dari segment yang dimiliki, maka key-value yang dipassing-kan pada route akan secara otomatis digenerate menjadi URL query string.
-```
+```php
 // router yang dibuat
 Route::get('/user/{id}/profile', function ($id) {
     //
@@ -267,7 +270,7 @@ Ketika sebuah development system menjadi besar, route yang digunakan tentu menja
 
 ### Middleware
 Untuk melakukan assign middleware ke seluruh route dalam sebuah group, kita dapat memakai middleware sebelum mendefinisikan method `group`.
-```
+```php
 Route::middleware(['first', 'second'])->group(function () {
     Route::get('/', function () {
         // Uses first & second middleware...
@@ -280,7 +283,7 @@ Route::middleware(['first', 'second'])->group(function () {
 ```
 ### Subdomain Routing
 Route juga dapat melakukan handle terhadap subdomain routing.
-```
+```php
 Route::domain('{account}.example.com')->group(function () {
     Route::get('user/{id}', function ($account, $id) {
         //
@@ -290,7 +293,7 @@ Route::domain('{account}.example.com')->group(function () {
 
 ### Route Prefixes
 Method `prefix` digunakan jika ingin memberikan awalan prefix pada setiap URI yang dikelompokkan. Misal kita ingin membuat prefix pada seluruh route dengan awalan `admin`.
-```
+```php
 Route::prefix('admin')->group(function () {
     Route::get('/users', function () {
         // Matches The "/admin/users" URL
@@ -300,7 +303,7 @@ Route::prefix('admin')->group(function () {
 
 ### Route Name Prefixes
 Kita juga dapat memberikan prefix pada nama dari route. Namun, penamaan prefix tersebut harus menggunakan karakter `.` (titik) di akhir prefix.
-```
+```php
 Route::name('admin.')->group(function () {
     Route::get('/users', function () {
         // Route assigned name "admin.users"...
@@ -313,7 +316,7 @@ Ketika melakukan injeksi model ID ke dalam route atau controller action, kita se
 
 ### Implicit Binding
 Laravel secara otomatis mengatasi model Eloquent yang didefinisikan pada route atau controller action yang bersesuaian dengan nama segment route.
-```
+```php
 use App\Models\User;
 
 Route::get('/users/{user}', function (User $user) {
@@ -324,12 +327,12 @@ Apabila variabel `user` yang ditunjukkan sebagai model Eloquent dari `App\Models
 
 Tentu, implicit binding juga bekerja pada method controller.
 Pada route akan berbentuk:
-```
+```php
 // Route definition...
 Route::get('/users/{user}', [UserController::class, 'show']);
 ```
 Pada `UserController` akan berbentuk:
-```
+```php
 // lakukan pemanggilan model instance
 use App\Http\Controllers\UserController;
 use App\Models\User;
@@ -343,7 +346,7 @@ public function show(User $user)
 
 #### Customizing The Key
 Terkadang kita ingin menggunakan kolom selain `id`. Maka, spesifikasikan nama kolom pada definisi parameter.
-```
+```php
 use App\Models\Post;
 
 // mengambil kolom slug pada model Post
@@ -353,7 +356,7 @@ Route::get('/posts/{post:slug}', function (Post $post) {
 ```
 
 Jika ingin keseluruhan model binding ingin diatur agar dapat mengambil selain `id`, override method `getRouteKeyName` pada model Eloquent.
-```
+```php
 /**
  * Get the route key for the model.
  *
@@ -366,7 +369,7 @@ public function getRouteKeyName()
 ```
 #### Custom Keys and Scoping
 Kita juga dapat memanggil beberapa model binding.
-```
+```php
 use App\Models\Post;
 use App\Models\User;
 
@@ -377,7 +380,7 @@ Route::get('/users/{user}/posts/{post:slug}', function (User $user, Post $post) 
 
 #### Customizing Missing Model Behavior
 Secara default, respon HTTP 404 akan di-generate jika bound model tidak ditemukan. Tetapi, kita dapat melakukan kustomisasi dengan memanggil method `missing`.
-```
+```php
 use App\Http\Controllers\LocationsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -391,7 +394,7 @@ Route::get('/locations/{location:slug}', [LocationsController::class, 'show'])
 
 ### Explicit Binding
 Kita juga bisa mendefinisikan bind secara eksplisit dengan method `model` pada router. Untuk melakukannya, definisikan binding pada method `boot` pada `App\Providers\RouteServiceProvider`.
-```
+```php
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -409,7 +412,7 @@ public function boot()
 ```
 
 Selanjutnya, definisikan route yang mengandung parameter `{user}`.
-```
+```php
 use App\Models\User;
 
 Route::get('/users/{user}', function (User $user) {
@@ -419,7 +422,7 @@ Route::get('/users/{user}', function (User $user) {
 
 #### Customizing The Resolution Logic
 Jika kita ingin melakukan model binding dengan resolution logic tersendiri, gunakan method `Route::bind`. Pengaturan ini dilakukan pada method `boot` pada `App\Providers\RouteServiceProvider`.
-```
+```php
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -439,7 +442,7 @@ public function boot()
 ```
 
 Selain itu, kita juga dapat override method `resolveRouteBind` pada model Eloquent.
-```
+```php
 /**
  * Retrieve the model for a bound value.
  *
@@ -454,7 +457,7 @@ public function resolveRouteBinding($value, $field = null)
 ```
 ## Fallback Routes
 Kita dapat menggunakan method `Route::fallback` apabila ingin melakukan eksekusi ketika tidak ada route lain yang sesuai dengan request yang diajukan. Secara default, request yang tidak sesuai akan otomatis merender laman 404. Namun, kita dapat melakukan otomasi terhadap fallback ini dengan meletakkannya pada bagian route terakhir pada file `routes/web.php`.
-```
+```php
 Route::fallback(function () {
     // kode program
 });
@@ -464,7 +467,7 @@ Kita dapat membatasi rate trafik yang ada pada sebuah atau grup route.
 
 ### Defining Rate Limiters
 Untuk membatasi rate, kita bisa mengganti method `configureRateLimiting` pada class `App\Providers\RouteServiceProvider`. Nantinya, rate limiters menggunakan method `for` pada facade `RateLimiter` yang menerima nama rate limiter dan closure yang berisi konfigurasi limitasi. Konfigurasi yang digunakan dalam closure akan memakai class `Illuminate\Cache\RateLimiting\Limit`.
-```
+```php
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -482,7 +485,7 @@ protected function configureRateLimiting()
 ```
 
 Jika request melebihi limit, response HTTP 429 akan dikembalikan. Kita juga dapat mendefinisikan response tersendiri dengan memakai method `response`.
-```
+```php
 RateLimiter::for('global', function (Request $request) {
     return Limit::perMinute(1000)->response(function () {
         return response('Custom response...', 429);
@@ -490,7 +493,7 @@ RateLimiter::for('global', function (Request $request) {
 });
 ```
 Kita juga dapat membagi limit berdasarkan model. Misal jika ingin membagi limit apakah untuk user khusus atau tidak.
-```
+```php
 RateLimiter::for('uploads', function (Request $request) {
     return $request->user()->vipCustomer()
                 ? Limit::none()
@@ -500,7 +503,7 @@ RateLimiter::for('uploads', function (Request $request) {
 
 #### Segmenting Rate Limits
 Terdapat beberapa kasus dalam membatasi rate limits. Misal, kita hanya memperbolehkan user mengakses route 100 kali per menit per IP address. Untuk menyelesaikan ini, digunakan method `by`.
-```
+```php
 RateLimiter::for('uploads', function (Request $request) {
     return $request->user()->vipCustomer()
                 ? Limit::none()
@@ -508,7 +511,7 @@ RateLimiter::for('uploads', function (Request $request) {
 });
 ```
 Adapun kasus jika, kita ingin membatasi  akses route dalam 100 kali per menit untuk user terautentikasi serta 10 kali per menit per IP address untuk guest.
-```
+```php
 RateLimiter::for('uploads', function (Request $request) {
     return $request->user()
                 ? Limit::perMinute(100)->by($request->user()->id)
@@ -518,7 +521,7 @@ RateLimiter::for('uploads', function (Request $request) {
 
 ### Attaching Rate Limiters to Routes
 Sekarang, kita akan mempelajari cara untuk memasukkan rate limiters di atas ke dalam routers. Kita dapat menggunakan [middleware](https://laravel.com/docs/8.x/middleware) `throttle`.
-```
+```php
 Route::middleware(['throttle:uploads'])->group(function () {
     Route::post('/audio', function () {
         //
@@ -532,13 +535,13 @@ Route::middleware(['throttle:uploads'])->group(function () {
 
 #### Throttling With Redis
 Jika pada projek menggunakan Redis, maka kita bisa mengganti middleware `throttle` yang di-map pada class `Illuminate\Routing\Middleware\ThrottleRequests` dengan class `Illuminate\Routing\Middleware\ThrottleRequestsWithRedis` pada HTTP kernel `App\Http\Kernel`. Penggunaan akan menjadi lebih efisien dengan adanya Redis.
-```
+```php
 'throttle' => \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
 ```
 
 ## Form Method Spoofing
 Karena form HTML standar tidak mendukung action PUT, PATCH, atau DELETE, maka anda perlu menambahkan field `_method` tersembunyi pada form.
-```
+```html
 <form action="/example" method="POST">
     <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -546,7 +549,7 @@ Karena form HTML standar tidak mendukung action PUT, PATCH, atau DELETE, maka an
 ```
 
 Atau jika kita memakai [Blade directive](https://laravel.com/docs/8.x/blade), kita dapat memakai `@method` untuk generate `_method` secara otomatis.
-```
+```html
 <form action="/example" method="POST">
     @method('PUT')
     @csrf
@@ -555,7 +558,7 @@ Atau jika kita memakai [Blade directive](https://laravel.com/docs/8.x/blade), ki
 
 ## Accessing The Current Route
 Kita juga dapat mengakses informasi pada route handling.
-```
+```php
 use Illuminate\Support\Facades\Route;
 
 $route = Route::current(); // Illuminate\Routing\Route
@@ -568,13 +571,13 @@ Laravel juga menyediakan response terhadap [CORS](https://developer.mozilla.org/
 
 ## Route Caching
 Ketika deploy ke production, kita dapat memanfaatkan route cache Laravel. Dengan route cache, kita dapat mengurangi waktu yang dibutuhkan untuk mendaftarkan seluruh aplikasi route. Untuk menggunakan route cache, eksekusi command artisan `route:cache`.
-```
+```shell
 php artisan route:cache
 ```
 
 Ketika menjalankan command ini pada CLI, file cache route akan diolah pada setiap request. Ketika melakukan penambahan route baru, kita akan membutuhkan untuk generate route cache lagi. Karenanya, jalankan command `route:cache` hanya pada saat deployment project.
 
 Kita juga dapat membersihkan route cache dengan `route:clear`.
-```
+```shell
 php artisan route:clear
 ```
