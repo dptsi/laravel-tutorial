@@ -53,7 +53,7 @@ Catatan : Semua middleware diselesaikan melalui service container , jadi kita da
 ### Middleware & Responses
 
 Tentu saja, middleware dapat melakukan tugas sebelum atau sesudah meneruskan permintaan lebih dalam ke dalam aplikasi. Misalnya, middleware berikut akan melakukan beberapa tugas sebelum permintaan ditangani oleh aplikasi:
-```
+```php
 <?php
 
 namespace App\Http\Middleware;
@@ -71,7 +71,7 @@ class BeforeMiddleware
 }
 ```
 Namun, middleware ini akan menjalankan tugasnya setelah permintaan ditangani oleh aplikasi:
-```
+```php
 <?php
 
 namespace App\Http\Middleware;
@@ -99,7 +99,7 @@ Jika ingin middleware dijalankan selama setiap permintaan HTTP ke aplikasi kita,
 ### Assigning Middleware to Routes
 
 Jika ingin menetapkan middleware ke route tertentu, kita harus menetapkan kunci middleware terlebih dahulu di file`app/Http/Kernel.php` . Secara default,properti `$routeMiddleware kelas ini berisi entri untuk middleware yang disertakan dengan Laravel. Kita dapat menambahkan middleware kita sendiri ke daftar ini dan menetapkannya sebagai kunci pilihan kita:
-```
+```php
 // Within App\Http\Kernel class...
 
 protected $routeMiddleware = [
@@ -115,19 +115,19 @@ protected $routeMiddleware = [
 ];
 ```
 Setelah middleware didefinisikan di kernel HTTP, Anda dapat menggunakan metode `middleware` untuk menetapkan middleware ke route:
-```
+```php
 Route::get('/profile', function () {
     //
 })->middleware('auth');
 ```
 Kita dapat menetapkan beberapa middleware ke route dengan meneruskan array of nama middleware ke metode `middleware`:
-```
+```php
 Route::get('/', function () {
     //
 })->middleware(['first', 'second']);
 ```
 Saat menetapkan middleware, juga dapat memberikan nama kelas yang memenuhi syarat:
-```
+```php
 use App\Http\Middleware\EnsureTokenIsValid;
 
 Route::get('/profile', function () {
@@ -135,7 +135,7 @@ Route::get('/profile', function () {
 })->middleware(EnsureTokenIsValid::class);
 ```
 Saat menetapkan middleware ke grup route, terkadang perlu mencegah middleware diterapkan ke route individu dalam grup. Kita dapat melakukannya dengan menggunakan metode `withoutMiddleware`:
-```
+```php
 use App\Http\Middleware\EnsureTokenIsValid;
 
 Route::middleware([EnsureTokenIsValid::class])->group(function () {
@@ -154,7 +154,7 @@ Metode `withoutMiddleware` hanya dapat menghapus route middleware dan tidak berl
 
 Terkadang kita  mungkin ingin mengelompokkan beberapa middleware di bawah satu tombol agar membuatnya lebih mudah untuk ditetapkan ke route. Kita dapat melakukannya dengan menggunakan properti `$middlewareGroups` dari kernel HTTP kita.
 LARAVEL mengandung middleware umum yang mungkin ingin menerapkan ke route web dan API kita. Ingat, grup middleware ini secara otomatis diterapkan oleh `App\Providers\RouteServiceProvider` penyedia server aplikasi kita untuk meroutekan dalam file yang sesuai route web dan api:
-```
+```php
 /**
  * The application's route middleware groups.
  *
@@ -178,7 +178,7 @@ protected $middlewareGroups = [
 ];
 ```
 Grup middleware dapat ditetapkan ke route dan controller actions menggunakan sintaks yang sama dengan middleware individual. Sekali lagi, grup middleware membuatnya lebih nyaman untuk menetapkan banyak middleware ke sebuah route sekaligus:
-```
+```php
 Route::get('/', function () {
     //
 })->middleware('web');
@@ -192,7 +192,7 @@ Route::middleware(['web'])->group(function () {
 ### Sorting Middleware
 
 Terkadang, kita mungkin memerlukan middleware kita untuk mengeksekusi dalam urutan tertentu tetapi tidak memiliki kendali atas urutannya saat ditetapkan ke route . Dalam kasus ini, kita dapat menentukan prioritas middleware Anda menggunakan properti `$middlewarePriority` dari file `app/Http/Kernel.php` kita. Properti ini mungkin tidak ada di kernel HTTP kita secara default. Jika tidak ada, kita dapat menyalin definisi defaultnya di bawah ini:
-```
+```php
 /**
  * The priority-sorted list of middleware.
  *
@@ -217,7 +217,7 @@ protected $middlewarePriority = [
 Middleware juga dapat menerima parameter tambahan. Misalnya, jika aplikasi kita perlu memverifikasi bahwa pengguna yang diautentikasi memiliki "peran" tertentu sebelum melakukan tindakan tertentu, kita dapat membuat `EnsureUserHasRolemiddleware` yang menerima nama peran sebagai argumen tambahan.
 
 Parameter middleware tambahan akan diteruskan ke middleware setelah `$nextargumen`:
-```
+```php
 <?php
 
 namespace App\Http\Middleware;
@@ -246,7 +246,7 @@ class EnsureUserHasRole
 }
 ```
 Parameter middleware dapat ditentukan saat menentukan route  dengan memisahkan nama middleware dan parameter dengan a :. Beberapa parameter harus dipisahkan dengan koma:
-```
+```php
 Route::put('/post/{id}', function ($id) {
     //
 })->middleware('role:editor');
@@ -256,7 +256,7 @@ Route::put('/post/{id}', function ($id) {
 ## Terminable Middleware
 
 Terkadang middleware mungkin perlu melakukan beberapa pekerjaan setelah respon HTTP telah dikirim ke browser. Jika kita menentukan metode `terminate` di middleware dan server web kita menggunakan FastCGI, metode `terminate` tersebut akan secara otomatis dipanggil setelah respons dikirim ke browser:
-```
+```php
 <?php
 
 namespace Illuminate\Session\Middleware;
@@ -292,7 +292,7 @@ class TerminatingMiddleware
 ```
 Metode `terminate` harus menerima permintaan dan respon. Setelah kita menentukan middleware yang dapat diakhiri, kita harus menambahkannya ke daftar route atau middleware global dalam file `app/Http/Kernel.php`.
 Saat memanggil metode` terminate` pada middleware kita, Laravel akan menyelesaikan instance baru dari middleware dari service container . Jika kita ingin menggunakan instance middleware yang sama saat metode `handle` dan metode `terminate` dipanggil, register middleware dengan container menggunakan metode container `singleton`. Biasanya ini harus dilakukan dengan metode `register` dari `AppServiceProvider` kita:
-```
+```php
 use App\Http\Middleware\TerminatingMiddleware;
 
 /**
