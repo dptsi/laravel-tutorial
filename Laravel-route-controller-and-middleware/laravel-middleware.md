@@ -64,7 +64,7 @@ class BeforeMiddleware
 {
     public function handle($request, Closure $next)
     {
-        // Perform action
+        // Aksi
 
         return $next($request);
     }
@@ -84,7 +84,7 @@ class AfterMiddleware
     {
         $response = $next($request);
 
-        // Perform action
+        // Aksi
 
         return $response;
     }
@@ -100,7 +100,7 @@ Jika ingin middleware dijalankan selama setiap permintaan HTTP ke aplikasi kita,
 
 Jika ingin menetapkan middleware ke route tertentu, kita harus menetapkan kunci middleware terlebih dahulu di file`app/Http/Kernel.php` . Secara default,properti `$routeMiddleware kelas ini berisi entri untuk middleware yang disertakan dengan Laravel. Kita dapat menambahkan middleware kita sendiri ke daftar ini dan menetapkannya sebagai kunci pilihan kita:
 ```php
-// Within App\Http\Kernel class...
+// Tanpa App\Http\Kernel class...
 
 protected $routeMiddleware = [
     'auth' => \App\Http\Middleware\Authenticate::class,
@@ -156,7 +156,7 @@ Terkadang kita  mungkin ingin mengelompokkan beberapa middleware di bawah satu t
 LARAVEL mengandung middleware umum yang mungkin ingin menerapkan ke route web dan API kita. Ingat, grup middleware ini secara otomatis diterapkan oleh `App\Providers\RouteServiceProvider` penyedia server aplikasi kita untuk meroutekan dalam file yang sesuai route web dan api:
 ```php
 /**
- * The application's route middleware groups.
+ * Grup Middleware Route Aplikasi.
  *
  * @var array
  */
@@ -194,9 +194,9 @@ Route::middleware(['web'])->group(function () {
 Terkadang, kita mungkin memerlukan middleware kita untuk mengeksekusi dalam urutan tertentu tetapi tidak memiliki kendali atas urutannya saat ditetapkan ke route . Dalam kasus ini, kita dapat menentukan prioritas middleware Anda menggunakan properti `$middlewarePriority` dari file `app/Http/Kernel.php` kita. Properti ini mungkin tidak ada di kernel HTTP kita secara default. Jika tidak ada, kita dapat menyalin definisi defaultnya di bawah ini:
 ```php
 /**
- * The priority-sorted list of middleware.
+ * Prioritas list-terurut dari middleware.
  *
- * This forces non-global middleware to always be in the given order.
+ * Ini memaksa middleware non-global untuk selalu berada dalam urutan tertentu.
  *
  * @var array
  */
@@ -227,7 +227,7 @@ use Closure;
 class EnsureUserHasRole
 {
     /**
-     * Handle the incoming request.
+     * menghandle request yang akan datang 
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -266,7 +266,7 @@ use Closure;
 class TerminatingMiddleware
 {
     /**
-     * Handle an incoming request.
+     * Menghandle request yang akan datang.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -278,7 +278,7 @@ class TerminatingMiddleware
     }
 
     /**
-     * Handle tasks after the response has been sent to the browser.
+     * Menghandle tugas setelah response dikirim ke browser.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Http\Response  $response
@@ -296,7 +296,7 @@ Saat memanggil metode` terminate` pada middleware kita, Laravel akan menyelesaik
 use App\Http\Middleware\TerminatingMiddleware;
 
 /**
- * Register any application services.
+ * Register setiap servisi aplikasi.
  *
  * @return void
  */
