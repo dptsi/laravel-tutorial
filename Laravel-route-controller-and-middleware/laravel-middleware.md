@@ -17,11 +17,11 @@ Fungsi-fungsi Middleware secara umum adalah:
 ## Defining Middleware
 
 Untuk membuat middleware baru, gunakan `make:middleware` perintah Artisan:
-```
+```php
 php artisan make:middleware EnsureTokenIsValid
 ```
 Perintah ini akan menempatkan kelas `EnsureTokenIsValid` baru dalam direktori `app/Http/Middleware`. Di middleware ini, hanya akan mengizinkan akses ke route jika token input yang diberikan cocok dengan nilai yang ditentukan. Jika tidak, akan diarakan kembali pengguna ke home URI:
-```
+```php
 <?php
 
 namespace App\Http\Middleware;
