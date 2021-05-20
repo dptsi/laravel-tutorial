@@ -15,7 +15,7 @@ Berikut adalah alur saat exception terjadi:
 
 Dalam tutorial ini akan dijelaskan mengenai:
 - penggunaan dasar exception
-- membuat suatu exception handler
+- membuat custom exception class
 - multiple exception
 - rethrow exception
 - membuat top level exception handler
@@ -61,12 +61,12 @@ Keyword `throw` digunakan untuk memicu exception dan setiap `throw` harus memili
 
 Blok `catch` berfungsi untuk menangkap exception dan membuat objek yang berisi informasi exception.
 
-Berikut adalah contoh kode untuk menghandle exception:
+Berikut adalah contoh kode untuk menghandle exception.
 
 ```php
 <?php
 
-//fungsi untuk memeriksa apakah nilai argumen adalah nol. Jika nilai argumen adalah nol, maka lempar exception
+//fungsi untuk memeriksa apakah nilai num adalah nol. Jika nilai num adalah nol, maka lempar exception
 function check_num($num) {
   if($num == 0) {
     throw new Exception("value cannot be 0");
@@ -97,10 +97,52 @@ catch(Exception $e) {
 pesan: value cannot be 0 
 ```
 
-### Membuat suatu exception handler
+### Membuat custom exception class
+
+Custom exception class berisi fungsi yang dipanggil saat suatu exception terjadi dan class tersebut merupakan ekstensi dari class `Exception`. Berikut adalah contoh dari custom exception class.
+
+```php
+<?php
+//custom exception class
+class custom_exception extends Exception {
+  public function get_error_msg() {
+    $err_msg = $this->getMessage()." is not a valid e-mail";
+    return $err_msg;
+  }
+}
+
+$email = "budi@@test.com";
+
+try {
+  //check email
+  if(filter_var($email, FILTER_VALIDATE_EMAIL) === FALSE) {
+    //if email is not valid, then throw exception
+    throw new custom_exception($email);
+  }
+}
+
+catch (custom_exception $e) {
+  //get custom error message
+  echo $e->get_error_msg();
+}
+?> 
+```
+
+**Output:**
+```
+budi@@test.com is not a valid e-mail
+```
+
 ### Multiple exception
+
+
+
 ### Rethrow exception
+
+
+
 ### Membuat top level exception handler
+
 
 
 ## Referensi
