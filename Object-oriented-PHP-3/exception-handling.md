@@ -4,7 +4,7 @@
 
 ## Latar belakang topik
 
-Exception handling adalah cara untuk mengatasi error dengan pendekatan object oriented. Exception handling akan mengubah alur kode jika terdapat suatu exception. Exception adalah kondisi error yang terjadi.
+Exception handling adalah proses yang merespon suatu exception selama ekseskusi program. Exception adalah kondisi yang mengganggu alur normal program saat program berjalan.
 
 ## Konsep-konsep
 
@@ -24,7 +24,7 @@ Dalam tutorial ini akan dijelaskan mengenai:
 
 ### Penggunaan dasar exception
 
-Jika suatu exception tidak ditangkap, maka error akan dikabarkan dengan pesan "Uncaught Exception". Berikut adalah contoh exception yang tidak ditangkap.
+Jika suatu exception tidak ditangkap, maka fatal error akan muncul dengan pesan "Uncaught Exception". Berikut adalah contoh exception yang tidak ditangkap.
 
 ```php
 <?php
