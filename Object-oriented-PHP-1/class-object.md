@@ -71,6 +71,10 @@ echo $employee1->get_name();
 echo "\n";
 ```
 
+Hasil yang didapatkan
+
+![steven](https://user-images.githubusercontent.com/80946219/118923215-69098880-b965-11eb-879e-2075d18cd308.png)
+
 Terdapat cara lain dalam menampilkan nama dari employee
 
 Cara 2
@@ -81,6 +85,10 @@ echo $employee2->{"get_name"}();
 echo "\n";
 ```
 
+Hasil yang didapatkan
+
+![Rudolf](https://user-images.githubusercontent.com/80946219/118923320-8fc7bf00-b965-11eb-93db-b8eb0d52e63c.png)
+
 Cara 3
 ```php
 $employee3 = new Employee();
@@ -90,16 +98,24 @@ echo $employee3->{$funcGetNama}();
 echo "\n";
 ```
 
+Hasil yang didapatkan
+
+![Smith](https://user-images.githubusercontent.com/80946219/118923417-b7b72280-b965-11eb-82e8-9ad724712b66.png)
+
 Cara 4
+Pada cara ini, method set_name dan get_name tidak diperlukan
+
 ```php
+class Employee{
+    public $name;
+}
+
 $employee4 = new Employee();
-$employee4->name = "Kevin";
-echo $employee4->name;
+$employee4->name = "Kevin"; //set nama
+echo $employee4->name; //print nama
 echo "\n";
 ```
 
-## Hasilnya
-Hasil yang bisa didapatkan
+Hasil yang didapatkan
 
-![hasil](https://user-images.githubusercontent.com/80946219/118680038-9bfa3200-b828-11eb-8737-40121c3b39d8.png)
-
+![Kevin](https://user-images.githubusercontent.com/80946219/118923519-dae1d200-b965-11eb-9070-226290d3b775.png)
