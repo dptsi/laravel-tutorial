@@ -98,7 +98,7 @@ class Employee {
 
 ```
 
-### Langkah keempat
+### Langkah kelima
 
 Menginstansiasi object dimana akan menjalankan fungsi constructor. 
 
@@ -110,7 +110,7 @@ Hasilnya
 
 ![image](https://user-images.githubusercontent.com/80946219/118929701-0cab6680-b96f-11eb-8f0e-c69ea1772839.png)
 
-### Langkah kelima
+### Langkah keenam
 
 Memanggil fungsi set_nama dan get_nama untuk menampilkan hasilnya.
 
