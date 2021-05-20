@@ -8,11 +8,11 @@ Pada dasarnya, seluruh entitas di dunia dapat dikelompokkan dan dikategorisasika
 
 Salah satu kesamaan pada tiap makhluk hidup adalah bergerak, namun disini walaupun makhluk hidup sama-sama bergerak, pergerakan mereka berbeda-beda. Ada yang bergerak dengan melangkah, dengan terbang, dengan menyeret tubuhnya dan lain sebagainya. Alat geraknya pun berbeda, ada yang menggunakan kaki, sirip, sayap. Dari situlah kita temukan bahwa terdapat persamaan dasar dari berbagai macam entitas yang sebenarnya sama, namun perlakuannya yang mungkin berbeda pada setiap entitas.
 
+## Konsep-konsep
+
 <p align="center">
 <img align="centre" src="https://cdn.discordapp.com/attachments/804405775988555776/844841853908287518/Untitled_Diagram_7.png">
 </p>
-
-## Konsep-konsep
 
 Polimorfisme dikatakan sebagai bentuk banyak, karena suatu class dapat membentuk class-class lainnya yang memiliki persamaan mendasar. Polimorfisme merupakan sebuah konsep dimana banyak class yang memiliki method yang sama, namun pengimplementasian method tersebut pada setiap class dapat berbeda-beda. Contohnya setiap hewan bisa bersuara, namun suara tersebut berbeda tergantung pada hewannya. Agar kita dapat memasukkan sebuah method yang sama pada banyak class, maka class tersebut harus diturunkan dari sebuah abstract class atau dari berbagai macam interface.
 
