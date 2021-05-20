@@ -15,6 +15,43 @@ Berikut adalah alur saat exception terjadi:
 2. eksekusi kode akan diganti ke exception handler function
 3. handler dapat melanjutkan eksekusi kode dari state yang tersimpan atau terminasi eksekusi kode atau melanjutkan dari lokasi lain dalam kode
 
+### Keyword dalam Exception Handling
+
+Keyword berikut digunakan dalam exception handling dalam PHP:
+1. `try`
+
+Blok `try` berisi kode yang dapat menghasilkan exception. Semua kode dalam blok `try` akan dieksekusi jika tidak terdapat exception dilemparkan.
+
+2. `throw`
+
+Keyword `throw` digunakan untuk memberi signal terjadinya suatu exception dan PHP runtime akan mencari statement `catch` untuk menghandle exception tersebut.
+
+3. `catch`
+
+Blok `catch` berfungsi untuk menangkap exception dan membuat objek yang berisi informasi exception.
+
+4. `finally`
+
+Kode dalam blok `finally` akan selalu dieksekusi setelah blok `try` dan `catch`, terlepas dari apakah exception sudah dilemparkan atau belum.
+
+Berikut adalah contoh blok try catch-finally
+
+```php
+try {
+    // run your code here
+}
+catch (exception $e) {
+    //code to handle the exception
+}
+finally {
+    //optional code that always runs
+}
+```
+
+dan berikut adalah diagram yang menggambarkan cara kerja blok try catch-finally.
+
+![image](https://user-images.githubusercontent.com/58259649/118943657-65d2c480-b986-11eb-9ca6-eed51f5c623c.png)
+
 Dalam tutorial ini akan dijelaskan mengenai:
 - penggunaan dasar exception
 - membuat custom exception class
@@ -52,20 +89,7 @@ Stack trace:
   thrown in /workspace/Main.php on line 6
 ```
 
-Untuk mencegah error di atas, perlu dibuat blok kode untuk menghandle exception. Blok kode tersebut harus berisi keyword:
-1. `try`
-
-Fungsi yang dapat menghasilkan exception diletakkan dalam blok `try`. Jika terjadi exception, maka exception dilempar. Jika tidak terjadi exception, maka kode akan berjalan dengan alur normal.
-
-2. `throw`
-
-Keyword `throw` digunakan untuk memicu exception dan setiap `throw` harus memiliki setidaknya satu blok `catch`.
-
-3. `catch`
-
-Blok `catch` berfungsi untuk menangkap exception dan membuat objek yang berisi informasi exception.
-
-Berikut adalah contoh kode untuk menghandle exception.
+Untuk mencegah error di atas, perlu dibuat blok kode untuk menghandle exception. Berikut adalah contoh kode untuk menghandle exception.
 
 ```php
 <?php
