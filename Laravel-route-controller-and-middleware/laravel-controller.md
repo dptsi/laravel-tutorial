@@ -127,7 +127,7 @@ Route::resources([
     'posts' => PostController::class,
 ]);
 ```
-####Aksi/method yang dapat dilakukan oleh resouce controller :
+**Aksi/method yang dapat dilakukan oleh resouce controller** :
 ** TOLONG TABELNYA WIS**
 
 Penetapan resource model dapat dilakukan saat generating controller dengan php artisan berikut :
@@ -151,7 +151,7 @@ Route::resource('photos', PhotoController::class)->except([
 ```
 Pada syntax pertama mengandung aksi index dan show saja. Sedangkan pada syntax kedua mengandung aksi selain create, store, update, dan destroy. Kedua syntax tersebut memiliki tujuan yang sama.
 
-#### API RESOURCE ROUTES
+**API RESOURCE ROUTES**
 Saat mendeklarasikan route resource yang akan digunakan oleh API, kita biasanya ingin mengecualikan rute yang menyajikan template HTML seperti `create` dan `edit`. Maka, kita dapat menggunakan api Resource metode ini untuk mengecualikan dua rute ini secara otomatis:
 ```php
 use App\Http\Controllers\PhotoController;
