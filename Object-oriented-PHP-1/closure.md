@@ -8,7 +8,7 @@ Terkadang kita ingin menulis dan memanggil fungsi dengan mudah, terutama dalam f
 
 ## Konsep-konsep
 
-Closure atau anonymous function merupakan fungsi yang tidak memiliki nama. Untuk memanggilnya secara individu, kita dapat menggunakan variabel yang merujuk pada closure tersebut. Seperti fungsi pada umumnya, closure juga dapat memiliki parameter dan me-return nilai. Pada umumnya, closure digunakan sebagai nilai parameter callable. 
+Closure atau anonymous function merupakan fungsi yang tidak memiliki nama. Untuk memanggilnya secara individu, kita dapat menggunakan variabel yang merujuk pada closure tersebut. Seperti fungsi pada umumnya, closure juga dapat memiliki parameter dan me-return sebuah nilai. Pada umumnya, closure digunakan sebagai nilai parameter callable. 
 
 ## Langkah-langkah tutorial
 
@@ -70,7 +70,7 @@ Pada langkah ini, output yang dihasilkan adalah `Hello, Steven!`.
 
 ### Langkah kelima
 
-Buat variabel message dan variabel yang merujuk pada closure tanpa parameter dengan keyword use agar closure dapat menggunakan variabel di luar closure, bukan dilewatkan dari parameter.
+Buat variabel message dan variabel yang merujuk pada closure tanpa parameter dan dengan keyword use agar closure dapat menggunakan variabel di luar closure, bukan dilewatkan dari parameter.
 
 ```php
 <?php
