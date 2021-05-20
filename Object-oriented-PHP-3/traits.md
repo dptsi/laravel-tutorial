@@ -297,4 +297,5 @@ Untuk trait dan class yang akan diinstansiasi yang memiliki nama fungsi yang sam
 ## Referensi
 
 https://khoerodin.id/object-oriented-php/trait-dalam-oop-php/
+<br>
 https://www.php.net/manual/en/language.oop5.traits.php
