@@ -4,7 +4,7 @@
 
 ## Latar belakang topik
 
-Secara umum, namespace adalah salah satu cara untuk mengenkapsulasi item. Sebagai contoh, dalam sistem operasi terdapat directory yang berfungsi untuk mengelompokkan file-file dan directory tersebut berfungsi sebagai namespace dari file-file yang ada di dalamnya. Misal terdapat file `note.txt`, file tersebut dapat berada dalam directory `/home/dan` dan `/home/dan/Downloads` secara bersamaan, tetapi dua file `note.txt` tidak dapat berada dalam directory yang sama. Untuk mengakses file `note.txt` di luar directory `/home/dan`, maka nama directory harus digabungkan dengan nama file menjadi `/home/dan/note.txt`. Sama halnya dengan namespace dalam PHP.
+Secara umum, namespace adalah salah satu cara untuk enkapsulasi item. Sebagai contoh, dalam sistem operasi terdapat directory yang berfungsi untuk mengelompokkan file-file dan directory tersebut berfungsi sebagai namespace dari file-file yang ada di dalamnya. Misal terdapat file `note.txt`, file tersebut dapat berada dalam directory `/home/dan` dan `/home/dan/Downloads` secara bersamaan, tetapi dua file `note.txt` tidak dapat berada dalam directory yang sama. Untuk mengakses file `note.txt` di luar directory `/home/dan`, maka nama directory harus digabungkan dengan nama file menjadi `/home/dan/note.txt`. Sama halnya dengan namespace dalam PHP.
 
 ## Konsep-konsep
 
