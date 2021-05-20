@@ -182,7 +182,7 @@ budi@test.com is a test e-mail
 
 ### Rethrow exception
 
-Suatu exception dapat dilemparkan kembali dalam suatu blok `catch`. Berikut adalah contoh dari rethrowo exception.
+Suatu exception dapat dilemparkan kembali dalam suatu blok `catch`. Berikut adalah contoh dari rethrow exception.
 
 ```php
 <?php
