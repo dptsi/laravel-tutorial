@@ -184,7 +184,7 @@ echo "\n";
 
 Pada langkah ini, object dari child class dapat mengakses method yang dimiliki child class sendiri beserta atributnya secara tidak langsung.
 
-### Langkah keenam
+### Langkah kesembilan
 
 Coba gunakan method parent class yang telah di-override oleh child class.
 
