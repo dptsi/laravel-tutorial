@@ -238,4 +238,103 @@ Setelah kata kerja dikustomisasi, pendaftaran route sumber daya seperti `Route::
 
 ### Supplementing Resource Controllers
 
+Jika kita perlu menambahkan route tambahan ke resource controller di luar rangkaian route resource default, kita harus definisikan route tersebut sebelum memanggil `Route::resource ` method; jika tidak, route yang didefinisikan oleh resource method mungkin secara tidak sengaja lebih diutamakan daripada route tambahan kita :
+```php
+use App\Http\Controller\PhotoController;
+
+Route::get('/photos/popular', [PhotoController::class, 'popular']);
+Route::resource('photos', PhotoController::class);
+```
+
+## Dependency Injection & Controllers
+
+### Apa Itu Dependency Injection?
+
+[Dependency Injection](https://stackoverflow.com/questions/130794/what-is-dependency-injection)
+
+### Constructor Injection
+
+Service container laravel digunakan untuk menyelesaikan semua Laravel controllers. Sebagai hasilnya, kita dapat type-hint setiap dependensi yang mungkin diperlukan controller dalam konstruktornya. Ketergantungan yang dideklarasikan akan secara otomatis diselesaikan dan inject ke instance controller: 
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Repositories\UserRepository;
+
+class UserController extends Controller
+{
+    /**
+     * user repository instance.
+     */
+    protected $users;
+
+    /**
+     * Membuat controller instance baru.
+     *
+     * @param  \App\Repositories\UserRepository  $users
+     * @return void
+     */
+    public function __construct(UserRepository $users)
+    {
+        $this->users = $users;
+    }
+}
+```
+
+### Method Injection
+
+Selain contructor injection, kita juga dapat mengetik dependensi-hint pada controller's method. Penggunaan umum untuk controller's method adalah inject `Illuminate\Http\Request` instance ke dalam method controller:: 
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class UserController extends Controller
+{
+    /**
+     * Store user baru
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $name = $request->name;
+
+        //
+    }
+}
+```
+Jika controller method kita juga mengharapkan input dari parameter route, register argumen route kita setelah dependensi kita yang lain. Misalnya, jika route kita didefinisikan seperti :
+```php
+use App\Http\Controllers\UserController;
+
+Route::put('/user/{id}', [UserController::class, 'update']);
+```
+kita masih dapat mengetikkan hint `Illuminate\Http\Request` dan mengakses parameter dengan mendefinisikan controller method sebagai berikut: 
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class UserController extends Controller
+{
+    /**
+     * Update user yang diberikan
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+}
+```
 
