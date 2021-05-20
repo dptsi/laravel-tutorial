@@ -4,9 +4,11 @@
 
 ## Latar belakang topik
 
-Exception handling adalah proses yang merespon suatu exception selama ekseskusi program. Exception adalah kondisi yang mengganggu alur normal program saat program berjalan.
+Exception adalah kondisi yang tidak diinginkan yang mengganggu alur normal program saat program berjalan. Jika terjadi exception, maka program akan berhenti dan akan mengeluarkan error message. PHP dapat menghandle exception ini. Dengan menghandle exception, kita dapat memberikan message yang bermakna kepada pengguna, di mana error message dari sistem mungkin tidak dapat dipahami pengguna.
 
 ## Konsep-konsep
+
+Exception handling adalah proses yang merespon suatu exception selama ekseskusi program.
 
 Berikut adalah alur saat exception terjadi:
 1. state dari kode sekarang disimpan
@@ -20,7 +22,7 @@ Dalam tutorial ini akan dijelaskan mengenai:
 - rethrow exception
 - membuat top level exception handler
 
-## Langkah-langkah tutorial
+## Implementasi
 
 ### Penggunaan dasar exception
 
