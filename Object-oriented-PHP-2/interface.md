@@ -106,4 +106,4 @@ class Vime implements smartphone{
 
 Berikut adalah output yang ditampilkan pada browser.
 
-![Hasil output](Interface.png)
+![Hasil output](https://cdn.discordapp.com/attachments/804405775988555776/844820831875235910/unknown.png)
