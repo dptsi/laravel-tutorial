@@ -6,7 +6,7 @@
 
 Sering kali dalam pembuatan beberapa class terdapat kemiripan atribut dan method yang dimiliki, dimana suatu class memiliki beberapa atribut dan method yang sama dengan class yang lain. Misalnya seperti class HourlyEmployee yang memiliki atribut dan method yang sama dengan class Employee, seperti name, salary, dan method setter-getter nya. Namun, yang membedakan adalah class HourlyEmployee memiliki atribut lainnya yang berbeda dengan class Employee, yaitu hours dan salaryperhours. Cara perhitungan salary mereka pun berbeda walaupun nama method untuk perhitungan salary mereka sama, dimana class Employee menerima salary yang tetap sedangkan class Employee menerima salary berdasarkan hasil perkalian jumlah jam mereka bekerja dengan salaryperhours.
 
-Biasanya kita akan menulis code untuk atribut dan method yang sama berulang kali pada class-class yang mirip tersebut. Namun, kita dapat mencegah penulisan atribut dan method yang sama berulang-ulang kali dengan menggunakan inheritance dan memanfaatkan override untuk mengubah isi method yang berbeda, seperi set_salary dari class HourlyEmployee. Sehingga, untuk mencegah pengulangan penulisan code yang sama pada class Employee dan class HourlyEmployee, kita dapat meng-inharitance class HourlyEmployee dari class Employee.
+Biasanya, kita akan menulis code untuk atribut dan method yang sama berulang kali pada class-class yang mirip tersebut. Namun, kita dapat mencegah penulisan atribut dan method yang sama berulang-ulang kali dengan menggunakan inheritance dan memanfaatkan override untuk mengubah isi method yang berbeda, seperi set_salary dari class HourlyEmployee. Sehingga, untuk mencegah pengulangan penulisan code yang sama pada class Employee dan class HourlyEmployee, kita dapat meng-inharitance class HourlyEmployee dari class Employee.
 
 ## Konsep-konsep
 
@@ -128,7 +128,7 @@ class HourlyEmployee extends Employee{
   }
 
   // override
-  function set_salary($salary) {
+  function set_salary($salaryperhours) {
     $this->salaryperhours = $salaryperhours;
     $this->salary = $this->hours * $this->salaryperhours;
     echo $this->get_salary();
