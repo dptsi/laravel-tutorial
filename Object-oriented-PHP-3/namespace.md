@@ -133,6 +133,20 @@ class myClass
 }
 ```
 
+```php
+<?php
+//main.php
+require 'myClass.php';
+
+use \Dan\Tools\myClass as theClass;
+
+// buat objek dari class myClass
+$myObject = new theClass();
+
+// coba fungsi myFunction()
+echo $myObject->myFunction();
+```
+
 **Output:**
 ```
 Hello World
@@ -157,6 +171,20 @@ class myClass
         echo $x->getTimestamp();
     }
 }
+```
+
+```php
+<?php
+//main.php
+require 'myClass.php';
+
+use \Dan\Tools\myClass as theClass;
+
+// buat objek dari class myClass
+$myObject = new theClass();
+
+// coba fungsi myFunction()
+echo $myObject->myFunction();
 ```
 
 **Output:**
