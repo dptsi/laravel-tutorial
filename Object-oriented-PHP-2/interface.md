@@ -107,3 +107,6 @@ class Vime implements smartphone{
 Berikut adalah output yang ditampilkan pada browser.
 
 ![Hasil output](https://cdn.discordapp.com/attachments/804405775988555776/844820831875235910/unknown.png)
+
+## Kesimpulan
+Penggunaan interface pada beberapa class, memungkinkan untuk class-class tersebut menggunakan suatu method atau fungsi yang sama, namun memiliki perlakuan yang berbeda. Hal tersebut membantu programmer untuk mengingatkan fungsi dasar apa saja yang harus ada dan wajib diisikan pada suatu class yang mengimplementasikan interface, agar tidak terdapat suatu fungsi yang miss atau gagal dijalankan oleh user.
