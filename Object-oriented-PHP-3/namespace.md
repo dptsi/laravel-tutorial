@@ -16,6 +16,8 @@ Dalam PHP, namespace digunakan untuk:
 
 ## Langkah-langkah tutorial
 
+Berikut adalah langkah-langkah menggunakan `namespace` di PHP.
+
 ### Langkah 1
 
 Dalam file `myClass.php`, buat sebuah kelas bernama `myClass`.
