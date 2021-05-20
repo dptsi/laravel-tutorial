@@ -2,6 +2,7 @@
 
 [Kembali](readme.md)
 
+
 ## Latar Belakang
 
 Programmer pada umumnya menggunakan satu file php untuk menyimpan satu kelas, sehingga untuk melakukan include, biasanya dilakukan secara manual dan terkesan bertele-tele.
@@ -71,6 +72,11 @@ $kambing->suaraKambing();
 
 ```
 
+**Output:** :  
+```
+mooomeawmbeek
+```
+
 File index di atas merupakan file dengan menggunakan include yang dipisah-pisah. Hal tersebut akan menjadi tidak efektif apabila sudah berhadapan dengan program dengan puluhan atau ratusan kelas.
 
 Oleh karenanya, digunakanlah Autoload seperti contoh di bawah :
@@ -93,7 +99,19 @@ $kambing = new Kambing();
 $kambing->suaraKambing();
 
 ```
+
+**Output:** :  
+```
+mooomeawmbeek
+```
+
 File index di atas tidak lagi memerlukan pemanggilan kelas-kelas lainnya, karena `spl_autoload_register()` telah secara otomatis memanggil kelas-kelas yang dibutuhkan.
 
 
 spl : standard php library
+
+## Referensi
+
+https://khoerodin.id/object-oriented-php/class-autoloader-dalam-oop-php/
+<br>
+https://www.php.net/manual/en/language.oop5.autoload.php
