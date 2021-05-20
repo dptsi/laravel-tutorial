@@ -1,4 +1,4 @@
-# Topik 2
+# Laravel Controller
 
 [Kembali](readme.md)
 
