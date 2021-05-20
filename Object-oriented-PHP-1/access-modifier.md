@@ -180,7 +180,7 @@ Inisialisasi object `employee` dengan class `Employee`.
 ```php
 <?php
 
-$employee1 = new Employee();
+$employee = new Employee();
 
 ?>
 ```
