@@ -66,6 +66,7 @@ Dalam file `main.php`, untuk membuat objek dari class `myClass`, tambahkan names
 
 ```php
 <?php
+//main.php
 require 'myClass.php';
 
 // buat objek dari class myClass
@@ -81,6 +82,7 @@ Untuk menyingkat namespace, gunakan statement `use` di atas file. Tambahkan `use
 
 ```php
 <?php
+//main.php
 require 'myClass.php';
 
 use \Dan\Tools\myClass as theClass;
@@ -94,6 +96,7 @@ Selanjutnya, `theClass` akan merefer ke `\Dan\Tools\myClass`.
 
 ```php
 <?php
+//main.php
 require 'myClass.php';
 
 use \Dan\Tools\myClass as theClass;
@@ -103,6 +106,63 @@ $myObject = new theClass();
 
 // coba fungsi myFunction()
 echo $myObject->myFunction();
+```
+
+**Output:**
+```
+Hello World
+```
+
+### Langkah 7
+
+Semua kelas dalam PHP modern berada dalam suatu namespace, kecuali core class PHP. Jika class sudah berada dalam suatu namespace, untuk mengakses core class PHP dalam class tersebut tambahkan `\` sebelum nama dari core class PHP. Pada contoh ini, digunakan class `DateTime()` yang merupakan core class PHP.
+
+```php
+<?php
+//myClass.php
+
+namespace Dan\Tools;
+
+class myClass
+{
+    public function myFunction() {
+        echo "Hello World\n";
+        $x = new \DateTime();
+        echo $x->getTimestamp();
+    }
+}
+```
+
+**Output:**
+```
+Hello World
+1621489149
+```
+
+Jika tidak ingin menambahkan `\`, maka dapat menggunakan keyword `use`. Tambahkan `use DateTime` dan hapus `\`.
+
+```php
+<?php
+//myClass.php
+
+namespace Dan\Tools;
+
+use DateTime;
+
+class myClass
+{
+    public function myFunction() {
+        echo "Hello World\n";
+        $x = new DateTime();
+        echo $x->getTimestamp();
+    }
+}
+```
+
+**Output:**
+```
+Hello World
+1621489149
 ```
 
 ## Referensi
