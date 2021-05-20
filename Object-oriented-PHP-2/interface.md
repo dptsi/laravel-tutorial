@@ -89,7 +89,7 @@ interface OperatingSystem{
    
  class Xiaovo implements PowerOn, OperatingSystem{
 	public function turn_on() {
-	  return "<Gambar Kodok>Xiaovo sedang booting...";
+	  return "[Gambar Kodok] Xiaovo sedang booting...";
 	}
  
 	public function show_ui() {
@@ -99,7 +99,7 @@ interface OperatingSystem{
    
  class Realsus implements PowerOn, OperatingSystem{
 	public function turn_on() {
-	  return "<Tulisan SnSV>Realsus sedang booting...";
+	  return "[Tulisan SnSV] Realsus sedang booting...";
 	}
  
 	public function show_ui() {
@@ -109,7 +109,7 @@ interface OperatingSystem{
  
  class Vime implements PowerOn, OperatingSystem{
 	public function turn_on() {
-	  return "<Gambar Robot>Vime sedang booting...";
+	  return "[Gambar Robot] Vime sedang booting...";
 	}
 	
 	public function show_ui() {
