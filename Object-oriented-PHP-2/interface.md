@@ -106,4 +106,4 @@ class Vime implements smartphone{
 
 Berikut adalah output yang ditampilkan pada browser.
 
-![Hasil output](./Object-oriented-PHP-2/src/Interface.png)
+![Hasil output](Interface.png)
