@@ -3,6 +3,7 @@
 [Kembali](readme.md)
 
 
+
 ## Latar Belakang Topik
 
 PHP merupakan suatu bahasa yang tidak mendukung multiple inheritance, dengan kata lain hanya setiap kelas hanya diperbolehkan mengextend 1 kelas lain.
@@ -16,7 +17,7 @@ Singkatnya Trait adalah suatu mekanisme dimana suatu class diizinkan untuk mengg
 Syntax Trait :
 
 ``` php
-trait myTrait(){
+trait myTrait{
     
     ... ;
 }
@@ -26,7 +27,7 @@ trait myTrait(){
 Syntax trait hampir sama dengan class, akan tetapi trait tidak dapat menginstansiasi dirinya sendiri, sehingga membutuhkan kelas sebagai pendukungnya.
 
 ``` php
-trait myTrait(){
+trait myTrait{
     function Hello(){
         echo "Hello";
     }
@@ -36,13 +37,16 @@ $obj = new myTrait();
 
 ```
 
-Output : `Error: Cannot instantiate trait myTrait ...`
+**Output:** : 
+```
+Error: Cannot instantiate trait myTrait ...
+```
 
 
 Syntax kelas yang menggunakan trait :
 
 ``` php
-class myClass(){
+class myClass{
     use myTrait;
 }
 ```
@@ -83,7 +87,10 @@ $obj->methodA();
 ?>
 ```
 
-Output : `Perancangan Berbasis `
+**Output:** : 
+```
+Perancangan Berbasis 
+```
 
 Output tidak sesuai dengan keinginan kita
 
@@ -120,7 +127,10 @@ $obj->methodB();                     // Method B dapat dipanggil
 ?>
 ```
 
-Output : `Perancangan Berbasis Kerangka Kerja`
+**Output:** : 
+```
+Perancangan Berbasis Kerangka Kerja
+```
 
 
 #### 3 Menggunakan Multiple Trait
@@ -155,7 +165,11 @@ $obj->methodB();                     // Method A dan B dapat dipanggil
 ?>
 ```
 
-Output : `Perancangan Berbasis Kerangka Kerja`
+**Output:** :  
+```
+Perancangan Berbasis Kerangka Kerja
+```
+
 
 #### 4 Menggunakan trait di dalam trait
 
@@ -195,13 +209,17 @@ $obj->methodB();
 $obj->methodC();
 ```
 
-Output : `Institut Teknologi Sepuluh Nopember`
+**Output:** : 
+```
+Institut Teknologi Sepuluh Nopember
+```
+
 
 #### 5 Urutan Prioritas Trait vs Class
 
 Urutan prioritas method dalam trait memiliki dua aturan:
 
-##### 1. Method turunan akan ditimpa oleh method yang berasal dari trait
+##### **1. Method turunan akan ditimpa oleh method yang berasal dari trait**
 
 Pada contoh di bawah, terdapat 2 method dengan nama yang sama di dalam masing-masing trait yang digunakan dan class yang diextend.
 
@@ -231,7 +249,10 @@ $obj->methodA();
 ?>
 ```
 
-Output : `Trait Menang !!`
+**Output:** : 
+```
+Trait Menang !!
+```
 
 Sesuai Aturan, dengan nama method yang sama, trait akan lebih diprioritaskan daripada kelas parent yang diextend.
 
@@ -263,6 +284,17 @@ $obj->methodA();
 ?>
 ```
 
-Output : `Current Class Menang !!`
+**Output:** :  
+```
+Current Class Menang !!
+```
 
 Untuk trait dan class yang akan diinstansiasi yang memiliki nama fungsi yang sama, php akan memprioritaskan kelas yang akan diinstansiasi.
+
+
+
+
+## Referensi
+
+https://khoerodin.id/object-oriented-php/trait-dalam-oop-php/
+https://www.php.net/manual/en/language.oop5.traits.php
