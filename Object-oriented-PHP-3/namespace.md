@@ -153,7 +153,7 @@ Hello World
 1621489149
 ```
 
-Jika tidak ingin menambahkan `\`, maka dapat menggunakan keyword `use`. Tambahkan `use DateTime` dan hapus `\`.
+Jika tidak ingin menambahkan `\`, maka dapat menggunakan keyword `use`. Tambahkan `use DateTime`.
 
 ```php
 <?php
