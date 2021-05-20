@@ -29,23 +29,25 @@ Jika suatu exception tidak ditangkap, maka error akan dikabarkan dengan pesan "U
 ```php
 <?php
 
-function check_num($num) {
-  if($num == 0) {
-    throw new Exception("value cannot be 0");
-  }
-  return true;
+function check_num($num)
+{
+    if ($num == 0) {
+        throw new Exception("value cannot be 0");
+    }
+    return true;
 }
 
-checkNum(0);
-?> 
+check_num(0);
+?>
 ```
 
 **Output:**
 ```
-PHP Fatal error:  Uncaught Error: Call to undefined function checkNum() in /workspace/Main.php:11
+PHP Fatal error:  Uncaught Exception: value cannot be 0 in /workspace/Main.php:6
 Stack trace:
-#0 {main}
-  thrown in /workspace/Main.php on line 11
+#0 /workspace/Main.php(11): check_num()
+#1 {main}
+  thrown in /workspace/Main.php on line 6
 ```
 
 Untuk mencegah error di atas, perlu dibuat blok kode untuk menghandle exception. Blok kode tersebut harus berisi keyword:
@@ -67,29 +69,29 @@ Berikut adalah contoh kode untuk menghandle exception.
 <?php
 
 //fungsi untuk memeriksa apakah nilai num adalah nol. Jika nilai num adalah nol, maka lempar exception
-function check_num($num) {
-  if($num == 0) {
-    throw new Exception("value cannot be 0");
-  }
-  return true;
+function check_num($num)
+{
+    if ($num == 0) {
+        throw new Exception("value cannot be 0");
+    }
+    return true;
 }
 
 //blok try
 try {
-  //periksa fungsi check_num()
-  check_num(0);
-  
-  //alur normal
-  echo 'values is not 0';
+    //periksa fungsi check_num()
+    check_num(0);
+
+    //alur normal
+    echo 'values is not 0';
 }
 
 //blok catch
-catch(Exception $e) {
-  //object Exception "e" berisi informasi exception
-  echo 'pesan: ' .$e->getMessage();
+catch (Exception $e) {
+    //object Exception "e" berisi informasi exception
+    echo 'pesan: ' . $e->getMessage();
 }
-
-?> 
+?>
 ```
 
 **Output:**
@@ -104,28 +106,28 @@ Custom exception class berisi fungsi yang dipanggil saat suatu exception terjadi
 ```php
 <?php
 //custom exception class
-class custom_exception extends Exception {
-  public function get_error_msg() {
-    $err_msg = $this->getMessage()." is not a valid e-mail";
-    return $err_msg;
-  }
+class custom_exception extends Exception
+{
+    public function get_error_msg()
+    {
+        $err_msg = $this->getMessage() . " is not a valid e-mail";
+        return $err_msg;
+    }
 }
 
 $email = "budi@@test.com";
 
 try {
-  //check email
-  if(filter_var($email, FILTER_VALIDATE_EMAIL) === FALSE) {
-    //if email is not valid, then throw exception
-    throw new custom_exception($email);
-  }
+    //check email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        //if email is not valid, then throw exception
+        throw new custom_exception($email);
+    }
+} catch (custom_exception $e) {
+    //get custom error message
+    echo $e->get_error_msg();
 }
-
-catch (custom_exception $e) {
-  //get custom error message
-  echo $e->get_error_msg();
-}
-?> 
+?>
 ```
 
 **Output:**
@@ -135,15 +137,111 @@ budi@@test.com is not a valid e-mail
 
 ### Multiple exception
 
+Multiple exception digunakan untuk memeriksa beberapa kondisi. Berikut adalah contoh dari multiple exception.
 
+```php
+<?php
+//custom exception class
+class custom_exception extends Exception
+{
+    public function get_error_msg()
+    {
+        $err_msg = $this->getMessage() . " is not a valid e-mail";
+        return $err_msg;
+    }
+}
+
+$email = "budi@test.com";
+
+try {
+    //check email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        //if email is not valid, then throw exception
+        throw new custom_exception($email);
+    }
+    
+    //check if email contains "test"
+    if (strpos($email, "test") !== FALSE) {
+        //if email contains "test", then throw exception
+        throw new Exception("$email is a test e-mail");
+    }
+} catch (custom_exception $e) {
+    //get custom error message
+    echo $e->get_error_msg();
+} catch (Exception $e) {
+    //get message
+    echo $e->getMessage();
+}
+?>
+```
+
+**Output:**
+```
+budi@test.com is a test e-mail
+```
 
 ### Rethrow exception
 
+Suatu exception dapat dilemparkan kembali dalam suatu blok `catch`. Berikut adalah contoh dari rethrowo exception.
 
+```php
+<?php
+//custom exception class
+class custom_exception extends Exception
+{
+    public function get_error_msg()
+    {
+        $err_msg = $this->getMessage() . " is not a valid e-mail";
+        return $err_msg;
+    }
+}
+
+$email = "budi@test.com";
+
+try {
+    try {
+        //check if email contains "test"
+        if (strpos($email, "test") !== FALSE) {
+            //if email contains "test", then throw exception
+            throw new Exception("$email is a test e-mail");
+        }
+    } catch (Exception $e) {
+        //rethrow
+        throw new custom_exception($email);
+    }
+} catch (custom_exception $e) {
+    //get custom error message
+    echo $e->get_error_msg();
+}
+?>
+```
+
+**Output:**
+```
+budi@test.com is not a valid e-mail
+```
 
 ### Membuat top level exception handler
 
+Fungsi `set_exception_handler()` berfungsi untuk menghandle semua "Uncaught Exception" menggunakan user-defined function. Berikut adalah contoh dari penggunaan `set_exception_handler()`.
 
+```php
+<?php
+function my_exception($e)
+{
+    echo $e->getMessage();
+}
+
+set_exception_handler('my_exception');
+
+throw new Exception('uncaught exception occurred');
+?> 
+```
+
+**Output:**
+```
+uncaught exception occurred
+```
 
 ## Referensi
 1. https://www.w3schools.com/php/php_exception.asp
