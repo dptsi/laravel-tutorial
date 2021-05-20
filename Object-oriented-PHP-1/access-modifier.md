@@ -4,22 +4,22 @@
 
 ## Latar belakang topik
 
-Terkadang dalam suatu class terdapat atribut atau fungsi yang ingin kita batasi akses penggunaannya. Kita ingin mengakses atribut atau fungsi tersebut hanya untuk class itu saja, class itu dan turunanannya, atau bahkan ingin kita gunakan secara bebas. Perbedaan akses ini dapat terjadi karena kita ingin menjaga keamanan sebuah atribut atau fungsi, dimana atribut atau fungsi tersebut memiliki data atau perintah yang bersifat rahasia dan tidak boleh dijalankan secara sembarangan. Sehingga, untuk mengatur dan menentukan hak akses suatu atribut atau fungsi pada class, kita dapat menggunakan access modifier.
+Terkadang dalam suatu class, terdapat atribut atau method yang ingin kita batasi akses penggunaannya. Kita ingin mengakses atribut atau method tersebut hanya untuk class itu saja, class itu dan turunanannya, atau bahkan ingin kita gunakan secara bebas. Perbedaan akses ini dapat terjadi karena kita ingin menjaga keamanan sebuah atribut atau method, dimana atribut atau method tersebut memiliki data atau perintah yang bersifat rahasia dan tidak boleh dijalankan secara sembarangan. Sehingga, untuk mengatur dan menentukan hak akses suatu atribut atau method pada class, kita dapat menggunakan access modifier.
 
 ## Konsep-konsep
 
-Access modifier merupakan keyword pada PHP yang berfungsi untuk mengatur dan menentukan hak akses atribut dan fungsi pada class. Ada 3 access modifier yang dapat digunakan, yaitu:
+Access modifier merupakan keyword pada PHP yang berfungsi untuk mengatur dan menentukan hak akses atribut dan method pada class. Ada 3 access modifier yang dapat digunakan, yaitu:
 * Public
 
-Public dapat digunakan apabila ingin mengakses atribut dan fungsi dari mana saja, bahkan dari luar class (pada saat menjadi object). Public merupakan default, sehingga apabila kita tidak menuliskan access modifier pada atribut dan fungsi, maka atribut dan fungsi akan menjadi public.
+Public dapat digunakan apabila ingin mengakses atribut dan method dari mana saja, bahkan dari luar class (pada saat menjadi object). Public merupakan default, sehingga apabila kita tidak menuliskan access modifier pada atribut dan method, maka atribut dan method akan menjadi public.
 
 * Protected
 
-Protected dapat digunakan apabila ingin memberikan akses atribut dan fungsi kepada class tersebut dan turunannya, tetapi tidak kepada object.
+Protected dapat digunakan apabila ingin memberikan akses atribut dan method kepada class tersebut dan turunannya, tetapi tidak kepada object.
 
 * Private
 
-Private dapat digunakan apabila ingin mengakses atribut dan fungsi dari dalam class itu saja.
+Private dapat digunakan apabila hanya ingin mengakses atribut dan method dari dalam class itu saja.
 
 ## Langkah-langkah tutorial
 
@@ -60,7 +60,7 @@ class Employee {
 
 ### Langkah ketiga
 
-Tambahan fungsi `set_name` dan `get_name` dengan access modifier public ke dalam class `Employee`, dimana fungsi set_name mengakses fungsi public get_name dari dalam class dan keduanya mengakses atribut public dari dalam class.
+Tambahan method `set_name` dan `get_name` dengan access modifier public ke dalam class `Employee`, dimana method set_name mengakses method public get_name dari dalam class dan keduanya mengakses atribut public dari dalam class.
 
 ```php
 <?php
@@ -89,7 +89,7 @@ class Employee {
 
 ### Langkah keempat
 
-Tambahan fungsi `set_position` dan `get_position` dengan access modifier public dan protected ke dalam class `Employee`, dimana fungsi set_position mengakses fungsi protected get_position dari dalam class dan keduanya mengakses atribut protected dari dalam class.
+Tambahan method `set_position` dan `get_position` dengan access modifier public dan protected ke dalam class `Employee`, dimana method set_position mengakses method protected get_position dari dalam class dan keduanya mengakses atribut protected dari dalam class.
 
 ```php
 <?php
@@ -128,7 +128,7 @@ class Employee {
 
 ### Langkah kelima
 
-Tambahan fungsi `set_salary` dan `get_salary` dengan access modifier public dan private ke dalam class `Employee`, dimana fungsi set_salary mengakses fungsi private get_salary dari dalam class dan keduanya mengakses atribut private dari dalam class.
+Tambahan method `set_salary` dan `get_salary` dengan access modifier public dan private ke dalam class `Employee`, dimana method set_salary mengakses method private get_salary dari dalam class dan keduanya mengakses atribut private dari dalam class.
 
 ```php
 <?php
@@ -213,7 +213,7 @@ Pada langkah ini, hanya atribut dengan access modifier public yang dapat diakses
 
 ### Langkah kedelapan
 
-Coba akses fungsi public `set_name`, yang mengakses fungsi public lainnya dari dalam class, beserta fungsi public `get_name` dari object.
+Coba akses method public `set_name`, yang mengakses method public lainnya dari dalam class, beserta method public `get_name` dari object.
 
 ```php
 <?php
@@ -225,11 +225,11 @@ echo "\n";
 ?>
 ```
 
-Pada langkah ini, kedua fungsi dengan access modifier public berhasil dijalankan.
+Pada langkah ini, kedua method dengan access modifier public berhasil dijalankan.
 
 ### Langkah kesembilan
 
-Coba akses fungsi public `set_position`, yang mengakses fungsi protected dari dalam class, beserta fungsi protected `get_position` dari object.
+Coba akses method public `set_position`, yang mengakses method protected dari dalam class, beserta method protected `get_position` dari object.
 
 ```php
 <?php
@@ -242,11 +242,11 @@ echo "\n";
 ?>
 ```
 
-Pada langkah ini, fungsi public `set_position` dapat dijalankan dengan baik, sedangkan fungsi protected `get_position` akan memunculkan pesan error karena kita berusaha mengakses fungsi dengan access modifier protected dari object.
+Pada langkah ini, method public `set_position` dapat dijalankan dengan baik, sedangkan method protected `get_position` akan memunculkan pesan error karena kita berusaha mengakses method dengan access modifier protected dari object.
 
 ### Langkah kesepuluh
 
-Coba akses fungsi public `set_salary`, yang mengakses fungsi private dari dalam class, beserta fungsi private `get_position` dari object.
+Coba akses method public `set_salary`, yang mengakses method private dari dalam class, beserta method private `get_position` dari object.
 
 ```php
 <?php
@@ -259,4 +259,4 @@ echo "\n";
 ?>
 ```
 
-Pada langkah ini, fungsi public `set_salary` dapat dijalankan dengan baik, sedangkan fungsi private `get_salary` akan memunculkan pesan error karena kita berusaha mengakses fungsi dengan access modifier private dari luar class (object).
+Pada langkah ini, method public `set_salary` dapat dijalankan dengan baik, sedangkan method private `get_salary` akan memunculkan pesan error karena kita berusaha mengakses method dengan access modifier private dari luar class (object).
