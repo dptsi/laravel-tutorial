@@ -8,7 +8,7 @@ Exception handling adalah cara untuk mengatasi error dengan pendekatan object or
 
 ## Konsep-konsep
 
-Berikut adalah alur normal saat exception terjadi:
+Berikut adalah alur saat exception terjadi:
 1. state dari kode sekarang disimpan
 2. eksekusi kode akan diganti ke exception handler function
 3. handler dapat melanjutkan eksekusi kode dari state yang tersimpan atau terminasi eksekusi kode atau melanjutkan dari lokasi lain dalam kode
@@ -38,6 +38,63 @@ function check_num($num) {
 
 checkNum(0);
 ?> 
+```
+
+**Output:**
+```
+PHP Fatal error:  Uncaught Error: Call to undefined function checkNum() in /workspace/Main.php:11
+Stack trace:
+#0 {main}
+  thrown in /workspace/Main.php on line 11
+```
+
+Untuk mencegah error di atas, perlu dibuat blok kode untuk menghandle exception. Blok kode tersebut harus berisi keyword:
+1. `try`
+
+Fungsi yang dapat menghasilkan exception diletakkan dalam blok `try`. Jika terjadi exception, maka exception dilempar. Jika tidak terjadi exception, maka kode akan berjalan dengan alur normal.
+
+2. `throw`
+
+Keyword `throw` digunakan untuk memicu exception dan setiap `throw` harus memiliki setidaknya satu blok `catch`.
+
+3. `catch`
+
+Blok `catch` berfungsi untuk menangkap exception dan membuat objek yang berisi informasi exception.
+
+Berikut adalah contoh kode untuk menghandle exception:
+
+```php
+<?php
+
+//fungsi untuk memeriksa apakah nilai argumen adalah nol. Jika nilai argumen adalah nol, maka lempar exception
+function check_num($num) {
+  if($num == 0) {
+    throw new Exception("value cannot be 0");
+  }
+  return true;
+}
+
+//blok try
+try {
+  //periksa fungsi check_num()
+  check_num(0);
+  
+  //alur normal
+  echo 'values is not 0';
+}
+
+//blok catch
+catch(Exception $e) {
+  //object Exception "e" berisi informasi exception
+  echo 'pesan: ' .$e->getMessage();
+}
+
+?> 
+```
+
+**Output:**
+```
+pesan: value cannot be 0 
 ```
 
 ### Membuat suatu exception handler
