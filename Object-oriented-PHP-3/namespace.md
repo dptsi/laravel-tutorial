@@ -8,6 +8,8 @@ Secara umum, namespace adalah salah satu cara enkapsulasi item. Sebagai contoh, 
 
 ## Konsep-konsep
 
+Namespace adalah area deklaratif yang menyediakan scope dari identifier (nama fungsi, variabel, class, dll) yang ada di dalamnya.
+
 Dalam PHP, namespace digunakan untuk:
 1. mencegah name collision dari class, functions, constants, third-party clasess, third-party functions, atau third-party constants
 2. menyingkat nama yang panjang dan meningkatkan readability dari kode
