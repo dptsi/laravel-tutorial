@@ -43,6 +43,46 @@ class UserController extends Controller
     }
 }
 ```
+### Request Path & Method
+Objek dari Illuminate\Http\Request menyediakan berbagai macam fungsi untuk memeriksa request HTTP yang masuk dan meng-extends Symfony\Component\HttpFoundation\Request. Berikut ini adalah beberapa fungsi penting yang sering digunakan:
+#### Mengambil path dari request
+Method ``path`` akan mengembalikan informasi mengenai path dari request. Jika request yang masuk menargetkan pada ``http://example.com/foo/bar`` fungsi ini akan mengembalikan ``/foo/bar``
+```php
+$uri = $request->path();
+```
+
+#### Memeriksa Path/Route dari request
+Method ``is`` akan memverifikasi apakah path request yang masuk sesuai dengan pattern yang diberikan.
+```php
+if ($request->is('admin/*')) {
+    //
+}
+```
+
+Metod ``routeIs`` akan memverifikasi apakah request yang masuk memiliki nama route sesuai dengan pattern yang diberikan
+```php
+if ($request->routeIs('admin.*')) {
+    //
+}
+```
+
+#### Mengambil URL dari request
+Dapat menggunakan method ``url`` atau ``fullUrl``. Method  ``url`` akan mengembalikan URL tanpa query string sedangkan method ``fullUrl`` akan mengembalikan URL dengan query string.
+```php
+$url = $request->url();
+
+$urlWithQueryString = $request->fullUrl();
+```
+
+#### Mengambil method dari request
+Dapat menggunakan method ``method`` yang akan mengembalikan HTTP verbs (HTTP request method) dan juga dapat menggunakan method ``isMethod`` yang akan memverifikasi apakah method dari request sesuai dengan string yang diberikan.
+```php
+$method = $request->method();
+
+if ($request->isMethod('post')) {
+    //
+}
+```
 
 ## Langkah-langkah tutorial
 
