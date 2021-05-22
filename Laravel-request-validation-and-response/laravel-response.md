@@ -3,12 +3,12 @@
 [Kembali](readme.md)
 
 ## Latar belakang topik
-
-Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
+HTTP (Hypertext Transfer Protocol) merupakan protokol yang digunakan untuk mengirim data melalui web. Client mengirimkan HTTP request ke server kemudian server akan mengembalikan respon ke client. Respon itu dapat berupa informasi status penyelesaian request ataupun berisi konten pada body dari response. Jadi agar client dan server dapat berkomunikasi aplikasi web memiliki HTTP request untuk membaca data dari client dan HTTP response untuk membaca.
 
 ## Konsep-konsep
+HTTP Response yaitu dimana server akan merespon permintaan yang dikirim oleh client.
+### Membuat Responses
 
-Misal: jelaskan mengenai pengertian, konsep, alur, dll.
 
 ## Langkah-langkah tutorial
 
