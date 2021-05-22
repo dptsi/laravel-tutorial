@@ -176,7 +176,7 @@ Setelah kita membuat tampilan dari input maka kita perlu membuat juga tampilan p
 </html> 
 ```
 
-###Langkah Keenam
+### Langkah Keenam
 Setelah itu kita juga bisa customisasi pesan yang akan digunakan untuk menampilkan error yang kita inginkan. Kita buka kembali NamaProject/App/Http/Controllers. Dan disini kita akan menambahkan array pesan baru untuk memvalidasi error. Contohnya adalah sebagai berikut :
 
 ```php
