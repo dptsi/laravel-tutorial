@@ -190,26 +190,139 @@ Laravel menyediakan ``old`` helper global. Jadi ketika pada blade template, kita
 
 
 ## Langkah-langkah tutorial
-
+Berikut ini merupakan contoh sederhana untuk mengimplementasikan method-method diatas
 ### Langkah pertama
-Membuat 
-Misal: Buat class `Contoh`
+Membuat form sederhana ``resources\views\formulir.blade.php``
+```php
+<!doctype html>
+<html lang="en">
 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <title>Guest's Form</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card mt-5">
+                    <h3 class="card-title text-center mt-5">
+                        Guest's Form
+                    </h3>
+                    <div class="card-body">
+                        <!-- menambahkan query string warna dengan value biru -->
+                        <form method="POST" action="{{route('proses-form-guest',['id' => '99','warna' => 'biru'])}}">
+                            @csrf
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" class="form-control" id="city" name="city">
+                            </div>
+
+                            <!-- Input dalam bentuk array dengan checkbox -->
+                            <div class="form-group">
+                                <label for="name">Hobby</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Bermain" id="Bermain" name="hobby[]">
+                                    <label class="form-check-label" for="Bermain">
+                                        Bermain
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Membaca" id="Membaca" name="hobby[]">
+                                    <label class="form-check-label" for="Membaca">
+                                        Membaca
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Tidur" id="Tidur" name="hobby[]">
+                                    <label class="form-check-label" for="Tidur">
+                                        Tidur
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
+```
+
+
+### Langkah kedua
+Membuat controller ``\app\Http\Controllers\GuestController.php``
 ```php
 <?php
 
+namespace App\Http\Controllers;
 
-namespace DummyNamespace;
+use Illuminate\Http\Request;
 
-
-class Contoh
+class GuestController extends Controller
 {
-    public function fungsi($request)
+    public static int $counter = 0;
+    public function input()
     {
-        ...
+        return view('formulir');
     }
 
+    public function proses(Request $request, int $id)
+    {
+        $message = "</br>Path = " . $request->path();
+
+        $message .= "</br>request patern == proses* ? " . ($request->is("proses*") ? 'true' : 'false');
+        $message .= "</br>request route name ==  proses-form-guest? " . ($request->routeIs("proses-form-guest") ? 'true' : 'false');
+
+        $message .= "</br>url = " . $request->url();
+        $message .= "</br>full url = " . $request->fullUrl();
+
+        $message .= "</br>Query string warna = " . $request->query('warna');
+
+        $message .= "</br>Method = " . $request->method();
+        $message .= "</br>Method == post? " . ($request->isMethod('post') ? 'true' : 'false');
+
+
+        $message .= "</br>Name = " . $request->input('name');
+        $message .= "</br>City = " . $request->input('city');
+
+        $message .= "</br>Hobby:";
+        for ($i = 0; $i < count($request->input('hobby')); $i++) {
+            $message .= '</br>' . $request->input("hobby.$i");
+        }
+
+        return $message;
+    }
 }
 ```
 
-### Langkah kedua
+### Langkah ketiga
+Menambahkan route pada ``routes\web.php``
+```php
+Route::get('/formulir', [GuestController::class, 'input'])->name('input-form-guest');
+Route::post('/proses-form/{id}', [GuestController::class, 'proses'])->name('proses-form-guest');
+```
+
+### Langkah keempat
+Jalankan ``http://127.0.0.1:8000/formulir``
+![Form](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/tampilan%20guest%20form.png?raw=true)
+
+Output yang diperoleh
+![Output](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/output%20guest%20form.png?raw=true)
+
