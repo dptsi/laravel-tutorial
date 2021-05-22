@@ -68,7 +68,7 @@ Selanjutnya kita akan membuat sebuah tampilan 'input' atau dalam ini view('input
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Malas Ngoding - Tutorial Laravel #18 : Membuat Form Validasi Pada Laravel</title>
+    <title>PBKK</title>
  
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
@@ -82,8 +82,6 @@ Selanjutnya kita akan membuat sebuah tampilan 'input' atau dalam ini view('input
                         <div class="card-body">
                             <h3 class="text-center">PBKK</h3>
                             <br/>
- 
-                            {{-- menampilkan error validasi --}}
                             @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <ul>
@@ -93,9 +91,7 @@ Selanjutnya kita akan membuat sebuah tampilan 'input' atau dalam ini view('input
                                 </ul>
                             </div>
                             @endif
- 
                             <br/>
-                             <!-- form validasi -->
                             <form action="/proses" method="post">
                                 {{ csrf_field() }}
  
