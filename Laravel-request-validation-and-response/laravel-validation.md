@@ -17,8 +17,20 @@ Disini kita akan membuath 2 buah route, yaitu route get. dengan url 'input' yang
 NamaProject/routes/web.php
 
 ```php
+use App\Http\Controllers\FormController;
+
 Route::get('/input', [FormController::class, 'input']);
 Route::post('/proses', [FormController::class, 'proses']);
+
+```
+
+Atau juga bisa seperti ini :
+```php
+use App\Http\Controllers\FormController;
+
+Route::get('/input', 'FormController@input');
+Route::post('/proses', 'FormController@proses');
+
 ```
 
 ### Langkah Kedua
@@ -53,11 +65,36 @@ class FormController extends Controller
            'pekerjaan' => 'required',
            'usia' => 'required|numeric'
         ]);
- 
+ 		
         return view('proses',['data' => $request]);
     }
 }
 ```
+
+#### Penjelasan
+
+Pada saat melakukan request bisa dilakukan dengan dua cara.
+
+```php
+$this->validate($request,[
+    'nama' => 'required|min:6|max:20',
+    'pekerjaan' => 'required'|'min:2',
+    'usia' => 'required|numeric'
+]);
+```
+
+atau
+
+```php
+$this->validate($request,[
+ 	'nama' => ['required', 'min:5', 'max:20'],
+ 	'pekerjaan' => ['required','min:2'],
+ 	'usia' => ['required', 'numeric']
+]);
+```
+
+Fungsi validasi sangat banyak yang disediakan oleh laravel. Untuk memudahkan validasi dan mengambil pesan error apabila validasi tersebut tidak memenuhi.
+
 
 ### Langkah Keempat
 Selanjutnya kita akan membuat sebuah tampilan 'input' atau dalam ini view('input') untuk bertujuan pada saat link menuju input akan ditampilkan form input nantinya. Lokasi dari file ini adalah NamaProject/Resources/Views/input.blade.php . Secara garis besar hal ini berguna untuk membuat tampilan input.Jika ada validasi error, maka data yang disi pada form tidak hilang, tapi tetap masih bisa ditampilkan, karena tentu akan sangat tidak efektif jika user harus menginput data berulang-ulang jika ada validasi yang salah pada penginputan. Disini terdapat fungsi old() berfungsi untuk menampilkan data yang sebelumnya di input. Source code adalah sebagai berikut :
@@ -82,6 +119,7 @@ Selanjutnya kita akan membuat sebuah tampilan 'input' atau dalam ini view('input
                         <div class="card-body">
                             <h3 class="text-center">PBKK</h3>
                             <br/>
+
                             @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <ul>
@@ -91,10 +129,11 @@ Selanjutnya kita akan membuat sebuah tampilan 'input' atau dalam ini view('input
                                 </ul>
                             </div>
                             @endif
+ 
                             <br/>
+                             <!-- form validasi -->
                             <form action="/proses" method="post">
                                 {{ csrf_field() }}
- 
                                 <div class="form-group">
                                     <label for="nama">Nama</label>
                                     <input class="form-control" type="text" name="nama" value="{{ old('nama') }}">
@@ -122,6 +161,45 @@ Selanjutnya kita akan membuat sebuah tampilan 'input' atau dalam ini view('input
 </html>
 ```
 
+#### Penjelasan 
+1. Berikut merupakan untuk menampilkan error. Jadi semua error akan dicek dan akan ditampilkan sesuai dengan permintaan yang akan dibuat. Bila melihat proses sebelumnya didapatkan beberapa pesan yang akan disampaikan. Disini terlihat bahwa akan menghitung error terlebih dahulu apabila error tersebut > 0 atau terdapat error disana maka akan dilakukan looping untuk mengeluarkan pesan sebanyak yang error. Laravel akan secara otomatis memeriksa kesalahan dalam data sesi, dan secara otomatis mengikatnya ke tampilan jika tersedia. Variabel $errors akan menjadi contoh Illuminate\Support\MessageBag. Variabel $errors terikat ke tampilan oleh middleware Illuminate\View\Middleware\ShareErrorsFromSessiopn, yang disediakan oleh kelompok middleware web. Ketika middleware ini menerapkan $erros, variabel akan selalu tersedia dalam tampilan.
+
+```php
+@if (count($errors) > 0)
+<div class="alert alert-danger">
+	<ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+```
+2. CSRF adalah Cross-site request forgeries. Dan fungsi csrf_field() adalah agar memproteksi form supaya tidak diakses secara illegal oleh orang lain dengan membuat token yang berbeda saat disubmit. Value input yang digunakan disini adalah {{ old('nama') }} bertujuan untuk apabila pada saat validasi terdapat kesalahan maka akan diberitahukan errornya dan yang sudah diinput tidak akan tereset sehingga user bisa mengubah apa yang tidak valid saja. Di laravel fungsi dari {{ csrf_field() }} untuk melakukan konfirmasi supaya isi form bisa dimasukkan kedalam request dan bisa diolah.
+
+```php
+ <!-- form validasi -->
+ <form action="/proses" method="post">
+    {{ csrf_field() }}
+    <div class="form-group">
+        <label for="nama">Nama</label>
+        <input class="form-control" type="text" name="nama" value="{{ old('nama') }}">
+    </div>
+    <div class="form-group">
+        <label for="pekerjaan">Pekerjaan</label>
+        <input class="form-control" type="text" name="pekerjaan" value="{{ old('pekerjaan') }}">
+    </div>
+    <div class="form-group">
+        <label for="usia">Usia</label>
+        <input class="form-control" type="text" name="usia" value="{{ old('usia') }}">
+    </div>
+    <div class="form-group">
+        <input class="btn btn-primary" type="submit" value="Proses">
+    </div>
+</form>
+
+```
 ### Langkah Kelima
 Setelah kita membuat tampilan dari input maka kita perlu membuat juga tampilan pada proses dengan directory yang sama yaitu NamaProject/Resources/Views/proses.blade.php. Code adalah sebagai berikut
 
@@ -162,6 +240,7 @@ Setelah kita membuat tampilan dari input maka kita perlu membuat juga tampilan p
                         </table>
 
                         <a href="/input" class="btn btn-primary">Kembali</a>
+
                     </div>
                 </div>
             </div>
@@ -171,6 +250,28 @@ Setelah kita membuat tampilan dari input maka kita perlu membuat juga tampilan p
 </body>
 </html> 
 ```
+
+#### Penjelasan
+
+Berikut cara menampilkan data yang sudah diinput
+
+```php
+<table class="table table-bordered table-striped">
+    <tr>
+        <td style="width:150px">Nama</td>
+    <td>{{ $data->nama }}</td>
+    </tr>
+    <tr>
+        <td>Pekerjaan</td>
+    <td>{{ $data->pekerjaan }}</td>
+    </tr>
+    <tr>
+        <td>Usia</td>
+    <td>{{ $data->usia }}</td>
+    </tr>
+</table>
+```
+
 
 ### Langkah Keenam
 Setelah itu kita juga bisa customisasi pesan yang akan digunakan untuk menampilkan error yang kita inginkan. Kita buka kembali NamaProject/App/Http/Controllers. Dan disini kita akan menambahkan array pesan baru untuk memvalidasi error. Contohnya adalah sebagai berikut :
