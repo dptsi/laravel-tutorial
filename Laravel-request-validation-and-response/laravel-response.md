@@ -86,7 +86,78 @@ Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function (
 
 
 
-####
+### Redirect
+Redirect responses merupakan objek dari kelas ``Illuminate\Http\RedirectResponse`', ada banyak cara untuk melakukan generate objek tersebut. Cara yang paling mudah adalah dengan menggunakan global ``redirect`` helper
+```php
+Route::get('/dashboard', function () {
+    return redirect('home/dashboard');
+});
+```
+Terkadang kita juga perlu melakukan redirect ke lokasi sebelumnya, contohnya ketika form yang dikirim tidak valid. Untuk hal ini, kita dapat menggunakan fungsi global ``back`` helper. Karena fitur ini menggunakan session, maka harus dipastikan route yang memanggil fungsi ``back`` menggunakan ``web`` middleware group.
+```php
+Route::post('/user/profile', function () {
+    // Validate the request...
+
+    return back()->withInput();
+});
+```
+catatan: method ``withInput`` akan melakukan flash data input yang masuk ke session 
+#### Redirect To Named Routes
+Untuk melakukan redirect ke suatu route dengan nama tertentu dapat dilakukan dengan cara berikut:
+```php
+return redirect()->route('login');
+```
+Jika route memiliki parameter, kita dapat melakukan <i>passing</i> paramter melalui argumen kedua 
+```php
+return redirect()->route('profile', ['id' => 1]);
+```
+
+
+##### Populating Parameters Via Eloquent Models
+Jika kita melakukan redirect ke suatu route dengan "ID" pada sebuah Eloquent model, kita dapat melakukan <i>passing</i> model tersebut secara langsung. ID akan diekstrak secara otomatis.
+```php
+// For a route with the following URI: /profile/{id}
+
+return redirect()->route('profile', [$user]);
+```
+
+#### Redirecting To Controller Actions
+Kita juga dapat melakukan redirect ke controller actions. Untuk melakukan hal tersebut, kita harus melakukan <i>passing</i> controller dan nama action pada method ``action``
+```php
+use App\Http\Controllers\UserController;
+
+return redirect()->action([UserController::class, 'index']);
+```
+Jika controller route membutuhkan parameter, kita dapat melakukan <i>passing</i> parameter pada argumen kedua 
+```php
+return redirect()->action(
+    [UserController::class, 'profile'], ['id' => 1]
+);
+```
+
+#### Redirecting To External Domains
+Untuk melakukan redirect ke luar domain dari aplikasi kita dapat menggunakan method ``away``.
+```php
+return redirect()->away('https://www.google.com');
+```
+
+#### Redirecting With Flashed Session Data
+Melakukan redirecting dan flash data ke session pada waktu yang sama.
+```php
+Route::post('/user/profile', function () {
+    // ...
+
+    return redirect('dashboard')->with('status', 'Profile updated!');
+});
+```
+Untuk menampilkan pesan yang telah di-flash melalui ``blade`` syntax
+```php
+@if (session('status'))
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+@endif
+```
 
 ## Langkah-langkah tutorial
 
