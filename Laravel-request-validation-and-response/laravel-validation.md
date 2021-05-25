@@ -24,15 +24,6 @@ Route::post('/proses', [FormController::class, 'proses']);
 
 ```
 
-Atau juga bisa seperti ini :
-```php
-use App\Http\Controllers\FormController;
-
-Route::get('/input', 'FormController@input');
-Route::post('/proses', 'FormController@proses');
-
-```
-
 ### Langkah Kedua
 Selanjutnya kita akan membuat sebuah controller yang sudah dideklarasikan diatas. Karena Laravel memiliki artisan yang merupakan Command-line utility pada Laravel seperti yang dimiliki framework web development lain. dengan cara sebagai berikut : 
 
