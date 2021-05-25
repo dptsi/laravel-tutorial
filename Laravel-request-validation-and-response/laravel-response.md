@@ -82,18 +82,73 @@ Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function (
 ```
 
 ### Attaching Cookies To Responses
+Kita juga dapat melampirkan cookie ke Illuminate\Http\Responses menggunakan instance cookie method. Jika juga dapat meneruskan nama, nilai dan jumlah menit cookie yang dianggap valid untuk metode ini:
+
+```php
+return response('Hello World')->cookie(
+    'name', 'value', $minutes
+);
+```
+Cookie method juga menerima beberapa argument lagi yang jarang sekali digunakan. Secara umum, argumen ini memiliki tujuan dan artis yang sama dengan argumen yang akan diberikan ke metode setcookie
+
+```php
+return response('Hello World')->cookie(
+    'name', 'value', $minutes, $path, $domain, $secure, $httpOnly
+);
+```
+
+Jika kita ingin memastikan bahwa cookie dikirim dengan respons keluar tetapi kita belum memiliki instance dari respon tersebut, kita dapat menggunakan Cokkie face untuk mengantrikan cooki yang dibuat ke response saat dikirim. Queue method ini menerima argumen yang diperlukan untuk membuat instance cookie. Cookie ini akan dilampirkan ke respons keluar sebelum dikirim ke browser 
+
+```php
+use Illuminate\Support\Facades\Cookie;
+
+Cookie::queue('name', 'value', $minutes);
+```
+
+#### Generating Cookie Instances
+Jika kita ingin membuat Symfone\Component\HttpFoundation\Cookie instance yang dapat memberikan ke instance respons di lain waktu, kita dapat menggunakan global cookie helper. Cookie ini tidak akan mengirim kembali ke klien kecuali jika mengirimkannya.
+
+```php
+$cookie = cookie('name', 'value', $minutes);
+return response('Hello World')->cookie($cookie);
+```
+
+#### Expiring Cookies Early
+Kita juga dapat menghapus cookie denganmengakhirnya melalui metode withoutCookie.
+```php
+return response('Hello World')->withoutCookie('name');
+```
+
+Jika kita belum memiliki respon output, kita dapat menggunakan metode Cookie facade's untuk menghentikan cookie
+
+```php
+Cookie::expire('name');
+```
+
+### Cookies & Enxryption
+Secara default, semua cokkie yang dihasilkan oleh laravel dienkripsi dan tidak dapat diubah atau dibaca oleh klien. Jika kita ingin menonaktifkan ekripsi untuk subset cookie yang dibuat aplikasi kita. Kita bisa menggunakan $except  dari APP\Http\Middleware\EncryptCookies. Lokasi dari middleware terdapat pada app/Http/Middleware folder.
 
 
-
+```php
+/**
+ * The names of the cookies that should not be encrypted.
+ *
+ * @var array
+ */
+protected $except = [
+    'cookie_name',
+];
+```
 
 ### Redirect
-Redirect responses merupakan objek dari kelas ``Illuminate\Http\RedirectResponse`', ada banyak cara untuk melakukan generate objek tersebut. Cara yang paling mudah adalah dengan menggunakan global ``redirect`` helper
+Redirect responses merupakan objek dari kelas Illuminate\Http\RedirectResponse, ada banyak cara untuk melakukan generate objek tersebut. Cara yang paling mudah adalah dengan menggunakan global redirect helper
 ```php
 Route::get('/dashboard', function () {
     return redirect('home/dashboard');
 });
 ```
-Terkadang kita juga perlu melakukan redirect ke lokasi sebelumnya, contohnya ketika form yang dikirim tidak valid. Untuk hal ini, kita dapat menggunakan fungsi global ``back`` helper. Karena fitur ini menggunakan session, maka harus dipastikan route yang memanggil fungsi ``back`` menggunakan ``web`` middleware group.
+Terkadang kita juga perlu melakukan redirect ke lokasi sebelumnya, contohnya ketika form yang dikirim tidak valid. Untuk hal ini, kita dapat menggunakan fungsi global helper. Karena fitur ini menggunakan session, maka harus dipastikan route yang memanggil fungsi menggunakan web middleware group.
+
 ```php
 Route::post('/user/profile', function () {
     // Validate the request...
@@ -158,6 +213,106 @@ Untuk menampilkan pesan yang telah di-flash melalui ``blade`` syntax
     </div>
 @endif
 ```
+
+### Other Response Types
+Response helper dapat digunakan untuk menghasilkan contoh respons lainnya. Ketika response helper dipanggil tanpa argumen, implementasi dari Illuminate\Cpntracts\Routing\ResponseFactory contract akan direturn. Kontrak ini memberikan beberapa metode bermanfaat untuk menghasilkan tanggapan.
+
+#### View Responses
+Jika kita membutuhkan kontrol atas status dan header respons, tetapi juga perlu mengembalikan sebuah view sebagai konten respons. Kita bisa menggunakan view method ini :
+
+```php
+return response()
+            ->view('hello', $data, 200)
+            ->header('Content-Type', $type);
+```
+
+Tentu saja, jika kita tidak perlu meneruskan kode status HTTP khus atau header khusus, Kita dapat menggunakan globa view helper function.
+
+
+#### JSON Responses
+Method json akan secara otomatis mengatur header Content-Type ke application/json, serta mengonversi array yang diberikan ke JSON menggunakan fungsi PHP json_encode
+
+
+```php
+return response()->json([
+    'name' => 'Abigail',
+    'state' => 'CA',
+]);
+```
+
+Jika kita membuat sebuah JSONP response, kita bisa menggunakan method json dengan kombinasi dengan method withCallback:
+
+```php
+return response()
+            ->json(['name' => 'Abigail', 'state' => 'CA'])
+            ->withCallback($request->input('callback'));
+```
+
+#### File Downloads
+Method download dapat digunakan untuk menghasilkan respons yang memaksa browser pengguna untuk mengunduh file dengan path yang telah diberikan. download method menerima nama file sebagai argumen kedua untuk metode tersebut, yang akan menentukan nama file yang dilihat oleh pengguna yang mengunduh file. Terakhir, kita dapat melakukan meneruskan sebuah array Headers HTTP sebagai argumen ketiga.
+
+```php
+return response()->download($pathToFile);
+return response()->download($pathToFile, $name, $headers);
+```
+
+##### Streamed Downloads
+Terkadang kita mungkin ingin mengubah respons string dari operasi tertentu menjadi respons yang dapat diunduh tanpa harus menulis konten operasi. Kita dapat menggunakan streamDownload dalam skenario ini. Metode ini menerima callback nama file dan sebuah array opsional header sebagai argumennya.
+
+```php
+use App\Services\GitHub;
+
+return response()->streamDownload(function () {
+    echo GitHub::api('repo')
+                ->contents()
+                ->readme('laravel', 'laravel')['contents'];
+}, 'laravel-readme.md');
+```
+
+
+#### File Responses
+Method file memungkinkan untuk menampilkan file, seperti gambar atau pdf, langsung di browser pengguna alih-alih memulai pengunduhan. Metode ini menerima jalur ke file sebagai argumen pertamanya dan sebuah array dari headers sebagai argumen yang kedua.
+
+```php
+return response()->file($pathToFile);
+
+return response()->file($pathToFile, $headers);
+```
+
+### Response Macros
+Jika kita ingin menentukan respons kustom yang bisa kita gunakan kembali di berbagai route dan controllers, kit bisa menggunakan macro method pada Response facede. Biasanya kita harus memanggil method dari boot merupakan salah satu layanan App\Providers\AppServiceProvider.
+
+```php
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Response::macro('caps', function ($value) {
+            return Response::make(strtoupper($value));
+        });
+    }
+}
+```
+
+Macro function menerima nama sebagai argumen pertamanya dan penutupan sebagai argumen keduanya. Macro's closure akan dijalankan saat memanggil nama macro dari implementasi ResponseFactory atau response helper.
+
+
+```php
+return response()->caps('foo');
+```
+
 
 ## Langkah-langkah tutorial
 
