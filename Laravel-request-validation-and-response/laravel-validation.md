@@ -78,7 +78,7 @@ atau
 
 ```php
 $this->validate($request,[
- 	'nama' => ['required', 'min:5', 'max:20'],
+ 	'nama' => ['required', 'min:6', 'max:20'],
  	'pekerjaan' => ['required','min:2'],
  	'usia' => ['required', 'numeric']
 ]);
