@@ -44,7 +44,7 @@ class UserController extends Controller
 }
 ```
 ### Request Path & Method
-Objek dari Illuminate\Http\Request menyediakan berbagai macam fungsi untuk memeriksa request HTTP yang masuk dan meng-extends Symfony\Component\HttpFoundation\Request. Berikut ini adalah beberapa fungsi penting yang sering digunakan:
+Objek dari ``Illuminate\Http\Request`` menyediakan berbagai macam fungsi untuk memeriksa request HTTP yang masuk dan meng-extends ``Symfony\Component\HttpFoundation\Request``. Berikut ini adalah beberapa fungsi penting yang sering digunakan:
 #### Mengambil path dari request
 Method ``path`` akan mengembalikan informasi mengenai path dari request. Jika request yang masuk menargetkan pada ``http://example.com/foo/bar`` fungsi ini akan mengembalikan ``/foo/bar``
 ```php
@@ -320,7 +320,7 @@ Membuat form sederhana ``resources\views\formulir.blade.php``
 
 
 ### Langkah kedua
-Membuat controller ``\app\Http\Controllers\GuestController.php``
+Membuat controller ``app\Http\Controllers\GuestController.php``
 ```php
 <?php
 
