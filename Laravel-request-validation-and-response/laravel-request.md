@@ -75,7 +75,7 @@ $urlWithQueryString = $request->fullUrl();
 ```
 
 #### Mengambil method dari request
-Dapat menggunakan method ``method`` yang akan mengembalikan HTTP verbs (HTTP request method) dan juga dapat menggunakan method ``isMethod`` yang akan memverifikasi apakah method dari request sesuai dengan string yang diberikan.
+Dapat menggunakan method ``method`` yang akan mengembalikan HTTP verbs (HTTP request method) dan bisa juga menggunakan method ``isMethod`` yang akan memverifikasi apakah method dari request sesuai dengan string yang diberikan.
 ```php
 $method = $request->method();
 
@@ -143,21 +143,22 @@ Jika nilai dari query string tidak ada, maka parameter kedua akan di-return
 ```php
 $name = $request->query('name', 'Helen');
 ```
-- Mengambil nilai input dari JSON
+- Mengambil nilai input dari JSON</br>
 Dapat dilakukan dengan menggunakan method ``input``
 ```php
 $name = $request->input('user.name');
 ```
 
-- Mengambil input dari dynamic properties
+- Mengambil input dari dynamic properties</br>
 Jika pada form  memiliki field ``name``, kita juga dapat mengaksesnya dengan cara berikut
 ```php
 $name = $request->name;
 ```
 
 #### Old Input
-Laravel memungkinkan kita menyimpan input yang lama untuk digunakan pada request berikutnya dengan menggunakan. Biasanya ini digunakan bersamaan dengan validation input.
-- Flash input ke session
+Laravel memungkinkan kita menyimpan input yang lama untuk digunakan pada request berikutnya. Biasanya ini digunakan bersamaan dengan validation input.
+- Flash input ke session</br>
+Method ``flash`` akan melakukan flash input ke session
 ```php
 $request->flash();
 ```
@@ -167,7 +168,7 @@ $request->flashOnly(['username', 'email']);
 
 $request->flashExcept('password');
 ```
-- Flash input dengan redirecting
+- Flash input dengan redirecting</br>
 Untuk melakukan flash input yang diikuti dengan redirect, dapat dilakukan dengan menggunakan method ``withInput``
 ```php
 return redirect('form')->withInput();
@@ -188,7 +189,7 @@ Laravel menyediakan ``old`` helper global. Jadi ketika pada blade template, kita
 <input type="text" name="username" value="{{ old('username') }}">
 ```
 #### Cookies
-- Mengambil cookies dari request
+- Mengambil cookies dari request<br>
 Semua cookies yang dibuat oleh Laravel dienkripsi dan ditandai dengan kode autentikasi, yang berarti cookies akan dianggap invalid jika diubah oleh client. Dengan menggunakan method ``cookie`` kita dapat mengambil cookies dari request.
 ```php
 $value = $request->cookie('name');
@@ -208,14 +209,14 @@ if ($request->hasFile('photo')) {
     //
 }
 ```
-##### Validasi keberhasilan upload
+- <b>Validasi keberhasilan upload</b></br>
 Terkadang kita juga harus melakukan verifikasi untuk memastikan tidak ada masalah dalam proses upload file. Hal ini dapat dilakukan dengan method ``isValid``
 ```php
 if ($request->file('photo')->isValid()) {
     //
 }
 ```
-##### File path dan ekstensi
+- <b>File path dan ekstensi</b></br>
 Untuk mengetahui file path dan ekstensi dapat menggunakan method ``path`` dan ``extension``
 ```php
 $path = $request->photo->path();
