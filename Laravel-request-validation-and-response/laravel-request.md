@@ -375,8 +375,8 @@ Route::post('/proses-form/{id}', [GuestController::class, 'proses'])->name('pros
 
 ### Langkah keempat
 Jalankan ``http://127.0.0.1:8000/formulir``
-![Form](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/tampilan%20guest%20form.png?raw=true)
+![Form](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Request/tampilan-form-guest.png?raw=true)
 
 Output yang diperoleh
-![Output](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/output%20guest%20form.png?raw=true)
+![Output](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Request/output-form-guest.png?raw=true)
 
