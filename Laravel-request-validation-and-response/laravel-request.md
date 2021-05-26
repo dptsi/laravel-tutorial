@@ -9,7 +9,7 @@ Dalam Laravel tentunya ada beberapa metode yang dapat digunakan untuk mengirimka
 Kelas ``Illuminate\Http\Request`` yang dimiliki laravel berfungsi menyediakan interaksi ke request HTTP yang sedang ditangani saat ini secara object-oriented termasuk juga mengambil input, cookies, dan files yang dikirimkan bersama request tersebut.
 
 ### Interaksi dengan Request
-Untuk mendapatkan objek dari request HTTP saat ini melalui dependency injection, kita harus menambahkan <i>type hinting</i> ``Illuminate\Http\Request``. Objek request yang masuk akan secara otomatis dimasukkan ke Laravel service container. Pada umumnya hal ini dilakukan dengan statement ``use`` pada bagian awal.
+Untuk mendapatkan objek dari request HTTP saat ini melalui dependency injection, kita harus menambahkan <i>type hinting</i> ``Illuminate\Http\Request``. Objek request yang masuk akan secara otomatis dimasukkan ke Laravel service container. Pada umumnya hal ini dilakukan dengan statement ``use``.
 ```
 use Illuminate\Http\Request;
 ```
@@ -59,7 +59,7 @@ if ($request->is('admin/*')) {
 }
 ```
 
-Metod ``routeIs`` akan memverifikasi apakah request yang masuk memiliki nama route sesuai dengan pattern yang diberikan
+Method ``routeIs`` akan memverifikasi apakah request yang masuk memiliki nama route sesuai dengan pattern yang diberikan
 ```php
 if ($request->routeIs('admin.*')) {
     //
@@ -123,7 +123,7 @@ $name = $request->input('name');
 
 $name = $request->input('name', 'Sally');
 ```
-Jika pada form terapat input berupa array, maka kita dapat meggunakan notasi ``dot`` untuk mengakses array 
+Jika pada form terdapat input berupa array, maka kita dapat meggunakan notasi ``dot`` untuk mengakses array 
 ```php
 $name = $request->input('products.0.name');
 
@@ -190,7 +190,7 @@ Laravel menyediakan ``old`` helper global. Jadi ketika pada blade template, kita
 ```
 #### Cookies
 - Mengambil cookies dari request<br>
-Semua cookies yang dibuat oleh Laravel dienkripsi dan ditandai dengan kode autentikasi, yang berarti cookies akan dianggap invalid jika diubah oleh client. Dengan menggunakan method ``cookie`` kita dapat mengambil cookies dari request.
+Semua cookies yang dibuat oleh Laravel dienkripsi dan ditandai dengan kode autentikasi, yang berarti cookies akan dianggap invalid jika diubah oleh client.
 ```php
 $value = $request->cookie('name');
 ```
