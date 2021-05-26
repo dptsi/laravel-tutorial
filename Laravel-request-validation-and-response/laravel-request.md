@@ -6,7 +6,7 @@ Dalam Laravel tentunya ada beberapa metode yang dapat digunakan untuk mengirimka
 
 
 ## Konsep
-Class Illuminate\Http\Request yang dimiliki laravel berfungsi menyediakan interaksi ke request HTTP yang sedang ditangani saat ini secara object-oriented termasuk juga mengambil input, cookie, dan files yang dikirimkan bersama request tersebut.
+Kelas ``Illuminate\Http\Request`` yang dimiliki laravel berfungsi menyediakan interaksi ke request HTTP yang sedang ditangani saat ini secara object-oriented termasuk juga mengambil input, cookies, dan files yang dikirimkan bersama request tersebut.
 
 ### Interaksi dengan Request
 Untuk mendapatkan objek dari request HTTP saat ini melalui dependency injection, kita harus menambahkan <i>type hinting</i> ``Illuminate\Http\Request``. Objek request yang masuk akan secara otomatis dimasukkan ke Laravel service container. Pada umumnya hal ini dilakukan dengan statement ``use`` pada bagian awal.
