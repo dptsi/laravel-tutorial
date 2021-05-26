@@ -21,6 +21,7 @@ class GuestController extends Controller
 
         echo "</br>url = " . $request->url();
         echo "</br>full url = " . $request->fullUrl();
+        echo "</br>route parameter id = $id";
 
         echo "</br>Query string warna = " . $request->query('warna');
 
