@@ -46,7 +46,7 @@ Route::get('/user/{user}', function (User $user) {
 ```  
 
 ### Attaching Headers To Responses
-Perlu kita ingat bahwa sebagai besar metode respons dapat dirantai, memungkinkan konstruksi instance dengan respons yang lancar. Misalnyam kita dapat menggunakan metode header untuk menambahkan serangkaian header ke response sebelum mengirimkannya kembali ke pengguna.
+Perlu kita ingat bahwa sebagai besar metode respons dapat dilanjutkan secara berantai (chainable), memungkinkan konstruksi instance dengan respons yang lancar. Misalnya kita dapat menggunakan metode header untuk menambahkan serangkaian header ke response sebelum mengirimkannya kembali ke pengguna.
 
 ```php
 return response($content)
@@ -67,7 +67,7 @@ return response($content)
 ```
 
 #### Cache Control Middleware
-Laravel menyertakan cache. Middleware headers, yang dapat digunakan untuk menyetel header Cache-Control dengan cepat untuk sekelompok rute. JIka etag ditentukan dalam daftar arahan, hash MD5 dari konten respons akan secara otomatis disetela sebagai pengenal ETag.
+Laravel menyertakan middleware ``cache.headers``, yang dapat digunakan untuk menyetel header ``Cache-Control`` dengan cepat untuk sekelompok rute. Jika ``etag`` ditentukan dalam list arahan, hash MD5 dari konten respons akan secara otomatis disetel sebagai pengenal ETag.
 
 ```php
 Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function () {
@@ -82,14 +82,14 @@ Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function (
 ```
 
 ### Attaching Cookies To Responses
-Kita juga dapat melampirkan cookie ke Illuminate\Http\Responses menggunakan instance cookie method. Jika juga dapat meneruskan nama, nilai dan jumlah menit cookie yang dianggap valid untuk metode ini:
+Kita juga dapat melampirkan cookie ke objek ``Illuminate\Http\Responses`` menggunakan method ``cookie``. Jika juga dapat melakukan <i>passing</i> nama, nilai dan jumlah menit cookie yang dianggap valid untuk metode ini:
 
 ```php
 return response('Hello World')->cookie(
     'name', 'value', $minutes
 );
 ```
-Cookie method juga menerima beberapa argument lagi yang jarang sekali digunakan. Secara umum, argumen ini memiliki tujuan dan artis yang sama dengan argumen yang akan diberikan ke metode setcookie
+Cookie method juga menerima beberapa argument lagi meskupun jarang digunakan. Secara umum, argumen ini memiliki tujuan dan arti yang sama dengan argumen yang akan diberikan ke method ``setcookie`` pada PHP native
 
 ```php
 return response('Hello World')->cookie(
@@ -97,7 +97,7 @@ return response('Hello World')->cookie(
 );
 ```
 
-Jika kita ingin memastikan bahwa cookie dikirim dengan respons keluar tetapi kita belum memiliki instance dari respon tersebut, kita dapat menggunakan Cokkie face untuk mengantrikan cooki yang dibuat ke response saat dikirim. Queue method ini menerima argumen yang diperlukan untuk membuat instance cookie. Cookie ini akan dilampirkan ke respons keluar sebelum dikirim ke browser 
+Jika kita ingin memastikan bahwa cookie dikirim dengan respons keluar tetapi kita belum memiliki instance dari respon tersebut, kita dapat menggunakan ``Cookie`` facade untuk mengantrikan cookie yang dibuat ke response saat dikirim. Method ``queue`` ini menerima argumen yang diperlukan untuk membuat instance cookie. Cookie ini akan dilampirkan ke respons keluar sebelum dikirim ke browser 
 
 ```php
 use Illuminate\Support\Facades\Cookie;
@@ -106,7 +106,7 @@ Cookie::queue('name', 'value', $minutes);
 ```
 
 #### Generating Cookie Instances
-Jika kita ingin membuat ``Symfone\Component\HttpFoundation\Cookie instance`` yang dapat memberikan ke instance respons di lain waktu, kita dapat menggunakan global cookie helper. Cookie ini tidak akan mengirim kembali ke klien kecuali jika mengirimkannya.
+Jika kita ingin membuat objek ``Symfone\Component\HttpFoundation\Cookie`` yang dapat memberikan ke objek response di lain waktu, kita dapat menggunakan global cookie helper. Cookie ini tidak akan mengirim kembali ke klien kecuali jika mengirimkannya.
 
 ```php
 $cookie = cookie('name', 'value', $minutes);
@@ -114,12 +114,12 @@ return response('Hello World')->cookie($cookie);
 ```
 
 #### Expiring Cookies Early
-Kita juga dapat menghapus cookie denganmengakhirnya melalui metode withoutCookie.
+Kita juga dapat menghapus cookie dengan mengakhirnya melalui metode withoutCookie.
 ```php
 return response('Hello World')->withoutCookie('name');
 ```
 
-Jika kita belum memiliki respon output, kita dapat menggunakan metode Cookie facade's untuk menghentikan cookie
+Jika kita belum memiliki respons keluar, kita dapat menggunakan method ``expire`` dari Cookie facade untuk menghentikan sebuah cookie
 
 ```php
 Cookie::expire('name');
@@ -215,10 +215,10 @@ Untuk menampilkan pesan yang telah di-flash melalui ``blade`` syntax
 ```
 
 ### Other Response Types
-Response helper dapat digunakan untuk menghasilkan contoh respons lainnya. Ketika response helper dipanggil tanpa argumen, implementasi dari ``Illuminate\Contracts\Routing\ResponseFactory`` contract akan direturn. Kontrak ini memberikan beberapa metode bermanfaat untuk menghasilkan tanggapan.
+Response helper dapat digunakan untuk menghasilkan contoh respons lainnya. Ketika response helper dipanggil tanpa argumen, implementasi dari contract ``Illuminate\Contracts\Routing\ResponseFactory`` akan direturn. Kontrak ini memberikan beberapa metode bermanfaat untuk menghasilkan tanggapan.
 
 #### View Responses
-Jika kita membutuhkan kontrol atas status dan header respons, tetapi juga perlu mengembalikan sebuah view sebagai konten respons. Kita bisa menggunakan view method ini :
+Jika kita membutuhkan kontrol atas status dan header respons, tetapi juga perlu mengembalikan sebuah view sebagai konten respons. Kita bisa menggunakan method ``view`` ini :
 
 ```php
 return response()
@@ -226,11 +226,11 @@ return response()
             ->header('Content-Type', $type);
 ```
 
-Tentu saja, jika kita tidak perlu meneruskan kode status HTTP khus atau header khusus, Kita dapat menggunakan globa view helper function.
+Tentu saja, jika kita tidak perlu meneruskan kode status HTTP khusus atau header khusus, Kita dapat menggunakan globa view helper function.
 
 
 #### JSON Responses
-Method json akan secara otomatis mengatur header Content-Type ke application/json, serta mengonversi array yang diberikan ke JSON menggunakan fungsi PHP json_encode
+Method ``json`` akan secara otomatis mengatur header ``Content-Type`` ke ``application/json``, serta mengonversi array yang diberikan ke JSON menggunakan fungsi PHP ``json_encode``
 
 
 ```php
@@ -240,7 +240,7 @@ return response()->json([
 ]);
 ```
 
-Jika kita membuat sebuah JSONP response, kita bisa menggunakan method json dengan kombinasi dengan method withCallback:
+Jika kita membuat sebuah JSONP response, kita bisa menggunakan method ``json`` yang dikombinasi dengan method ``withCallback``:
 
 ```php
 return response()
@@ -249,7 +249,7 @@ return response()
 ```
 
 #### File Downloads
-Method download dapat digunakan untuk menghasilkan respons yang memaksa browser pengguna untuk mengunduh file dengan path yang telah diberikan. download method menerima nama file sebagai argumen kedua untuk metode tersebut, yang akan menentukan nama file yang dilihat oleh pengguna yang mengunduh file. Terakhir, kita dapat melakukan meneruskan sebuah array Headers HTTP sebagai argumen ketiga.
+Method ``download`` dapat digunakan untuk menghasilkan respons yang memaksa browser pengguna untuk mengunduh file dengan path yang telah diberikan. Method ini menerima nama file sebagai argumen kedua untuk metode tersebut, yang akan menentukan nama file yang dilihat oleh pengguna yang mengunduh file. Terakhir, kita dapat melakukan <i>passing</i> sebuah array Headers HTTP sebagai argumen ketiga.
 
 ```php
 return response()->download($pathToFile);
@@ -280,7 +280,7 @@ return response()->file($pathToFile, $headers);
 ```
 
 ### Response Macros
-Jika kita ingin menentukan respons kustom yang bisa kita gunakan kembali di berbagai route dan controllers, kit bisa menggunakan macro method pada Response facede. Biasanya kita harus memanggil method dari boot merupakan salah satu layanan ``App\Providers\AppServiceProvider``.
+Jika kita ingin menentukan respons kustom yang bisa kita gunakan kembali di berbagai route dan controllers, kita bisa menggunakan method ``macro`` pada ``Response`` facade. Biasanya kita harus memanggil method dari method ``boot`` pada salah satu service provider dari aplikasi kita contohnya ``App\Providers\AppServiceProvider``:
 
 ```php
 <?php
