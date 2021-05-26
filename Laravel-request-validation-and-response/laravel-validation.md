@@ -282,5 +282,21 @@ $this->validate($request,[
 
 ```
 
+Hasilnya adalah sebagai berikut
+### Tampilan Utama
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Validation/Tampilaawal.jpeg)
+
+### Tampilan Form
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Validation/formpendataan.jpeg)
+
+### Tampilan Apabila tidak diisi
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Validation/tidakdiisi.jpeg)
+
+### Tampilan tidak sesuai
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Validation/tidaksesuai.jpeg)
+
+### Tampilan Setelah tervalidasi
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Validation/setelahtervalidasi.jpeg)
+
 
 Berikut merupakan tutorial yang dapat saya sampaikan. Mohon maaf apabila terdapat kekurangan. Wassalamualaikum Warrahmatullahi Wabarakatuh.
