@@ -377,3 +377,19 @@ Route::get('/cookie', function () {
 });
 ```
 ![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Response/cookie.jpeg)
+
+### Redirect
+Metode ini menggunakan redirect yang bertujuan mereturn route "/dashboard" ke root.
+
+```php
+Route::get('/dashboard',function(){
+    return redirect('/');
+});
+```
+Berikut pada saat pemanggilan 
+
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Response/redirectbefore.jpeg)
+
+Berikut setelah pemanggilan
+
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Response/redirectafter.jpeg)
