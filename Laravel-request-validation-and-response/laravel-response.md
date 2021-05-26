@@ -168,7 +168,7 @@ return redirect()->route('profile', ['id' => 1]);
 ```
 
 
-##### Populating Parameters Via Eloquent Models
+- <b>Populating Parameters Via Eloquent Models</b>
 Jika kita melakukan redirect ke suatu route dengan "ID" pada sebuah Eloquent model, kita dapat melakukan <i>passing</i> model tersebut secara langsung. ID akan diekstrak secara otomatis.
 ```php
 // For a route with the following URI: /profile/{id}
@@ -256,7 +256,7 @@ return response()->download($pathToFile);
 return response()->download($pathToFile, $name, $headers);
 ```
 
-##### Streamed Downloads
+- <b>Streamed Downloads</b>
 Terkadang kita mungkin ingin mengubah respons string dari operasi tertentu menjadi respons yang dapat diunduh tanpa harus menulis konten operasi. Kita dapat menggunakan streamDownload dalam skenario ini. Metode ini menerima callback nama file dan sebuah array opsional header sebagai argumennya.
 
 ```php
