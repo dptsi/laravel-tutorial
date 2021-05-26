@@ -20,7 +20,7 @@
                     </h3>
                     <div class="card-body">
                         <!-- menambahkan query string warna dengan value biru -->
-                        <form method="POST" action="{{route('proses-form-guest',['id' => '99','warna' => 'biru'])}}">
+                        <form method="POST" action="{{route('proses-form-guest',['id' => '99','warna' => 'biru'])}}" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="name">Name</label>
@@ -52,6 +52,11 @@
                                         Tidur
                                     </label>
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gambar">Gambar</label>
+                                <input type="file" class="form-control-file" id="gambar" name="gambar">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
