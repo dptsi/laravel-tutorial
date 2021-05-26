@@ -316,25 +316,64 @@ return response()->caps('foo');
 
 ## Langkah-langkah tutorial
 
-### Langkah pertama
-
-Misal: Buat class `Contoh`
+### Pembuatan Basic Response
+Kita ingin membuat membuat sebuah response langsung ke web dengan mengatur routenya dan langsung melakukan pengembalian berupa sebuah kalimat langsung di web.
 
 ```php
-<?php
+Route::get('/basic', function(){
+    return 'Hallo ngab, coba basic';
+});
+```
+![image1](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Response/basic.jpg)
 
 
-namespace DummyNamespace;
+### Pembuatan Response Object
+Jika kita ingin mengembalikan string atau array sederhana dari tindakan route. kita akan kembali ke contoh atau tampilan Illuminate/Http/Response.
 
+```php
+Route::get('/header', function(){
+    return response('Hallo', 200)->header('Content-Type','text/html');
+});
+```
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Response/header.jpg)
 
-class Contoh
-{
-    public function fungsi($request)
-    {
-        ...
-    }
+### Pembuatan Attach Cookie
+Metode ini digunakan pada saat di user session disebuah web aplikasi. Cookie dapat dibuat oleh global cookie helper di laravel. Dan cookie adalah asebuah instance dari Symfony\Component\HttpFoundation\Cookie. Cookie dapat kita lampirkan ke response menggunakan metode withcookie(). Cookie yang dihasilkan oleh laravel dienkripsi sehingga tidak dapat dimodifikasi ataupun dibaca oleh klien.
 
-}
+```php
+Route::get('/header-cookie', function(){
+    return response('Hallo', 200)
+    ->header('Content-Type','text/html')
+    ->withcookie('name','Fitrah Arie');
+});
 ```
 
-### Langkah kedua
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Response/header-cookie.jpg)
+
+### Json Response
+Berikut merupakan cara menampilkan respons dalam bentuk Json.
+```php
+Route::get('/json', function(){
+    return response()->json([
+        'Nama1' => 'Fitrah',
+        'Nama2' => 'Ryan'
+    ]);
+})
+```
+
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Response/json.jpg)
+
+### Attaching Cookies to Responses
+Metode ini memungkinkan kita untuk dengan mudah melampirkan cookie ke respons. Kita dapat menggunakan metode cookie untuk menghasilkan cookie dan dengan lancara melampirkannya ke contoh respons berikut
+
+```php
+Route::get('/cookie', function () {
+    $content = 'Hello World';
+    $type = 'text/plain';
+    $minutes = 1;
+    return response($content)
+                ->header('Content-Type', $type)
+                ->cookie('name', 'value', $minutes);
+});
+```
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Response/cookie.jpeg)
