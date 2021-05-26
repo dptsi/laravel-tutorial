@@ -106,7 +106,7 @@ Cookie::queue('name', 'value', $minutes);
 ```
 
 #### Generating Cookie Instances
-Jika kita ingin membuat Symfone\Component\HttpFoundation\Cookie instance yang dapat memberikan ke instance respons di lain waktu, kita dapat menggunakan global cookie helper. Cookie ini tidak akan mengirim kembali ke klien kecuali jika mengirimkannya.
+Jika kita ingin membuat ``Symfone\Component\HttpFoundation\Cookie instance`` yang dapat memberikan ke instance respons di lain waktu, kita dapat menggunakan global cookie helper. Cookie ini tidak akan mengirim kembali ke klien kecuali jika mengirimkannya.
 
 ```php
 $cookie = cookie('name', 'value', $minutes);
@@ -126,7 +126,7 @@ Cookie::expire('name');
 ```
 
 ### Cookies & Enxryption
-Secara default, semua cokkie yang dihasilkan oleh laravel dienkripsi dan tidak dapat diubah atau dibaca oleh klien. Jika kita ingin menonaktifkan ekripsi untuk subset cookie yang dibuat aplikasi kita. Kita bisa menggunakan $except  dari APP\Http\Middleware\EncryptCookies. Lokasi dari middleware terdapat pada app/Http/Middleware folder.
+Secara default, semua cokkie yang dihasilkan oleh laravel dienkripsi dan tidak dapat diubah atau dibaca oleh klien. Jika kita ingin menonaktifkan ekripsi untuk subset cookie yang dibuat aplikasi kita. Kita bisa menggunakan ``$except``  dari ``App\Http\Middleware\EncryptCookies``. Lokasi dari middleware terdapat pada folder ``app/Http/Middleware``.
 
 
 ```php
@@ -215,7 +215,7 @@ Untuk menampilkan pesan yang telah di-flash melalui ``blade`` syntax
 ```
 
 ### Other Response Types
-Response helper dapat digunakan untuk menghasilkan contoh respons lainnya. Ketika response helper dipanggil tanpa argumen, implementasi dari Illuminate\Cpntracts\Routing\ResponseFactory contract akan direturn. Kontrak ini memberikan beberapa metode bermanfaat untuk menghasilkan tanggapan.
+Response helper dapat digunakan untuk menghasilkan contoh respons lainnya. Ketika response helper dipanggil tanpa argumen, implementasi dari ``Illuminate\Contracts\Routing\ResponseFactory`` contract akan direturn. Kontrak ini memberikan beberapa metode bermanfaat untuk menghasilkan tanggapan.
 
 #### View Responses
 Jika kita membutuhkan kontrol atas status dan header respons, tetapi juga perlu mengembalikan sebuah view sebagai konten respons. Kita bisa menggunakan view method ini :
@@ -280,7 +280,7 @@ return response()->file($pathToFile, $headers);
 ```
 
 ### Response Macros
-Jika kita ingin menentukan respons kustom yang bisa kita gunakan kembali di berbagai route dan controllers, kit bisa menggunakan macro method pada Response facede. Biasanya kita harus memanggil method dari boot merupakan salah satu layanan App\Providers\AppServiceProvider.
+Jika kita ingin menentukan respons kustom yang bisa kita gunakan kembali di berbagai route dan controllers, kit bisa menggunakan macro method pada Response facede. Biasanya kita harus memanggil method dari boot merupakan salah satu layanan ``App\Providers\AppServiceProvider``.
 
 ```php
 <?php
