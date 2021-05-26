@@ -54,3 +54,8 @@ Route::get('/json', function(){
         'Nama2' => 'Ryan'
     ]);
 });
+
+//redirect
+Route::get('/dashboard',function(){
+    return redirect('/');
+});
