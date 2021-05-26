@@ -2,19 +2,19 @@
 [Kembali](readme.md)
 
 ## Latar Belakang
-Dalam Laravel tentunya ada beberapa metode yang dapat digunakan untuk mengirimkan data, baik menggunakan GET, POST, PUT, PATCH, DELETE, ataupun OPTIONS. Untuk memudahkan hal tersebut, diperlukan adanya suatu cara yang dapat melakukan pengaksesan data yang dikirim secara object-oriented. Oleh karena itu, Laravel memiliki class untuk mengakomodasi hal tersebut melalui class Illuminate\Http\Request
+Dalam Laravel tentunya ada beberapa metode yang dapat digunakan untuk mengirimkan data, baik menggunakan GET, POST, PUT, PATCH, DELETE, ataupun OPTIONS. Untuk memudahkan hal tersebut, diperlukan adanya suatu cara yang dapat melakukan pengaksesan data yang dikirim secara object-oriented. Oleh karena itu, Laravel memiliki kelas ``Illuminate\Http\Request``
 
 
 ## Konsep
-Class Illuminate\Http\Request yang dimiliki laravel berfungsi menyediakan interaksi ke request HTTP yang sedang ditangani saat ini secara object-oriented serta mengambil input, cookie, dan files yang dikirimkan bersama request tersebut.
+Class Illuminate\Http\Request yang dimiliki laravel berfungsi menyediakan interaksi ke request HTTP yang sedang ditangani saat ini secara object-oriented termasuk juga mengambil input, cookie, dan files yang dikirimkan bersama request tersebut.
 
 ### Interaksi dengan Request
-Untuk mendapatkan objek dari request HTTP saat ini melalui dependency injection, kita harus menambahkan <i>type hinting</i> ``Illuminate\Http\Request`` untuk dapat mengakses class tersebut. Pada umumnya hal terebut dilakukan dengan statement use pada bagian awal.
+Untuk mendapatkan objek dari request HTTP saat ini melalui dependency injection, kita harus menambahkan <i>type hinting</i> ``Illuminate\Http\Request``. Objek request yang masuk akan secara otomatis dimasukkan ke Laravel service container. Pada umumnya hal ini dilakukan dengan statement ``use`` pada bagian awal.
 ```
 use Illuminate\Http\Request;
 ```
 #### Dependency Injection & Route Parameters
-Jika kita juga menginginkan menerima input dari route, kita harus mencantumkan parameter rute setelah dependensi lainnya. Sebagai contoh, jika kita memiliki route sebagai berikut
+Jika kita juga menginginkan menerima input dari route, kita harus mencantumkan parameter route setelah dependensi lainnya. Sebagai contoh, jika kita memiliki route sebagai berikut
 ```php
 use App\Http\Controllers\UserController;
 
@@ -91,7 +91,7 @@ $value = $request->header('X-Header-Name');
 
 $value = $request->header('X-Header-Name', 'default');
 ```
-Selain itu, juga ada method ``hasHeader`` untuk mengecek apakah request memiliki header yang sesuai dengan parameter yang diberikan.
+Selain itu, juga ada method ``hasHeader`` untuk mengecek apakah request memiliki header tertentu.
 ```php
 if ($request->hasHeader('X-Header-Name')) {
     //
@@ -135,11 +135,11 @@ Jika tidak diberikan parameter maka method ini akan mengembalikan seluruh nilai 
 ```php
 $query = $request->query();
 ```
-Jika diberikan sebuah parameter maka akan mengembalikan nilai dari query string yang dimasukkan.
+Jika diberikan sebuah parameter maka akan mengembalikan nilai dari parameter query string yang dimasukkan.
 ```php
 $name = $request->query('name');
 ```
-Jika nilai dari query string tidak ada, maka parameter kedua akan di-return
+Jika nilai dari parameter query string tidak ada, maka parameter kedua akan di-return
 ```php
 $name = $request->query('name', 'Helen');
 ```
@@ -168,7 +168,7 @@ $request->flashOnly(['username', 'email']);
 
 $request->flashExcept('password');
 ```
-- Flash input dengan redirecting</br>
+- Flash input yang diikuti redirecting</br>
 Untuk melakukan flash input yang diikuti dengan redirect, dapat dilakukan dengan menggunakan method ``withInput``
 ```php
 return redirect('form')->withInput();
@@ -203,7 +203,7 @@ $file = $request->file('photo');
 
 $file = $request->photo;
 ```
-Untuk mengecek apakah file terdapat pada request dapat menggunakan method ``hasFile``
+Untuk mengecek apakah file terdapat pada request, dapat menggunakan method ``hasFile``
 ```php
 if ($request->hasFile('photo')) {
     //
