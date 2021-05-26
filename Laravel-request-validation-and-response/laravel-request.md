@@ -187,7 +187,54 @@ Laravel menyediakan ``old`` helper global. Jadi ketika pada blade template, kita
 ```php
 <input type="text" name="username" value="{{ old('username') }}">
 ```
+#### Cookies
+- Mengambil cookies dari request
+Semua cookies yang dibuat oleh Laravel dienkripsi dan ditandai dengan kode autentikasi, yang berarti cookies akan dianggap invalid jika diubah oleh client. Dengan menggunakan method ``cookie`` kita dapat mengambil cookies dari request.
+```php
+$value = $request->cookie('name');
+```
 
+### Files
+#### Mengambil file yang diupload
+Kita dapat mengambil file yang diupload dengan dari objek ``Illuminate\Http\Request`` dengan menggunakan method ``file`` atau dynamic properties. Method ``file`` akan me-return objek ``Illuminate\Http\UploadedFile`` yang meng-extends kelas ``SplFileInfo`` pada PHP.
+```php
+$file = $request->file('photo');
+
+$file = $request->photo;
+```
+Untuk mengecek apakah file terdapat pada request dapat menggunakan method ``hasFile``
+```php
+if ($request->hasFile('photo')) {
+    //
+}
+```
+##### Validasi keberhasilan upload
+Terkadang kita juga harus melakukan verifikasi untuk memastikan tidak ada masalah dalam proses upload file. Hal ini dapat dilakukan dengan method ``isValid``
+```php
+if ($request->file('photo')->isValid()) {
+    //
+}
+```
+##### File path dan ekstensi
+Untuk mengetahui file path dan ekstensi dapat menggunakan method ``path`` dan ``extension``
+```php
+$path = $request->photo->path();
+
+$extension = $request->photo->extension();
+```
+#### Menyimpan file yang diupload
+Menggunakan method ``store`` dengan parameter path file relatif terhadap root direktori yang telah dikonfigurasi pada filesystem. Path file seharusnya tidak diisi dengan nama file karena ID unik akan dibuat secara otomatis yang digunakan sebagai nama file. Selain itu method ini juga dapat menerima argumen kedua yang bersifat opsional untuk mengatur nama disk yang digunakan untuk menyimpan file.
+```php
+$path = $request->photo->store('images');
+
+$path = $request->photo->store('images', 's3');
+```
+Jika kita tidak ingin nama file di-generate secara otomatis, maka kita dapat menggunakan method ``storeAs`` dengan argumen path, nama file, dan disk
+```php
+$path = $request->photo->storeAs('images', 'filename.jpg');
+
+$path = $request->photo->storeAs('images', 'filename.jpg', 's3');
+```
 
 ## Langkah-langkah tutorial
 Berikut ini merupakan contoh sederhana untuk mengimplementasikan method-method diatas
@@ -216,7 +263,7 @@ Membuat form sederhana ``resources\views\formulir.blade.php``
                     </h3>
                     <div class="card-body">
                         <!-- menambahkan query string warna dengan value biru -->
-                        <form method="POST" action="{{route('proses-form-guest',['id' => '99','warna' => 'biru'])}}">
+                        <form method="POST" action="{{route('proses-form-guest',['id' => '99','warna' => 'biru'])}}" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="name">Name</label>
@@ -248,6 +295,11 @@ Membuat form sederhana ``resources\views\formulir.blade.php``
                                         Tidur
                                     </label>
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gambar">Gambar</label>
+                                <input type="file" class="form-control-file" id="gambar" name="gambar">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
@@ -285,29 +337,30 @@ class GuestController extends Controller
 
     public function proses(Request $request, int $id)
     {
-        $message = "</br>Path = " . $request->path();
+        echo "</br>Path = " . $request->path();
 
-        $message .= "</br>request patern == proses* ? " . ($request->is("proses*") ? 'true' : 'false');
-        $message .= "</br>request route name ==  proses-form-guest? " . ($request->routeIs("proses-form-guest") ? 'true' : 'false');
+        echo "</br>request patern == proses* ? " . ($request->is("proses*") ? 'true' : 'false');
+        echo "</br>request route name ==  proses-form-guest? " . ($request->routeIs("proses-form-guest") ? 'true' : 'false');
 
-        $message .= "</br>url = " . $request->url();
-        $message .= "</br>full url = " . $request->fullUrl();
+        echo "</br>url = " . $request->url();
+        echo "</br>full url = " . $request->fullUrl();
 
-        $message .= "</br>Query string warna = " . $request->query('warna');
+        echo "</br>Query string warna = " . $request->query('warna');
 
-        $message .= "</br>Method = " . $request->method();
-        $message .= "</br>Method == post? " . ($request->isMethod('post') ? 'true' : 'false');
+        echo "</br>Method = " . $request->method();
+        echo "</br>Method == post? " . ($request->isMethod('post') ? 'true' : 'false');
 
 
-        $message .= "</br>Name = " . $request->input('name');
-        $message .= "</br>City = " . $request->input('city');
+        echo "</br>Name = " . $request->input('name');
+        echo "</br>City = " . $request->input('city');
 
-        $message .= "</br>Hobby:";
+        echo "</br>Hobby:";
         for ($i = 0; $i < count($request->input('hobby')); $i++) {
-            $message .= '</br>' . $request->input("hobby.$i");
+            echo '</br>' . $request->input("hobby.$i");
         }
-
-        return $message;
+        echo "</br></br> Gambar";
+        echo "</br>gambar ada? " . ($request->hasFile('gambar') ? 'true' : 'false');
+        echo "</br> Ekstensi = " . $request->gambar->extension();
     }
 }
 ```
