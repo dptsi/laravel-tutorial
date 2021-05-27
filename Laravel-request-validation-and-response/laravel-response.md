@@ -82,7 +82,7 @@ Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function (
 ```
 
 ### Attaching Cookies To Responses
-Kita juga dapat melampirkan cookie ke objek ``Illuminate\Http\Responses`` menggunakan method ``cookie``. Jika juga dapat melakukan <i>passing</i> nama, nilai dan jumlah menit cookie yang dianggap valid untuk metode ini:
+Kita juga dapat melampirkan cookie ke objek ``Illuminate\Http\Responses`` menggunakan method ``cookie``. Kita juga dapat melakukan <i>passing</i> nama, nilai dan jumlah menit cookie yang dianggap valid untuk metode ini:
 
 ```php
 return response('Hello World')->cookie(
@@ -106,7 +106,7 @@ Cookie::queue('name', 'value', $minutes);
 ```
 
 #### Generating Cookie Instances
-Jika kita ingin membuat objek ``Symfone\Component\HttpFoundation\Cookie`` yang dapat memberikan ke objek response di lain waktu, kita dapat menggunakan global cookie helper. Cookie ini tidak akan mengirim kembali ke klien kecuali jika mengirimkannya.
+Jika kita ingin membuat objek ``Symfony\Component\HttpFoundation\Cookie`` yang dapat diberikan ke objek response di lain waktu, kita dapat menggunakan global cookie helper. Cookie ini tidak akan mengirim kembali ke klien kecuali jika mengirimkannya.
 
 ```php
 $cookie = cookie('name', 'value', $minutes);
@@ -126,7 +126,7 @@ Cookie::expire('name');
 ```
 
 ### Cookies & Enxryption
-Secara default, semua cokkie yang dihasilkan oleh laravel dienkripsi dan tidak dapat diubah atau dibaca oleh klien. Jika kita ingin menonaktifkan ekripsi untuk subset cookie yang dibuat aplikasi kita. Kita bisa menggunakan ``$except``  dari ``App\Http\Middleware\EncryptCookies``. Lokasi dari middleware terdapat pada folder ``app/Http/Middleware``.
+Secara default, semua cokkie yang dihasilkan oleh laravel dienkripsi dan tidak dapat diubah atau dibaca oleh klien. Jika kita ingin menonaktifkan enkripsi untuk subset cookie yang dibuat aplikasi kita. Kita bisa menggunakan ``$except``  dari ``App\Http\Middleware\EncryptCookies``. Lokasi dari middleware terdapat pada folder ``app/Http/Middleware``.
 
 
 ```php
