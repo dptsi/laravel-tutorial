@@ -191,6 +191,47 @@ Selanjutnya kita akan membuat sebuah tampilan 'input' atau dalam ini view('input
 </form>
 
 ```
+
+Hasilnya adalah sebagai berikut
+
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Validation/tidakdiisi.jpeg)
+
+Atau ada cara juga yang menampilkan error secara langsung dibawah text
+
+```php
+<form action="/proses" method="post">
+{{ csrf_field() }}
+	<div class="form-group">
+        	<label for="nama">Nama</label>
+        	<input class="form-control" type="text" name="nama" value="{{ old('nama') }}" class="@error('nama') is-invalid @enderror">
+        	@error('nama')
+               		<div class="alert alert-danger">{{ $message }}</div>
+       		@enderror
+        </div>
+        <div class="form-group">
+               <label for="pekerjaan">Pekerjaan</label>
+               <input class="form-control" type="text" name="pekerjaan" value="{{ old('pekerjaan') }}" class="@error('pekerjaan') is-invalid @enderror">
+                @error('pekerjaan')
+                         <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+        </div>
+        <div class="form-group">
+               <label for="usia">Usia</label>
+               <input class="form-control" type="text" name="usia" value="{{ old('usia') }}" class="@error('usia') is-invalid @enderror">
+               @error('usia')
+                          <div class="alert alert-danger">{{ $message }}</div>
+               @enderror
+         </div>
+         <div class="form-group">
+               <input class="btn btn-primary" type="submit" value="Proses">
+         </div>
+</form>
+```
+
+Hasilnya adalah sebagai berikut
+
+![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Validation/errrorpersatu.jpg)
+
 ### Langkah Kelima
 Setelah kita membuat tampilan dari input maka kita perlu membuat juga tampilan pada proses dengan directory yang sama yaitu NamaProject/Resources/Views/proses.blade.php. Code adalah sebagai berikut
 
