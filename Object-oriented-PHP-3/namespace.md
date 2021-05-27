@@ -197,6 +197,22 @@ Hello World
 1621489149
 ```
 
+## Penamaan Namespace
+Berikut adalah beberapa standar dan "best practice" penamaan namespace:
+* namespace dan class yang telah terkualifikasi secara penuh harus memiliki struktur seperti berikut `\<Vendor Name>\(<Namespace>\)*<Class Name>`
+* setiap namespace harus memiliki top-level namespace ("Vendor Name")
+* setiap namespace dapat memiliki beberapa sub-namespace
+* namespace dan class yang telah terkualifikasi secara penuh diberi akhiran `.php` ketika loading dari file system
+* karakter alfabet dalam nama vendor, namespace, dan class dapat berupa kombinasi huruf kecil dan huruf kapital
+
+**Contoh:**
+
+* `\Doctrine\Common\IsolatedClassLoader` => `/path/to/project/lib/vendor/Doctrine/Common/IsolatedClassLoader.php`
+* `\Symfony\Core\Request` => `/path/to/project/lib/vendor/Symfony/Core/Request.php`
+* `\Zend\Acl` => `/path/to/project/lib/vendor/Zend/Acl.php`
+* `\Zend\Mail\Message` => `/path/to/project/lib/vendor/Zend/Mail/Message.php`
+
 ## Referensi
 1. https://www.php.net/manual/en/language.namespaces.rationale.php
 2. https://symfonycasts.com/screencast/php-namespaces/namespaces
+3. https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
