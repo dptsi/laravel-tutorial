@@ -1,11 +1,11 @@
 # Laravel Request
 [Kembali](readme.md)
 
-## Latar Belakang
+## Latar Belakang Topik
 Dalam Laravel tentunya ada beberapa metode yang dapat digunakan untuk mengirimkan data, baik menggunakan GET, POST, PUT, PATCH, DELETE, ataupun OPTIONS. Untuk memudahkan hal tersebut, diperlukan adanya suatu cara yang dapat melakukan pengaksesan data yang dikirim secara object-oriented. Oleh karena itu, Laravel memiliki kelas ``Illuminate\Http\Request``
 
 
-## Konsep
+## Konsep-Konsep
 Kelas ``Illuminate\Http\Request`` yang dimiliki laravel berfungsi menyediakan interaksi ke request HTTP yang sedang ditangani saat ini secara object-oriented termasuk juga mengambil input, cookies, dan files yang dikirimkan bersama request tersebut.
 
 ### Interaksi dengan Request
