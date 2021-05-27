@@ -4,6 +4,7 @@
 
 ## Daftar isi
 
-- [Laravel Route](laravel-route.md)
-- [Laravel Middleware](laravel-middleware.md)
-- [Laravel Controller](laravel-controller.md)
+-   [Laravel Route Basic](laravel-route-basic.md)
+-   [Laravel Route Dengan Parameter](laravel-route-parameter.md)
+-   [Laravel Middleware](laravel-middleware.md)
+-   [Laravel Controller](laravel-controller.md)

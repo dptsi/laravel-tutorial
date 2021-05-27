@@ -2,326 +2,134 @@
 
 [Kembali](readme.md)
 
-## Introduction
+## Daftar Isi
 
-Middleware menyediakan mekanisme yang mudah untuk memeriksa dan memfilter permintaan HTTP yang memasuki aplikasi kita. Misalnya, Laravel menyertakan middleware yang memverifikasi bahwa pengguna aplikasi kita telah diautentikasi. Jika pengguna tidak diautentikasi, middleware akan mengarahkan pengguna ke layar login aplikasi. Namun, jika pengguna diautentikasi, middleware akan mengizinkan permintaan untuk melanjutkan lebih jauh ke dalam aplikasi.
+-   [Laravel Middleware](#laravel-middleware)
+    -   [Daftar Isi](#daftar-isi)
+    -   [Latar Belakang Topik](#latar-belakang-topik)
+    -   [Konsep-Konsep](#konsep-konsep)
+    -   [Langkah-Langkah Tutorial](#langkah-langkah-tutorial)
+        -   [Langkah Pertama](#langkah-pertama)
+        -   [Langkah Kedua](#langkah-kedua)
+        -   [Langkah Ketiga](#langkah-ketiga)
+        -   [Langkah Keempat](#langkah-keempat)
+        -   [Langkah Kelima](#langkah-kelima)
+    -   [Kesimpulan](#kesimpulan)
+
+## Latar Belakang Topik
+
+Dalam mengakses route, terkadang kita perlu mengecek kembali kriteria akses. Misal, sebuah web memiliki route untuk anggota dan route untuk umum. Tentu, tidak mungkin orang umum diperbolehkan mengakses route yang dimiliki anggota karena bisa jadi orang luar akan mengambil data-data pribadi maupun masalah keamanan lainnya. Karena itu, diperlukan semacam pengecekan sebelum diberikan akses request terhadap route yang disebut middleware.
 
 ![Middleware](./img/middleware.png)
 
-Sesuai namanya ‘middle’ yang berarti tengah, maka letak Middleware adalah berada di tengah antara controller dan router. Ada pula yang mengartikan Middleware adalah software yang menengahi sebuah aplikasi dengan yang lain. Dengan begini, proses integrasi antar aplikasi dapat berjalan dengan lebih mudah. Semua middleware ini terletak di `app/Http/Middlewaredirektori`.
+Dalam kesempatan kali ini, kita mencoba menggunakan route sebagai semacam link coming soon. Kita tidak dapat mengakses sebuah route jika tanggalnya kurang dari 27 Mei 2021. Nantinya, pengguna akan diarahkan ke laman named route “view” jika tidak sesuai.
 
-Fungsi-fungsi Middleware secara umum adalah:
-1. Authentication (seperti pada Laravel).
-2. Validasi input.
-3. Authorization.
-4. Data logger.
-5. Sanitasi input.
-6. Meresponse handler, dan lain sebagainya.
+Banyaknya fitur tersebut lah yang akan kita pelajari pada konsep Laravel Middleware.
 
-## Daftar Isi
-- [Laravel Middleware](#laravel-middleware)
-  * [Introduction](#introduction)
-  * [Daftar Isi](#daftar-isi)
-  * [Defining Middleware](#defining-middleware)
-    + [Middleware & Responses](#middleware---responses)
-  * [Registering Middleware](#registering-middleware)
-    + [Global Middleware](#global-middleware)
-    + [Assigning Middleware to Routes](#assigning-middleware-to-routes)
-    + [Middleware Groups](#middleware-groups)
-    + [Sorting Middleware](#sorting-middleware)
-  * [Middleware Parameters](#middleware-parameters)
-  * [Terminable Middleware](#terminable-middleware)
+## Konsep-Konsep
 
-## Defining Middleware
+Konsep dari Laravel Middleware ini adalah dengan memberikan semacam pengecekan tengah sebelum request diteruskan ke aplikasi. Misal penggunaanya dalam membagi user dan public. Semisal kita membangun aplikasi yang bisa membuat blog, tentu tidak mungkin jika public diberikan kesempatan untuk membuat blog juga. Namun, public cukup diberikan kesempatan untuk membaca isi dari blog tersebut. Untuk melakukannya, sebelum mengakses route untuk membuat blog, user akan diarahkan untuk dicek apakah ia merupakan user atau tidak. Jika iya, maka pengguna dapat mengakses konten blog.
 
-Untuk membuat middleware baru, gunakan `make:middleware` perintah Artisan:
-```shell
-php artisan make:middleware EnsureTokenIsValid
-```
-Perintah ini akan menempatkan kelas `EnsureTokenIsValid` baru dalam direktori `app/Http/Middleware`. Di middleware ini, hanya akan mengizinkan akses ke route jika token input yang diberikan cocok dengan nilai yang ditentukan. Jika tidak, akan diarakan kembali pengguna ke home URI:
+## Langkah-Langkah Tutorial
+
+### Langkah Pertama
+
+Untuk membuat middleware, pertama kita perlu membuat route yang ingin dipakaikan middleware. Pada contoh ini, kita membuat named route “view” sebagai redirect middleware dan route dengan prefix “/pegawai” sebagai route yang akan kita pakaikan middleware.
+
+Pada file `routes\web.php`, kita melakukan koding route “/view” dengan diakhiri dengan method `name` untuk memberikan nama.
+
 ```php
-<?php
-
-namespace App\Http\Middleware;
-
-use Closure;
-
-class EnsureTokenIsValid
-{
-    /**
-     * Menghandle request yang masuk
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next)
-    {
-        if ($request->input('token') !== 'my-secret-token') {
-            return redirect('home');
-        }
-        return $next($request);
-    }
-}
-```
-Seperti yang kita lihat, jika `token` yang diberikan tidak cocok dengan `my-secret-token`, middleware akan mengembalikan pengalihan HTTP ke klien; jika tidak, permintaan tersebut akan diteruskan lebih jauh ke dalam aplikasi. Untuk meneruskan permintaan lebih dalam ke aplikasi (mengizinkan middleware untuk "pass"), kita harus memanggil `$next` callback dengan ekstensi `$request`.
-Alangkah baiknya adalah membayangkan middleware sebagai serangkaian "layer" yang harus dilalui permintaan HTTP sebelum masuk ke aplikasi Anda. Setiap layer dapat memeriksa permintaan dan bahkan menolaknya seluruhnya.
-Catatan : Semua middleware diselesaikan melalui service container , jadi kita dapat memberi petunjuk tentang dependensi apa pun yang diperlukan dalam konstruktor middleware.
-
-### Middleware & Responses
-
-Tentu saja, middleware dapat melakukan tugas sebelum atau sesudah meneruskan permintaan lebih dalam ke dalam aplikasi. Misalnya, middleware berikut akan melakukan beberapa tugas sebelum permintaan ditangani oleh aplikasi:
-```php
-<?php
-
-namespace App\Http\Middleware;
-
-use Closure;
-
-class BeforeMiddleware
-{
-    public function handle($request, Closure $next)
-    {
-        // Aksi
-
-        return $next($request);
-    }
-}
-```
-Namun, middleware ini akan menjalankan tugasnya setelah permintaan ditangani oleh aplikasi:
-```php
-<?php
-
-namespace App\Http\Middleware;
-
-use Closure;
-
-class AfterMiddleware
-{
-    public function handle($request, Closure $next)
-    {
-        $response = $next($request);
-
-        // Aksi
-
-        return $response;
-    }
-}
+Route::get("/view", function () {
+    return "Warga Laravel.";
+})->name("view");
 ```
 
-## Registering Middleware
+Pada file yang sama pula, kita juga menambahkan prefix “/pegawai” dan kita gabungkan dalam group seperti pada tutorial [Laravel Route dengan Parameter](../laravel-route-dengan-parameter).
 
-### Global Middleware
-
-Jika ingin middleware dijalankan selama setiap permintaan HTTP ke aplikasi kita, register kelas middleware di `$middleware` properti `app/Http/Kernel.php` kelas kita.
-### Assigning Middleware to Routes
-
-Jika ingin menetapkan middleware ke route tertentu, kita harus menetapkan kunci middleware terlebih dahulu di file`app/Http/Kernel.php` . Secara default,properti `$routeMiddleware kelas ini berisi entri untuk middleware yang disertakan dengan Laravel. Kita dapat menambahkan middleware kita sendiri ke daftar ini dan menetapkannya sebagai kunci pilihan kita:
 ```php
-// Tanpa App\Http\Kernel class...
-
-protected $routeMiddleware = [
-    'auth' => \App\Http\Middleware\Authenticate::class,
-    'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-    'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-    'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-    'can' => \Illuminate\Auth\Middleware\Authorize::class,
-    'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-    'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
-    'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-    'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-];
-```
-Setelah middleware didefinisikan di kernel HTTP, Anda dapat menggunakan metode `middleware` untuk menetapkan middleware ke route:
-```php
-Route::get('/profile', function () {
-    //
-})->middleware('auth');
-```
-Kita dapat menetapkan beberapa middleware ke route dengan meneruskan array of nama middleware ke metode `middleware`:
-```php
-Route::get('/', function () {
-    //
-})->middleware(['first', 'second']);
-```
-Saat menetapkan middleware, juga dapat memberikan nama kelas yang memenuhi syarat:
-```php
-use App\Http\Middleware\EnsureTokenIsValid;
-
-Route::get('/profile', function () {
-    //
-})->middleware(EnsureTokenIsValid::class);
-```
-Saat menetapkan middleware ke grup route, terkadang perlu mencegah middleware diterapkan ke route individu dalam grup. Kita dapat melakukannya dengan menggunakan metode `withoutMiddleware`:
-```php
-use App\Http\Middleware\EnsureTokenIsValid;
-
-Route::middleware([EnsureTokenIsValid::class])->group(function () {
-    Route::get('/', function () {
-        //
+Route::prefix("/pegawai")->group(function () {
+    Route::get("/view", function () {
+        return "Pegawai Laravel.";
     });
-
-    Route::get('/profile', function () {
-        //
-    })->withoutMiddleware([EnsureTokenIsValid::class]);
+    Route::get("/{id}", function ($id) {
+        return "Pegawai dengan id: " . $id . ".";
+    })->whereNumber('id');
 });
 ```
-Metode `withoutMiddleware` hanya dapat menghapus route middleware dan tidak berlaku untuk middleware global.
 
-### Middleware Groups
+### Langkah Kedua
 
-Terkadang kita  mungkin ingin mengelompokkan beberapa middleware di bawah satu tombol agar membuatnya lebih mudah untuk ditetapkan ke route. Kita dapat melakukannya dengan menggunakan properti `$middlewareGroups` dari kernel HTTP kita.
-LARAVEL mengandung middleware umum yang mungkin ingin menerapkan ke route web dan API kita. Ingat, grup middleware ini secara otomatis diterapkan oleh `App\Providers\RouteServiceProvider` penyedia server aplikasi kita untuk meroutekan dalam file yang sesuai route web dan api:
-```php
-/**
- * Grup Middleware Route Aplikasi.
- *
- * @var array
- */
-protected $middlewareGroups = [
-    'web' => [
-        \App\Http\Middleware\EncryptCookies::class,
-        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-        \Illuminate\Session\Middleware\StartSession::class,
-        // \Illuminate\Session\Middleware\AuthenticateSession::class,
-        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \App\Http\Middleware\VerifyCsrfToken::class,
-        \Illuminate\Routing\Middleware\SubstituteBindings::class,
-    ],
+Jalankan command berikut untuk membuat file middleware baru.
 
-    'api' => [
-        'throttle:api',
-        \Illuminate\Routing\Middleware\SubstituteBindings::class,
-    ],
-];
 ```
-Grup middleware dapat ditetapkan ke route dan controller actions menggunakan sintaks yang sama dengan middleware individual. Sekali lagi, grup middleware membuatnya lebih nyaman untuk menetapkan banyak middleware ke sebuah route sekaligus:
-```php
-Route::get('/', function () {
-    //
-})->middleware('web');
-
-Route::middleware(['web'])->group(function () {
-    //
-});
-```
-**Catatan** : Grup middleware web dan api secara otomatis diterapkan ke aplikasi kita yang sesuai dengan file `routes/web.php` dan `routes/api.php` oleh `App\Providers\RouteServiceProvider`.
-
-### Sorting Middleware
-
-Terkadang, kita mungkin memerlukan middleware kita untuk mengeksekusi dalam urutan tertentu tetapi tidak memiliki kendali atas urutannya saat ditetapkan ke route . Dalam kasus ini, kita dapat menentukan prioritas middleware Anda menggunakan properti `$middlewarePriority` dari file `app/Http/Kernel.php` kita. Properti ini mungkin tidak ada di kernel HTTP kita secara default. Jika tidak ada, kita dapat menyalin definisi defaultnya di bawah ini:
-```php
-/**
- * Prioritas list-terurut dari middleware.
- *
- * Ini memaksa middleware non-global untuk selalu berada dalam urutan tertentu.
- *
- * @var array
- */
-protected $middlewarePriority = [
-    \Illuminate\Cookie\Middleware\EncryptCookies::class,
-    \Illuminate\Session\Middleware\StartSession::class,
-    \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-    \Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
-    \Illuminate\Routing\Middleware\ThrottleRequests::class,
-    \Illuminate\Session\Middleware\AuthenticateSession::class,
-    \Illuminate\Routing\Middleware\SubstituteBindings::class,
-    \Illuminate\Auth\Middleware\Authorize::class,
-];
+php artisan make:middleware EnsureDateIsRight
 ```
 
-## Middleware Parameters
+Nantinya pada directory `App\Http\Middleware`, kita dapat melihat file `EnsureDateIsRight.php`
 
-Middleware juga dapat menerima parameter tambahan. Misalnya, jika aplikasi kita perlu memverifikasi bahwa pengguna yang diautentikasi memiliki "peran" tertentu sebelum melakukan tindakan tertentu, kita dapat membuat `EnsureUserHasRolemiddleware` yang menerima nama peran sebagai argumen tambahan.
+![Lokasi Directory Middleware](./img/middleware-1.png)
 
-Parameter middleware tambahan akan diteruskan ke middleware setelah `$nextargumen`:
+### Langkah Ketiga
+
+Selanjutnya, pada file `App\Http\Middleware\EnsureDateIsRight.php`, kita dapat menambahkan pada fungsi handle sebagai berikut.
+
 ```php
-<?php
-
-namespace App\Http\Middleware;
-
-use Closure;
-
-class EnsureUserHasRole
-{
-    /**
-     * menghandle request yang akan datang 
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  $role
-     * @return mixed
-     */
-    public function handle($request, Closure $next, $role)
+public function handle(Request $request, Closure $next)
     {
-        if (! $request->user()->hasRole($role)) {
-            // Redirect...
+        $date_now = new DateTime();
+        $date_target = new DateTime("27-05-2021");
+        if ($date_now < $date_target) {
+            return redirect()->route("view");
         }
-
         return $next($request);
     }
-
-}
 ```
-Parameter middleware dapat ditentukan saat menentukan route  dengan memisahkan nama middleware dan parameter dengan a :. Beberapa parameter harus dipisahkan dengan koma:
+
+Di sini, dapat dilihat, jika tanggal kurang dari 27-05-2021, maka middleware akan mengarahkan route kita kepada named route “view”.
+
+![Middleware EnsureDateIsRight](./img/middleware-2.png)
+
+### Langkah Keempat
+
+Untuk memberikan nama terhadap middleware kita, buka file `App\Http\Kernel.php`, di sini pada state `$routeMiddleware` tambahkan kode berikut.
+
 ```php
-Route::put('/post/{id}', function ($id) {
-    //
-})->middleware('role:editor');
+'date' => \App\Http\Middleware\EnsureDateIsRight::class,
 ```
 
+Di sini, kita akan membuat alias nama middleware pada kelas EnsureDateIsRight menjadi “date”.
 
-## Terminable Middleware
+### Langkah Kelima
 
-Terkadang middleware mungkin perlu melakukan beberapa pekerjaan setelah respon HTTP telah dikirim ke browser. Jika kita menentukan metode `terminate` di middleware dan server web kita menggunakan FastCGI, metode `terminate` tersebut akan secara otomatis dipanggil setelah respons dikirim ke browser:
+Sekarang kita ubah prefix “/pegawai” tadi menjadi berikut.
+
 ```php
-<?php
-
-namespace Illuminate\Session\Middleware;
-
-use Closure;
-
-class TerminatingMiddleware
-{
-    /**
-     * Menghandle request yang akan datang.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next)
-    {
-        return $next($request);
-    }
-
-    /**
-     * Menghandle tugas setelah response dikirim ke browser.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Http\Response  $response
-     * @return void
-     */
-    public function terminate($request, $response)
-    {
-        // ...
-    }
-}
+Route::middleware('date')->prefix("/pegawai")->group(function () {
+    Route::get("/view", function () {
+        return "Pegawai Laravel.";
+    });
+    Route::get("/{id}", function ($id) {
+        return "Pegawai dengan id: " . $id . ".";
+    })->whereNumber('id');
+});
 ```
-Metode `terminate` harus menerima permintaan dan respon. Setelah kita menentukan middleware yang dapat diakhiri, kita harus menambahkannya ke daftar route atau middleware global dalam file `app/Http/Kernel.php`.
-Saat memanggil metode` terminate` pada middleware kita, Laravel akan menyelesaikan instance baru dari middleware dari service container . Jika kita ingin menggunakan instance middleware yang sama saat metode `handle` dan metode `terminate` dipanggil, register middleware dengan container menggunakan metode container `singleton`. Biasanya ini harus dilakukan dengan metode `register` dari `AppServiceProvider` kita:
+
+Hal tersebut berarti kita akan mengarahkan keseluruhan prefix “/pegawai” untuk menjalankan middleware “date”.
+
+Sekarang, jika kita mencoba menjalankan Laravel, maka jika kita mencoba mengakses “/pegawai/{id}”.
+
+![Akses Middleware Berhasil](./img/middleware-3.png)
+
+Sekarang kita coba ubah kodingan $date_target pada file `App\Http\Middleware\EnsureDateIsRight.php` menjadi berikut.
+
 ```php
-use App\Http\Middleware\TerminatingMiddleware;
-
-/**
- * Register setiap servisi aplikasi.
- *
- * @return void
- */
-public function register()
-{
-    $this->app->singleton(TerminatingMiddleware::class);
-}
+$date_target = new DateTime("28-05-2021");
 ```
 
+Maka, jika kita mengakses “/pegawai/{id}”, kita akan diarahkan ke named route “view” karena tanggal ternyata belum 28-05-2021.
 
+![Akses Middleware Gagal](./img/middleware-4.png)
+
+## Kesimpulan
+
+Laravel Middleware berfungsi sebagai gate untuk menghubungkan request dari pengguna yang nantinya akan ditentukan apakah pengguna pantas untuk mengakses route yang diminta atau tidak.
