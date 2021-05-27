@@ -3,7 +3,7 @@
 [Kembali](readme.md)
 
 ## Latar belakang topik
-HTTP (Hypertext Transfer Protocol) merupakan protokol yang digunakan untuk mengirim data melalui web. Client mengirimkan HTTP request ke server kemudian server akan mengembalikan respon ke client. Respon itu dapat berupa informasi status penyelesaian request ataupun berisi konten pada body dari response. Jadi agar client dan server dapat berkomunikasi aplikasi web memiliki HTTP request untuk membaca data dari client dan HTTP response untuk membaca.
+HTTP (Hypertext Transfer Protocol) merupakan protokol yang digunakan untuk mengirim data melalui web. Client mengirimkan HTTP request ke server kemudian server akan mengembalikan respon ke client. Respon itu dapat berupa informasi status penyelesaian request ataupun berisi konten pada body dari response. Jadi agar client dan server dapat berkomunikasi, aplikasi web harus memiliki cara untuk membaca HTTP request dan mengembalikan HTTP response ke client.
 
 ## Konsep-konsep
 HTTP Response yaitu dimana server akan merespon permintaan yang dikirim oleh client.
@@ -25,7 +25,7 @@ Route::get('/', function () {
 ```
 
 #### Response Objects
-Pada umumnya kita tidak hanya me-return string dan array saja, melainkan keseluruhan objek dari ``Illuminate\Http\Response ataupun view``. Dengan me-return keseluruhan objek dari ``Response`` kita dapat menyesuaikan status code dari HTTP response dan headers sesuai dengan kebutuhan. Sebuah objek ``Response`` akan mewarisi kelas ``Symfony\Component\HttpFoundation\Response`` yang menyediakan berbagai macam method untuk membuat HTTP response.
+Pada umumnya kita tidak hanya me-return string dan array saja, melainkan keseluruhan objek dari ``Illuminate\Http\Response`` ataupun ``view``. Dengan me-return keseluruhan objek dari ``Response`` kita dapat menyesuaikan status code dari HTTP response dan headers sesuai dengan kebutuhan. Sebuah objek ``Response`` akan mewarisi kelas ``Symfony\Component\HttpFoundation\Response`` yang menyediakan berbagai macam method untuk membuat HTTP response.
 
 ```php
 Route::get('/home', function () {
@@ -35,7 +35,7 @@ Route::get('/home', function () {
 ```
 
 #### Eloquent Models & Collections
-Kita juga dapat mengembalikan model dan koleksi Eloquent ORM langsung dari rute dan pengontrol. Saat kita melakukannya, Laravel akan secara otomatis mengonversi model dan koleksi menjadi response JSON. 
+Kita juga dapat mengembalikan models dan collections dari Eloquent ORM secara langsung melalui routes dan controllers. Saat kita melakukannya, Laravel akan secara otomatis menglonversi models dan collections menjadi response JSON. 
 
 ```php
 use App\Models\User;
@@ -46,7 +46,7 @@ Route::get('/user/{user}', function (User $user) {
 ```  
 
 ### Attaching Headers To Responses
-Perlu kita ingat bahwa sebagai besar metode respons dapat dilanjutkan secara berantai (chainable), memungkinkan konstruksi instance dengan respons yang lancar. Misalnya kita dapat menggunakan metode header untuk menambahkan serangkaian header ke response sebelum mengirimkannya kembali ke pengguna.
+Perlu kita ingat bahwa sebagai besar metode respons dapat dilanjutkan secara berantai (chainable). Misalnya kita dapat menggunakan metode header untuk menambahkan serangkaian header ke response sebelum mengirimkannya kembali ke pengguna.
 
 ```php
 return response($content)
@@ -55,7 +55,7 @@ return response($content)
             ->header('X-Header-Two', 'Header Value');
 ```
 
-Atau kita juga bisa menggunakan method withHeaders untuk menentukan sebuah array headers ditambahkan ke response.
+Atau kita juga bisa menggunakan method ``withHeaders`` untuk menentukan sebuah array headers ditambahkan ke response.
 
 ```php
 return response($content)
@@ -82,14 +82,14 @@ Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function (
 ```
 
 ### Attaching Cookies To Responses
-Kita juga dapat melampirkan cookie ke objek ``Illuminate\Http\Responses`` menggunakan method ``cookie``. Kita juga dapat melakukan <i>passing</i> nama, nilai dan jumlah menit cookie yang dianggap valid untuk metode ini:
+Kita juga dapat melampirkan cookie ke objek ``Illuminate\Http\Responses`` menggunakan method ``cookie``. Kita juga dapat melakukan <i>passing</i> nama, nilai dan jumlah menit cookie yang dianggap valid untuk method ini:
 
 ```php
 return response('Hello World')->cookie(
     'name', 'value', $minutes
 );
 ```
-Cookie method juga menerima beberapa argument lagi meskupun jarang digunakan. Secara umum, argumen ini memiliki tujuan dan arti yang sama dengan argumen yang akan diberikan ke method ``setcookie`` pada PHP native
+Method ``cookie`` juga menerima beberapa argument lagi meskupun jarang digunakan. Secara umum, argumen ini memiliki tujuan dan arti yang sama dengan argumen yang akan diberikan ke method ``setcookie`` pada PHP native
 
 ```php
 return response('Hello World')->cookie(
@@ -114,7 +114,7 @@ return response('Hello World')->cookie($cookie);
 ```
 
 #### Expiring Cookies Early
-Kita juga dapat menghapus cookie dengan mengakhirnya melalui metode withoutCookie.
+Kita juga dapat menghapus cookie dengan mengakhirnya melalui method ``withoutCookie``.
 ```php
 return response('Hello World')->withoutCookie('name');
 ```
