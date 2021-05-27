@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DosenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,3 +79,7 @@ Route::middleware('date')->prefix("/pegawai")->group(function () {
         return "Pegawai dengan id: " . $id . ".";
     })->whereNumber('id');
 });
+
+// Route untuk controller
+Route::get('/dosen', [DosenController::class, 'index']);
+
