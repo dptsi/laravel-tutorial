@@ -22,25 +22,25 @@ Route::get('/', function () {
 //     return view('welcome-pegawai');
 // });
 
-// Laravel-Route-Dasar 3.2
-Route::view("/pegawai", "welcome-pegawai");
+// // Laravel-Route-Dasar 3.2
+// Route::view("/pegawai", "welcome-pegawai");
 
-// Laravel-Route-Dasar 5
-Route::redirect("/employee", "/pegawai");
+// // Laravel-Route-Dasar 5
+// Route::redirect("/employee", "/pegawai");
 
 // // Laravel-Route-Dengan-Parameter 1
 // Route::get("/pegawai/{id}", function ($id) {
 //     return "Pegawai dengan id: " . $id . ".";
 // });
 
-// Laravel-Route-Dengan-Parameter 2
+// // Laravel-Route-Dengan-Parameter 2
+// // Route::get("/pegawai/{id}", function ($id) {
+// //     return "Pegawai dengan id: " . $id . ".";
+// // })->where('id', '[0-9]+');
+
 // Route::get("/pegawai/{id}", function ($id) {
 //     return "Pegawai dengan id: " . $id . ".";
-// })->where('id', '[0-9]+');
-
-Route::get("/pegawai/{id}", function ($id) {
-    return "Pegawai dengan id: " . $id . ".";
-})->whereNumber('id');
+// })->whereNumber('id');
 
 // Laravel-Route-Dengan-Parameter 2.2
 // Route::get("/pegawai/{id}/city/{city}", function ($id, $city) {
@@ -52,15 +52,29 @@ Route::get("/pegawai/{id}", function ($id) {
 // })->whereNumber('id')->whereAlpha('city');
 
 
-// Laravel-Route-Dengan-Parameter 3
-Route::prefix("/pegawai")->group(function () {
+// // Laravel-Route-Dengan-Parameter 3
+// Route::prefix("/pegawai")->group(function () {
+//     Route::get("/view", function () {
+//         return "Pegawai Laravel.";
+//     });
+//     Route::get("/{id}", function ($id) {
+//         return "Pegawai dengan id: " . $id . ".";
+//     })->whereNumber('id');
+//     Route::get("/name/{name}", function ($name) {
+//         return "Pegawai dengan name: " . $name . ".";
+//     })->whereAlpha('name');
+// });
+
+// Laravel-Middleware 
+Route::get("/view", function () {
+    return "Warga Laravel.";
+})->name("view");
+
+Route::middleware('date')->prefix("/pegawai")->group(function () {
     Route::get("/view", function () {
         return "Pegawai Laravel.";
     });
     Route::get("/{id}", function ($id) {
         return "Pegawai dengan id: " . $id . ".";
     })->whereNumber('id');
-    Route::get("/name/{name}", function ($name) {
-        return "Pegawai dengan name: " . $name . ".";
-    })->whereAlpha('name');
 });
