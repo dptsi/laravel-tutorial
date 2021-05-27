@@ -197,8 +197,8 @@ Hello World
 1621489149
 ```
 
-## Penamaan Namespace
-Berikut adalah beberapa standar dan "best practice" penamaan namespace:
+## Syarat Namespace
+Berikut adalah beberapa syarat dan "best practice" dalam menggunakan namespace:
 * namespace dan class yang telah terkualifikasi secara penuh harus memiliki struktur seperti berikut `\<Vendor Name>\(<Namespace>\)*<Class Name>`
 * setiap namespace harus memiliki top-level namespace ("Vendor Name")
 * setiap namespace dapat memiliki beberapa sub-namespace
