@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DosenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,3 +65,7 @@ Route::prefix("/pegawai")->group(function () {
         return "Pegawai dengan name: " . $name . ".";
     })->whereAlpha('name');
 });
+
+// Route untuk controller
+Route::get('/dosen', [DosenController::class, 'index']);
+
