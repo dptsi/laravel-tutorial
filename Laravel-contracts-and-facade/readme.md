@@ -5,4 +5,4 @@
 ## Daftar isi
 
 - [Contracts](contracts.md)
-- [facade](facade.md)
+- [Facade](facade.md)
