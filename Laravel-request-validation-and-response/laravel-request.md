@@ -2,7 +2,7 @@
 [Kembali](readme.md)
 
 ## Latar Belakang Topik
-Dalam Laravel tentunya ada beberapa metode yang dapat digunakan untuk mengirimkan data, baik menggunakan GET, POST, PUT, PATCH, DELETE, ataupun OPTIONS. Untuk memudahkan hal tersebut, diperlukan adanya suatu cara yang dapat melakukan pengaksesan data yang dikirim secara object-oriented. Oleh karena itu, Laravel memiliki kelas ``Illuminate\Http\Request``
+HTTP (Hypertext Transfer Protocol) merupakan protokol yang digunakan untuk mengirim data melalui web. Client mengirimkan HTTP request ke server kemudian server akan mengembalikan respon ke client. Dalam Laravel tentunya ada beberapa metode yang dapat digunakan untuk mengirimkan data, baik menggunakan GET, POST, PUT, PATCH, DELETE, ataupun OPTIONS. Untuk memudahkan hal tersebut, diperlukan adanya suatu cara yang dapat melakukan pengaksesan data yang dikirim secara object-oriented. Oleh karena itu, Laravel memiliki kelas ``Illuminate\Http\Request``
 
 
 ## Konsep-Konsep
@@ -240,7 +240,8 @@ $path = $request->photo->storeAs('images', 'filename.jpg', 's3');
 ## Langkah-langkah tutorial
 Berikut ini merupakan contoh sederhana untuk mengimplementasikan method-method diatas
 ### Langkah pertama
-Membuat form sederhana ``resources\views\formulir.blade.php``
+Membuat form sederhana ``resources\views\formulir.blade.php``</br>
+Membuat Form menggunakan method POST dan action ke route yang bernama 'proses-form-guest' yang memiliki route parameter ``id`` serta kita juga dapat menambahkan query string seperti pada contoh. Tambahkan enctype="multipart/form-data" sehingga user bisa mengirim file melalui form ini. Lalu tambahkan input sesuai dengan kebutuhan. Pada contoh ini terdapat input array menggunakan checkbox dan juga terdapat input untuk file. 
 ```php
 <!doctype html>
 <html lang="en">
@@ -320,7 +321,8 @@ Membuat form sederhana ``resources\views\formulir.blade.php``
 
 
 ### Langkah kedua
-Membuat controller ``app\Http\Controllers\GuestController.php``
+Membuat controller ``app\Http\Controllers\GuestController.php``.<br>
+Biasanya interaksi dengan Request HTTP berlangsung di controller. Pada Controller, kita dapat menggunakan method-method dari Request sesuai dengan kebutuhan. Kita dapat mengecek path, route, HTTP method dari request yang masuk. Dikarenakan kita memiliki route paramter ``id``, kita harus menambahkan argumen kedua ``id`` pada fungsi yang kita buat. 
 ```php
 <?php
 
@@ -367,7 +369,8 @@ class GuestController extends Controller
 ```
 
 ### Langkah ketiga
-Menambahkan route pada ``routes\web.php``
+Menambahkan route pada ``routes\web.php``<br>
+Untuk membuat route yang bisa mengakses form, kita cukup gunakan method GET. Berikutnya kita harus membuat route berdasarkan form yang dibuat pada langkah pertama sehingga kita harus membuat route dengan method POST dimana route tersebut menerima route paramter ``id`` dan diberi nama dengan 'proses-form-guest'
 ```php
 Route::get('/formulir', [GuestController::class, 'input'])->name('input-form-guest');
 Route::post('/proses-form/{id}', [GuestController::class, 'proses'])->name('proses-form-guest');
