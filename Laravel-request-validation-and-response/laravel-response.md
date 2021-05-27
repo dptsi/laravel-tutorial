@@ -89,7 +89,7 @@ return response('Hello World')->cookie(
     'name', 'value', $minutes
 );
 ```
-Method ``cookie`` juga menerima beberapa argument lagi meskupun jarang digunakan. Secara umum, argumen ini memiliki tujuan dan arti yang sama dengan argumen yang akan diberikan ke method ``setcookie`` pada PHP native
+Method ``cookie`` juga menerima beberapa argument lagi meskipun jarang digunakan. Secara umum, argumen ini memiliki tujuan dan arti yang sama dengan argumen yang akan diberikan ke method ``setcookie`` pada PHP native
 
 ```php
 return response('Hello World')->cookie(
@@ -106,7 +106,7 @@ Cookie::queue('name', 'value', $minutes);
 ```
 
 #### Generating Cookie Instances
-Jika kita ingin membuat objek ``Symfony\Component\HttpFoundation\Cookie`` yang dapat diberikan ke objek response di lain waktu, kita dapat menggunakan global cookie helper. Cookie ini tidak akan mengirim kembali ke klien kecuali jika mengirimkannya.
+Jika kita ingin membuat objek ``Symfony\Component\HttpFoundation\Cookie`` yang dapat diberikan ke objek response di lain waktu, kita dapat menggunakan global cookie helper. Cookie ini tidak akan mengirim kembali ke klien kecuali jika kita menambahkannya pada objek response.
 
 ```php
 $cookie = cookie('name', 'value', $minutes);
@@ -126,7 +126,7 @@ Cookie::expire('name');
 ```
 
 ### Cookies & Enxryption
-Secara default, semua cokkie yang dihasilkan oleh laravel dienkripsi dan tidak dapat diubah atau dibaca oleh klien. Jika kita ingin menonaktifkan enkripsi untuk subset cookie yang dibuat aplikasi kita. Kita bisa menggunakan ``$except``  dari ``App\Http\Middleware\EncryptCookies``. Lokasi dari middleware terdapat pada folder ``app/Http/Middleware``.
+Secara default, semua cookie yang dihasilkan oleh laravel dienkripsi dan tidak dapat diubah atau dibaca oleh klien. Jika kita ingin menonaktifkan enkripsi untuk subset cookie yang dibuat aplikasi kita. Kita bisa menggunakan ``$except``  dari ``App\Http\Middleware\EncryptCookies``. Lokasi dari middleware terdapat pada folder ``app/Http/Middleware``.
 
 
 ```php
