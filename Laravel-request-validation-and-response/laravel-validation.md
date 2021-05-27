@@ -162,7 +162,7 @@ Selanjutnya kita akan membuat sebuah tampilan 'input' atau dalam ini view('input
         @foreach ($errors->all() as $error)
             <li>{{ $error }}</li>
         @endforeach
-    </ul>
+    	</ul>
 </div>
 @endif
 
@@ -196,7 +196,7 @@ Hasilnya adalah sebagai berikut
 
 ![image](https://github.com/Fitrah1812/laravel-tutorial/blob/master/Laravel-request-validation-and-response/img/Validation/tidakdiisi.jpeg)
 
-Atau ada cara juga yang menampilkan error secara langsung dibawah text
+Atau ada cara juga yang menampilkan error secara langsung dengan mendeteksi apakah ada error atau tidak secara satu persatu dilakukan cek. Hasilnya adalah sebagai berikut
 
 ```php
 <form action="/proses" method="post">
