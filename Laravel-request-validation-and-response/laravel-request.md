@@ -97,7 +97,7 @@ if ($request->hasHeader('X-Header-Name')) {
     //
 }
 ```
-Terdapat juga method ``berarerToken`` yang akan mengembalikan <i>bearer token</i> dari header Authorization. Jika tidak ada akan mereturn ``null``.
+Terdapat juga method ``bearerToken`` yang akan mengembalikan <i>bearer token</i> dari header Authorization. Jika tidak ada akan mereturn ``null``.
 ```php
 $token = $request->bearerToken();
 ```
