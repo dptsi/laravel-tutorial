@@ -57,7 +57,7 @@
     - Pastikan reposity benar, kemudian klik `Create pull request`.
     ![fork](img/pr-2.png)
 
-    - Isi `Title` dengan nama materi yang dipresentasi (nama direktori yang kebab case) dan tambahkan ricesky dan ersadishla pada reviewers,  kemudian klik `Create pull request`.
+    - Isi `Title` dengan nama materi yang dipresentasi (nama direktori yang kebab case),  kemudian klik `Create pull request`.
     ![fork](img/pr-3.png)
 
     - Pada repository asli ketika reviewer telah ACC pull request yang dilakukan, maka riwayat pull request akan muncul pada tab `Closed`.
