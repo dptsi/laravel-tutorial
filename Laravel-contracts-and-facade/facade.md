@@ -133,3 +133,9 @@ class Contoh
 ```
 
 ### Langkah kedua
+
+
+## Referensi
+* https://laravel.com/docs/8.x/facades
+* https://www.sitepoint.com/how-laravel-facades-work-and-how-to-use-them-elsewhere/
+* https://www.freecodecamp.org/news/how-to-use-facades-in-laravel/
