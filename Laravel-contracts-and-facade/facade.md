@@ -113,27 +113,141 @@ public function testBasicExample()
 
 ### Langkah pertama
 
-Misal: Buat class `Contoh`
+Buat direktori baru bernama ```Classes``` dalam direktori ```app``` laravel, kemudian dalam direktori baru ini buat suatu direktori baru bernama ```Facade```.
+Dalam direktori ```Classes``` ini buatlah juga sebuah file bernama ```Student.php```.
 
+Lalu isi file ```Student.php``` dengan source code berikut:
 ```php
 <?php
+namespace App\Classes;
 
-
-namespace DummyNamespace;
-
-
-class Contoh
-{
-    public function fungsi($request)
-    {
-        ...
-    }
-
+class Student {
+	public function studentName() {
+		return 'Sheinna';
+	}
 }
 ```
 
 ### Langkah kedua
 
+Berikutnya buatlah sebuah file bernama ```Student.php``` pula di dalam direktori ```Facade``` yang sudah dibuat tadi. Lalu isi file ```Student.php``` ini dengan source code berikut:
+```php
+<?php
+namespace App\Classes\Facade;
+
+use Illuminate\Support\Facades\Facade;
+
+class Student extends Facade {
+	protected static function getFacadeAccessor() {
+		return 'student';
+	}
+}
+```
+
+### Langkah ketiga
+
+Berarti sementara ini dalam direktori ```app``` kita sudah mempunyai direktori baru bernama ```Classes``` dengan struktur sebagai berikut:
+```
+Classes/
+--Facade/
+----Student.php
+--Student.php
+```
+
+Setelah berhasil membuat 2 file tersebut, kita harus membuat provider, dengan cara menjalankan perintah berikut pada terminal:
+```
+php artisan make:provider StudentProvider
+```
+
+### Langkah keempat
+
+File ```StudentProvider.php``` yang baru saja kita buat dapat ditemukan di direktori ```app/Providers```. Tambahkan source code berikut pada file ```StudentProvider.php``` untuk melakukan *binding*.
+```php
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+
+class StudentProvider extends ServiceProvider
+{
+    /**
+     * Register services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->app->bind('student', function() {
+            return new \App\Classes\Student;
+        });
+    }
+}
+```
+
+### Langkah kelima
+
+Setelah membuat provider, maka yang perlu dilakukan hanyalah mendaftarkan provider yang dibuat ke dalam ```config/app.php```.
+
+Dengan cara menambahkan 2 baris berikut pada **provider class** dan **aliases class**:
+```php
+<?php
+
+    'providers' => [
+   
+        //...
+        App\Providers\StudentProvider::class,
+
+    ],
+    
+    ...
+
+    'aliases' => [
+
+        //...
+        'Student' => App\Classes\Facade\Student::class,
+
+    ],
+
+```
+
+### Langkah keenam
+
+Langkah terakhir sebelum kita dapat menggunakan facade yang baru saja kita buat adalah dengan melakukan generate ulang file ```autoload.php``` agar kelas-kelas yang baru dibuat tadi dapat langsung dikenali oleh aplikasi (tanpa harus include/require secara manual), dengan menjalankan perintah berikut pada terminal:
+```
+composer dump-autoload
+```
+
+### Langkah ketujuh
+
+Sekarang facade yang baru saja dibuat sudah dapat digunakan di mana saja dalam aplikasi Laravel kita secara mudah dan sederhana. Sebagai contoh mengujinya kita dapat mencoba menjalankan **tinker** Laravel dengan cara menjalankan perintah berikut pada terminal:
+```
+php artisan tinker
+```
+
+### Langkah kedelapan
+
+Kemudian kita dapat mencoba memanggil fungsi ```stundentName()``` yang sudah kita buat pada class ```Student```, langsung pada terminal, dengan perintah:
+```
+Student::studentName()
+```
+
+### Langkah kesembilan
+
+Selain menggunakan **tinker**, kita dapat mencoba langsung dengan melakukan edit file ```welcome.blade.php``` pada aplikasi Laravel kita. File ```welcome.blade.php``` terdapat pada direktori ```resources/views/```. Misalkan kita coba mengubah title 'Laravel' menjadi ```Student::studentName()```. Akan tetapi karena file ```welcome.blade.php``` ditulis dengan HTML, maka harus menggunakan ```{{ }}``` untuk menjalankan perintah PHP, sebagai berikut:
+```html
+	<title>{{Student::studentName()}}</title>
+```
 
 ## Referensi
 * https://laravel.com/docs/8.x/facades
