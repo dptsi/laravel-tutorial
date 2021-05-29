@@ -20,7 +20,7 @@ Gates adalah closure yang menentukan apakah user memiliki izin atau otorisasi un
 
 Sebagai contoh, kita akan mendefinisikan gate untuk menentukan apakah user dapat mengupdate model `App\Models\Post`. Gate akan mencoba untuk membandingkan id user yang akan mengupdate model dengan id user yang membuat post :
 
-`use App\Models\Post;
+```use App\Models\Post;
 use App\Models\user;
 use Illuminate\Support\Facades\Gate;
 
@@ -30,11 +30,12 @@ public function boot(){
     Gate::define('update-post', function(User $user, Post $post) {
         return $user->id === $post->user_id;
     });
-}`
+}
+```
 
 Seperti controllers, gates juga bisa didefinisikan menggunakan class callback array :
 
-`use App\Policies\PostPolicy;
+```use App\Policies\PostPolicy;
 use Illuminate\Support\Facades\Gate;
 
 public function boot()
@@ -43,12 +44,13 @@ public function boot()
 
     Gate::define('update-post', [PostPolicy::class, 'update']);
 }
-`
+````
+
 #### Authorizing Actions
 
 Untuk mengotorisasi tindakan menggunakan gates, kita harus menggunakan method `allows` atau `denies` yang disediakan oleh facade `Gate`. Kita tidak diharuskan untuk mempassing user yang sedang terotentikasi ke method ini karena akan dipassing secara otomatis oleh laravel.
 
-`<?php
+```<?php
 
 namespace App\Http\Controllers;
 
@@ -74,41 +76,45 @@ class PostController extends Controller
 
         // Update the post...
     }
-}`
+}
+```
 
 Jika kita ingin menemukan apakah ada user selain dari user yang sedang terautentikasi bisa melakukan tindakan, maka kita dapat menggunakan method `forUser` pada facade `Gate` :
 
-`if (Gate::forUser($user)->allows('update-post', $post)) {
+```if (Gate::forUser($user)->allows('update-post', $post)) {
     // The user can update the post...
 }
 
 if (Gate::forUser($user)->denies('update-post', $post)) {
     // The user can't update the post...
-}`
+}
+```
 
 Kita dapat mengotorisasi banyak tindakan dalam satu waktu dengan menggunakan method `any` atau `none`
 
-`if (Gate::any(['update-post', 'delete-post'], $post)) {
+```if (Gate::any(['update-post', 'delete-post'], $post)) {
     // The user can update or delete the post...
 }
 
 if (Gate::none(['update-post', 'delete-post'], $post)) {
     // The user can't update or delete the post...
-}`
+}
+```
 
 ##### Authorizing Or Throwing Exceptions
 
 Jika kita ingin mencoba untuk mengotorisasi sebuah tindakan dan secara otomatis melakukan throw `Illuminate\Auth\Access\AuthorizationException` jika user tidak diperbolehkan untuk melakukan tindakan tersebut, maka kita dapat menggunakan method `authorize` pada facade `method.` Instance dari `AuthorizationException` secara otomatis akan dikonversi ke 403 HTTP response oleh exception handler Laravel :
 
-`Gate::authorize('update-post', $post);
+```Gate::authorize('update-post', $post);
 
-// The action is authorized...`
+// The action is authorized...
+```
 
 ##### Supplying Additional Context
 
 Method gate dengan kemampuan otorisasi (`allows, denies, check, any, none, authorize, can, cannot` dan otorisasi blade directives (`@can, @cannot, @canany`) bisa menerima array sebagai argumen kedua. Elemen array ini akan dipassing sebagai parameter ke gate closure, dan dapat digunakan sebagai tambahan ketika membuat sebuah keputusan otorisasi.
 
-`use App\Models\Category;
+```use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 
@@ -124,7 +130,8 @@ Gate::define('create-post', function (User $user, Category $category, $pinned) {
 
 if (Gate::check('create-post', [$category, $pinned])) {
     // The user can create the post...
-}`
+}
+```
 
 #### Gate Responses
 
