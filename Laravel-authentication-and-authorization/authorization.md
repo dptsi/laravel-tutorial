@@ -558,25 +558,209 @@ Kita juga dapat menggunakan `@canany` jika aksi berupa array:
 
 ## Langkah-langkah tutorial
 
-### Langkah pertama
+### Langkah pertama - menambah kolom pada database user
 
-Misal: Buat class `Contoh`
+Buka file user migration yang terletak di directory `database\migrations` dan tambahkan satu kolom dengan nama **isAdmin** yang berupa boolean:
 
 ```php
-<?php
-
-
-namespace DummyNamespace;
-
-
-class Contoh
-{
-    public function fungsi($request)
+/**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
     {
-        ...
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('isAdmin')->default(0);
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
     }
+```
 
+Lalu, migrasikan database tersebut:
+
+`php artisan migrate`
+
+### Langkah kedua - membuat view private dan response
+
+Jalankan command `php artisan ui:auth` untuk membuat sistem login dan register. Buatlah data user seperti gambar berikut:
+ ![alt text](/img/authorization-auth.PNG)
+
+Lalu, Buatlah file `private.blade.php` dan `response.blade.php`, file ini nantinya hanya dapat diakses oleh user admin. Berikut adalah file `private.blade.php`:
+
+```php
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            Halaman private, hanya admin yang dapat melihat halaman ini.
+            <br> <a href="{{ url('/home') }}">Kembali</a>
+        </div>  
+    </div>
+</div>
+@endsection
+```
+
+dan berikut adalah file `response.blade.php`:
+```php
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {{ $msg }}
+            <br> <a href="{{ url('/home') }}">Kembali</a>
+        </div>
+    </div>
+</div>
+@endsection
+```
+
+Tambahkan kedua file tersebut di route `routes\web.php`:
+```php
+Route::get('/private', [HomeController::class, 'private'])->name('private');
+Route::get('/response', [HomeController::class, 'response'])->name('response');
+```
+
+### Langkah ketiga - membuat gate
+
+Buka class `App\Providers\AuthServiceProvider` dan tambahkan gate seperti contoh dibawah ini. Gate `before` akan dijalankan pertama kali dan gate `after` akan dijalankan terakhir. Gate dengan nama `go-to-private` dan `update-post` hanya akan mengizinkan user admin mengakses resource tertentu. Gate dengan nama `go-to-responses` digunakan untuk mendemonstrasikan penggunaan response pada gate.
+
+```php
+public function boot()
+{
+    $this->registerPolicies();
+
+    // before
+    Gate::before(function ($user, $ability) {
+        if ($user->isAdmin) {
+            return true;
+        }
+    });
+
+    Gate::define('go-to-private', function ($user) {
+        return($user->isAdmin);
+    });
+
+    Gate::define('update-post', function ($user) {
+       return($user->isAdmin);
+    });
+
+    // Gate responses
+    Gate::define('go-to-response', function (User $user) {
+        return $user->isAdmin
+                    ? Response::allow()
+                    : Response::deny('You must be an administrator.');
+    });
+
+    // after
+    // Gate::after(function ($user, $ability) {
+    //     if ($user->isAdmin) {
+    //         return true;
+    //     }
+    // });
 }
 ```
 
-### Langkah kedua
+Kemudian, kita akan menerapkan gate tersebut pada controller `app\Http\Controllers\HomeController`. Jika user memiliki dapat melewati gate tertentu, maka controller akan mereturn view yang sesuai. Untuk tutorial ini, kita akan menggunakan `Gate::allows` pada fungsi private dan Gate response pada fungsi response:
+
+```php
+public function private()
+ {
+    // 1. allows
+    if (Gate::allows('go-to-private')) {
+        return view('private');
+    }
+    return 'You are not admin!';
+
+    // 2. denies, hasilnya akan sama dengan allows
+    // if (Gate::denies('go-to-private')) {
+    //     return 'You are not admin!';
+    // }
+    // return view('private');
+
+    // 3. check
+    // if (Gate::check('go-to-private')) {
+    //     return view('private');
+    // }
+    // return 'You are not admin!';
+
+    // 4. any
+    // if (Gate::any(['go-to-private', 'update-post'], Post::class)) {
+    //     return view('private');
+    // }
+    // return 'user cannot go to this page or update the page';
+
+    // 5. none
+    // if (Gate::none(['go-to-private', 'update-post'], Post::class)) {
+    //     return 'user cannot go to this page or update the page';
+    // }
+    // return view('private');
+
+    // 6. authorize
+    // Gate::authorize('go-to-private');
+    // return view('private');
+
+    // 7. for user - allows
+    // $user = DB::table('users')->where('id', '1')->first();
+    // if (Gate::forUser($user)->allows('go-to-private')) {
+    //     return 'user with ID 1 can go to private page';
+    // }
+
+    // 8. for user - denies
+    // $user = DB::table('users')->where('id', '2')->first();
+    // if (Gate::forUser($user)->denies('go-to-private')) {
+    //     return 'user with ID 2 cannot go to private page';
+    // }
+}
+
+public function response()
+{
+    $response = Gate::inspect('go-to-response');
+
+    if ($response->allowed()) {
+        return view('response', ['msg' => 'custom response']); 
+    } else {
+        echo $response->message();
+    }
+}
+```
+
+### Langkah keempat - hasil gates
+
+Jalankan command `php artisan serve` dan buka http://localhost:8000/. Output halaman private adalah sebagai berikut:
+Ketika diakses oleh admin :
+![alt text](/img/authorization-output-admin-private.PNG)
+
+ketika diakses oleh user biasa :
+![alt text](/img/authorization-output-user-private.PNG)
+
+dan berikut adalah output halaman response ketika diakses oleh admin :
+![alt text](/img/authorization-output-admin-response.PNG)
+
+ketika diakses oleh user biasa :
+![alt text](/img/authorization-output-user-response.PNG)
+
+### Langkah kelima - membuat policy
+
+
+
+
+### Langkah keenam
+
+### Langkah ketujuh
+
+### Langkah kedelepan
+
+### Langkah kesembilan
+
+### Langkah kesepuluh
