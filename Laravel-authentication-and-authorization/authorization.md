@@ -148,10 +148,6 @@ Jika kita ingin melakukan otorisasi dan secara otomatis melakukan throw exceptio
 Gate::authorize('update-post', $post);
 ```
 
-**7. before**
-
-
-
 Selain itu, jika kita ingin menemukan apakah ada user selain dari user yang sedang login / terautentikasi bisa melakukan aksi, maka kita dapat menggunakan method **`forUser`** pada facade `Gate` :
 
 ```php
