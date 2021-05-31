@@ -223,15 +223,7 @@ if ($response->allowed()) {
 
 ### Policies
 
-Policies adalah class yang mengatur logika otorisasi pada suatu model atau resource. Kita dapat membuat class policy dengan menggunakan Artisan command `make:policy` dengan opsi `--model`. Policy ini akan diletakkan di directory `app/Policies`.
-
-Setelah class policy dibuat, kita harus mendaftarkan policy tersebut. Dengan ini, Laravel dapat mengetahui policy mana yang akan digunakan untuk mengotorisasi aksi terhadap suatu model. Kita dapat mendaftarkan kelas policy tersebut di `App\Providers\AuthServiceProvider`.
-
-```php
-protected $policies = [
-        Post::class => PostPolicy::class,
-];
-```
+Policies adalah class yang mengatur logika otorisasi pada suatu model atau resource. Kita dapat membuat class policy dengan menggunakan Artisan command `make:policy` dengan opsi `--model`. Policy ini akan diletakkan di directory `app/Policies`. Setelah class policy dibuat, kita harus mendaftarkan policy tersebut pada `App\Providers\AuthServiceProvider`. Dengan ini, Laravel dapat mengetahui policy mana yang akan digunakan untuk mengotorisasi aksi terhadap suatu model. 
 
 Laravel juga dapat menemukan policies secara otomatis selama model dan policy tersebut memenuhi konvensi penamaan Laravel. Policies harus berada pada directory `Policies`. Laravel akan mengecek policies di folder `app/Models/Policies` lalu `app/Policies`. Nama policy juga harus sesuai dengan nama model dan memiliki akhiran `Policy`. Sebagai contoh, model `User` akan memiliki class policy `UserPolicy`.
 
@@ -698,15 +690,54 @@ ketika diakses oleh user biasa :
 
 ### Langkah kelima - membuat policy
 
+Buatlah policy untuk model Post dengan menjalankan command berikut
+```
+php artisan make:policy PostPolicy --model=Post
+```
 
+Setelah itu, kita perlu mendaftarkan policy ini di `App\Providers\AuthServiceProvider`.
 
+```php
+protected $policies = [
+        Post::class => PostPolicy::class,
+];
+```
 
-### Langkah keenam
+Setelah itu, kita dapat menambahkan method untuk setiap request otorisasi seperti pada kode dibawah ini:
 
-### Langkah ketujuh
+```php
+public function update(User $user, Post $post)
+{
+    return $user->id === $post->user_id;
+}
+```
 
-### Langkah kedelepan
+### Langkah keenam - menggunakan policy dengan user model
 
-### Langkah kesembilan
+Tulislah code dibawah ini pada `PostController`:
+
+```php
+public function update(Request $request, Post $post)
+{
+    if ($request->user()->can('update', $post)) {
+        
+    }
+}
+```
+
+### Langkah ketujuh - menggunakan policy dengan helper controller
+
+Tambahkan code dibawah ini pada `PostController`:
+
+```php
+ public function __construct()
+    {
+        $this->authorizeResource(Post::class, 'post');
+    }
+```
+
+### Langkah kedelepan - menggunakan policy dengan middleware
+
+### Langkah kesembilan - menggunakan policy dengan blade template
 
 ### Langkah kesepuluh
