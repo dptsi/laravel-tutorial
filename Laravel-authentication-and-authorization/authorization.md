@@ -93,60 +93,6 @@ public function boot()
 
 #### Authorizing Actions
 
-Untuk mengecek apakah seorang user dapat melakukan suatu aksi seperti create, kita dapat menggunakan method `allows`. Pada contoh dibawah ini, kita hanya perlu mempassing `$post` karena Laravel sudah secara otomatis mempassing user yang sedang login saat ini.
-
-```php
-<?php
-
-namespace App\Http\Controllers;
-
-use App\Http\Controllers\Controller;
-use App\Models\Post;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-
-class PostController extends Controller
-{
-    /**
-     * Update the given post.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Post $post)
-    {
-        if (! Gate::allows('update-post', $post)) {
-            abort(403);
-        }
-
-        // Update the post...
-    }
-}
-```
-
-Jika kita membutuhkan lebih dari 1 parameter pada closure, maka kita dapat menggunakan array. Sebagai contoh :
-
-```php
-use App\Models\Category;
-use App\Models\User;
-use Illuminate\Support\Facades\Gate;
-
-Gate::define('create-post', function (User $user, Category $category, $pinned) {
-    if (! $user->canPublishToGroup($category->group)) {
-        return false;
-    } elseif ($pinned && ! $user->canPinPosts()) {
-        return false;
-    }
-
-    return true;
-});
-
-if (Gate::allows('create-post', [$category, $pinned])) {
-    // The user can create the post...
-}
-```
-
 Beberapa method yang dapat digunakan untuk melakukan otorisasi adalah :
 
 **1. allows**
@@ -202,6 +148,9 @@ Jika kita ingin melakukan otorisasi dan secara otomatis melakukan throw exceptio
 Gate::authorize('update-post', $post);
 ```
 
+**7. before**
+
+
 
 Selain itu, jika kita ingin menemukan apakah ada user selain dari user yang sedang login / terautentikasi bisa melakukan aksi, maka kita dapat menggunakan method **`forUser`** pada facade `Gate` :
 
@@ -214,6 +163,8 @@ if (Gate::forUser($user)->denies('update-post', $post)) {
     // The user can't update the post...
 }
 ```
+
+Pada contoh diatas, kita hanya perlu mempassing `$post` karena Laravel sudah secara otomatis mempassing user yang sedang login saat ini.
 
 <a name="gate-responses"/>
 
