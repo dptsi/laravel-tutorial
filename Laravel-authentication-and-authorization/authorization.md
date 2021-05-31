@@ -9,7 +9,6 @@
        - [Menulis gates](#menulis-gates)
        - [Authorizing actions](#authorize-actions)
        - [Gate responses](#gate-responses)
-       - [Intercepting Gate Checks](#gate-checks)
     - [Policies](#policies)
        - [Menulis policies](#menulis-policies)
        - [Guest users](#guest)
@@ -148,7 +147,8 @@ Jika kita ingin melakukan otorisasi dan secara otomatis melakukan throw exceptio
 Gate::authorize('update-post', $post);
 ```
 
-Selain itu, jika kita ingin menemukan apakah ada user selain dari user yang sedang login / terautentikasi bisa melakukan aksi, maka kita dapat menggunakan method **`forUser`** pada facade `Gate` :
+**7. forUser**
+Jika kita ingin menemukan apakah ada user selain dari user yang sedang login / terautentikasi bisa melakukan aksi, maka kita dapat menggunakan method **`forUser`** pada facade `Gate` :
 
 ```php
 if (Gate::forUser($user)->allows('update-post', $post)) {
@@ -159,6 +159,33 @@ if (Gate::forUser($user)->denies('update-post', $post)) {
     // The user can't update the post...
 }
 ```
+
+**8. before**
+
+Kita dapat menggunakan method `before` untuk mendefinisikan closure yang akan dijalankan sebelum method otorisasi lainnya. `before` dapat digunakan untuk memberikan seluruh akses pada user tertentu tanpa melakukan pengecekan otorisasi lainnya:
+
+```php
+Gate::before(function ($user, $ability) {
+    if ($user->isAdministrator()) {
+        return true;
+    }
+});
+```
+
+**9. after**
+
+Method `after` mirip dengan `before`. Hanya saja, method ini akan dijalankan setelah pengecekan otorisasi lainnya:
+
+```php
+Gate::after(function ($user, $ability, $result, $arguments) {
+    if ($user->isAdministrator()) {
+        return true;
+    }
+});
+```
+
+Jika closure `before` atau `after` mereturn non-null maka hasil tersebut akan dianggap hasil dari pengecekan otorisasi.
+
 
 Pada contoh diatas, kita hanya perlu mempassing `$post` karena Laravel sudah secara otomatis mempassing user yang sedang login saat ini.
 
@@ -191,34 +218,6 @@ if ($response->allowed()) {
     echo $response->message();
 }
 ```
-
-<a name="gate-checks"/>
-
-#### Intercepting Gate Checks
-
-Kita dapat menggunakan method `before` untuk mendefinisikan closure yang akan dijalankan sebelum method otorisasi lainnya:
-
-```php
-use Illuminate\Support\Facades\Gate;
-
-Gate::before(function ($user, $ability) {
-    if ($user->isAdministrator()) {
-        return true;
-    }
-});
-```
-
-Kita juga dapat menggunakan method `after` untuk mendefinisikan closure yang akan dieksekusi setelah semua pengecekan otorisasi:
-
-```php
-Gate::after(function ($user, $ability, $result, $arguments) {
-    if ($user->isAdministrator()) {
-        return true;
-    }
-});
-```
-
-Jika closure `before` atau `after` mereturn non-null maka hasil tersebut akan dianggap hasil dari pengecekan otorisasi.
 
 <a name="policies"/>
 
