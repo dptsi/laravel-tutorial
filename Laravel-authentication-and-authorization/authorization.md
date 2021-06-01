@@ -389,16 +389,20 @@ public function response()
 
 Jalankan command `php artisan serve` dan buka http://localhost:8000/. Output halaman private adalah sebagai berikut:
 Ketika diakses oleh admin :
-![alt text](/img/authorization-3-admin-private.PNG)
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-3-admin-private.PNG)
 
 ketika diakses oleh user biasa :
-![alt text](/img/authorization-3-user-private.PNG)
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-3-user-private.PNG)
 
 dan berikut adalah output halaman response ketika diakses oleh admin :
-![alt text](/img/authorization-3-admin-response.PNG)
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-3-admin-response.PNG)
 
 ketika diakses oleh user biasa :
-![alt text](/img/authorization-3-user-response.PNG)
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-3-user-response.PNG)
 
 ### Langkah keempat - membuat policy
 
@@ -444,7 +448,8 @@ public function delete(User $user, Post $post)
 ```
 
 Jalankan command `php artisan serve` dan buka http://localhost:8000/. Ketika kita menekan link **View Post**, kita dapat melihat list dari post meskipun user belum melakukan login (Guest User). Hal ini dikarenakan pada method `viewAny`, user bersifat optional.
-![alt text](/img/authorization-4.PNG)
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-4.PNG)
 
 ### Langkah kelima - menggunakan policy dengan model user
 
@@ -466,11 +471,13 @@ public function edit($id)
 }
 ```
 
-Method `can` akan secara otomatis memanggil policy yang sesuai dengan model `Post`. Jika user biasa mencoba untuk mengedit post user lain, maka akan muncul error berikut:
-![alt text](/img/authorization-5-error.PNG)
+Method `can` akan secara otomatis memanggil policy yang sesuai dengan model `Post`. Jika user biasa mencoba untuk mengedit post user lain, maka akan muncul error berikut :
 
-Jika user biasa mencoba untuk mengedit postnya sendiri, akan muncul output berikut:
-![alt text](/img/authorization-5.PNG)
+![alt text](/Laravel-authentication-and-authorization/img/authorization-5-error.PNG)
+
+Jika user biasa mencoba untuk mengedit postnya sendiri, akan muncul output berikut :
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-5.PNG)
 
 ### Langkah keenam - menggunakan policy dengan helper controller
 
@@ -486,10 +493,12 @@ public function create()
 ```
 
 `create` adalah nama aksi otorisasi dan `Post::class` adalah model yang bersangkutan. Ketika user yang belum login mencoba untuk membuat post, error 403 akan ditampilkan :
-![alt text](/img/authorization-6-guest.PNG)
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-6-guest.PNG)
 
 Jika user sudah login, maka akan muncul halaman berikut :
-![alt text](/img/authorization-6.PNG)
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-6.PNG)
 
 Method controller dibawah ini akan dipetakan ke method policy yang sesuai. Ketika sebuah request di arahkan ke method controller, method policy yang sesuai akan secara otomatis dipanggil sebelum method controller dijalankan:
 
@@ -538,7 +547,9 @@ Kita juga dapat menggunakan method `canany` jika aksi berupa array :
 ```
 
 Ketika user biasa login, output halaman home adalah sebagai berikut :
-![alt text](/img/authorization-8-user.PNG)
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-8-user.PNG)
 
 Sedangkan output halaman home untuk user admin adalah :
-![alt text](/img/authorization-8-admin.PNG)
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-8-admin.PNG)
