@@ -498,7 +498,7 @@ Kita juga dapat menggunakan `@canany` jika aksi berupa array:
 
 ### Langkah pertama - menambah kolom pada database user
 
-Buka file user migration yang terletak di directory `database\migrations` dan tambahkan satu kolom dengan nama **isAdmin** yang berupa boolean:
+Buka file user migration yang terletak di directory `database\migrations` dan tambahkan satu kolom dengan nama **isAdmin** dengan tipe data boolean:
 
 ```php
 /**
@@ -525,12 +525,9 @@ Lalu, migrasikan database tersebut:
 
 `php artisan migrate`
 
-### Langkah kedua - membuat view private dan response
+### Langkah kedua - membuat view yang diperlukan
 
-Jalankan command `php artisan ui:auth` untuk membuat sistem login dan register. Buatlah data user seperti gambar berikut:
- ![alt text](/img/authorization-auth.PNG)
-
-Lalu, Buatlah file `private.blade.php` dan `response.blade.php`, file ini nantinya hanya dapat diakses oleh user admin. Berikut adalah file `private.blade.php`:
+Buatlah view `private.blade.php`. View ini nantinya hanya dapat diakses oleh admin yang sudah login:
 
 ```php
 @extends('layouts.app')
@@ -547,7 +544,8 @@ Lalu, Buatlah file `private.blade.php` dan `response.blade.php`, file ini nantin
 @endsection
 ```
 
-dan berikut adalah file `response.blade.php`:
+Kemudian, buatlah view `response.blade.php`. Seperti view `private`, view ini hanya dapat diakses oleh admin yang sudah login:
+
 ```php
 @extends('layouts.app')
 
@@ -563,18 +561,72 @@ dan berikut adalah file `response.blade.php`:
 @endsection
 ```
 
-Tambahkan kedua file tersebut di route `routes\web.php`:
+Selanjutnya, buatlah view `post.blade.php`. View ini akan dapat dilihat oleh semua user, termasuk guest user. View ini akan menampilkan data table post:
+
+```php
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <a href="{{ url('post/create') }}">Create</a>
+            <table style="width:100%">
+                <tr>
+                  <th>post ID</th>
+                  <th>Name</th>
+                  <th>user ID</th>
+                  <th>Aksi</th>
+                </tr>
+                @foreach($posts as $post)
+                <tr>
+                    <td>{{ $post->id }}</td>
+                    <td>{{ $post->name }}</td>
+                    <td>{{ $post->user_id }}</td>
+                    <td> <a href="{{ url('post/edit/'.$post->id) }}">Edit</a> <a href="{{ url('post/delete/'.$post->id) }}">Delete</a></td> 
+                </tr>
+                @endforeach
+            </table>
+            <br> <a href="{{ url('/') }}">Kembali</a>
+        </div>
+    </div>
+</div>
+@endsection
+```
+
+Kemudian, buatlah view `post-detail.blade.php`. User yang menekan link edit atau delete pada view sebelumnya akan diarahkan ke view ini:
+
+```php
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {{ $msg }}
+            <br> <a href="{{ url('/post') }}">Kembali</a>
+        </div>
+    </div>
+</div>
+@endsection
+```
+
+Tambahkan code di bawah ini pada route `routes\web.php`:
 ```php
 Route::get('/private', [HomeController::class, 'private'])->name('private');
 Route::get('/response', [HomeController::class, 'response'])->name('response');
+
+Route::get('/post', [PostController::class, 'index']);
+Route::get('/post/create', [PostController::class, 'create']);
+Route::get('/post/edit/{id}', [PostController::class, 'edit']);
 ```
 
 ### Langkah ketiga - membuat gate
 
-Buka class `App\Providers\AuthServiceProvider` dan tambahkan gate seperti contoh dibawah ini. Gate `before` akan dijalankan pertama kali dan gate `after` akan dijalankan terakhir. Gate dengan nama `go-to-private` dan `update-post` hanya akan mengizinkan user admin mengakses resource tertentu. Gate dengan nama `go-to-responses` digunakan untuk mendemonstrasikan penggunaan response pada gate.
+Buka class `App\Providers\AuthServiceProvider` dan tambahkan gate seperti contoh dibawah ini. Gate `before` akan dijalankan pertama kali dan gate `after` akan dijalankan terakhir. Pada tutorial ini, kita akan menggunakan before. Gate dengan nama `go-to-private` dan `update-post` hanya akan mengizinkan user admin mengakses resource tertentu. Gate dengan nama `go-to-responses` digunakan untuk mendemonstrasikan penggunaan response pada gate.
 
 ```php
-public function boot()
+ public function boot()
 {
     $this->registerPolicies();
 
@@ -589,7 +641,7 @@ public function boot()
         return($user->isAdmin);
     });
 
-    Gate::define('update-post', function ($user) {
+    Gate::define('update-private', function ($user) {
        return($user->isAdmin);
     });
 
@@ -609,11 +661,13 @@ public function boot()
 }
 ```
 
-Kemudian, kita akan menerapkan gate tersebut pada controller `app\Http\Controllers\HomeController`. Jika user memiliki dapat melewati gate tertentu, maka controller akan mereturn view yang sesuai. Untuk tutorial ini, kita akan menggunakan `Gate::allows` pada fungsi private dan Gate response pada fungsi response:
+Kemudian, kita akan menerapkan gate tersebut pada controller `app\Http\Controllers\HomeController`. Jika user dapat melewati gate tertentu, maka controller akan mereturn view yang sesuai. Untuk tutorial ini, kita akan menggunakan `Gate::allows` untuk otorisasi ke halaman `private` dan Gate response untuk otorisasi ke halaman `response`:
 
 ```php
 public function private()
- {
+{
+public function private()
+{
     // 1. allows
     if (Gate::allows('go-to-private')) {
         return view('private');
@@ -633,13 +687,13 @@ public function private()
     // return 'You are not admin!';
 
     // 4. any
-    // if (Gate::any(['go-to-private', 'update-post'], Post::class)) {
+    // if (Gate::any(['go-to-private', 'update-private'])) {
     //     return view('private');
     // }
     // return 'user cannot go to this page or update the page';
 
     // 5. none
-    // if (Gate::none(['go-to-private', 'update-post'], Post::class)) {
+    // if (Gate::none(['go-to-private', 'update-private'])) {
     //     return 'user cannot go to this page or update the page';
     // }
     // return view('private');
@@ -699,45 +753,86 @@ Setelah itu, kita perlu mendaftarkan policy ini di `App\Providers\AuthServicePro
 
 ```php
 protected $policies = [
-        Post::class => PostPolicy::class,
+    'App\Models\Post' => 'App\Policies\PostPolicy',
 ];
 ```
 
-Setelah itu, kita dapat menambahkan method untuk setiap request otorisasi seperti pada kode dibawah ini:
+Setelah itu, kita dapat menambahkan method untuk setiap request otorisasi pada class `PostPolicy` seperti pada kode dibawah ini:
 
 ```php
+public function viewAny(User $user)
+{
+    return optional($user)->id > 0;
+}
+
+public function create(User $user)
+{
+    return $user->id > 0;
+}
+
 public function update(User $user, Post $post)
 {
     return $user->id === $post->user_id;
 }
+
+public function delete(User $user, Post $post)
+{
+    return $user->id === $post->user_id;
+}
+
 ```
 
 ### Langkah keenam - menggunakan policy dengan user model
 
-Tulislah code dibawah ini pada `PostController`:
+Kita dapat memanggil method `can` atau `cannot` pada user model. Tambahkan code dibawah ini pada `PostController`:
 
 ```php
-public function update(Request $request, Post $post)
+public function create()
 {
-    if ($request->user()->can('update', $post)) {
-        
+    $user = Auth::user();
+    if ($user->can('create', Post::class)) {
+        return view('post-detail', ['msg' => 'user can create post']); 
+    }else{
+        abort(403);
     }
 }
 ```
 
+`create` adalah nama aksi otorisasi dan `Post::class` adalah model yang bersangkutan.
+
 ### Langkah ketujuh - menggunakan policy dengan helper controller
 
-Tambahkan code dibawah ini pada `PostController`:
+Laravel mempunyai method `authorize` pada controllers. Method ini akan melakukan throw exception `Illuminate\Auth\Access\AuthorizationException` ketika user tidak memiliki akses. Tambahkan code dibawah ini pada `PostController`:
 
 ```php
- public function __construct()
-    {
-        $this->authorizeResource(Post::class, 'post');
-    }
+public function edit($id)
+{
+    $post = Post::find($id);
+
+    $this->authorize('update', $post);
+
+    return view('post-detail', ['msg' => 'user can edit post']); 
+}
 ```
 
 ### Langkah kedelepan - menggunakan policy dengan middleware
 
+Policy juga dapat digunakan pada middleware. Tambahkan code dibawah ini pada route :
+```php
+Route::get('/post/delete/{post}', [PostController::class, 'destroy'])->middleware('can:delete,post');
+```
+
+Middleware `can` akan menerima dua argumen, yaitu nama aksi yang akan diotorisasi dan route parameter yang akan dipassing ke method policy, dalam hal ini adalah model `Post`.
+
 ### Langkah kesembilan - menggunakan policy dengan blade template
 
-### Langkah kesepuluh
+Ketika membuat template Blade, kita dapat menampilkan beberapa bagian dari halaman hanya kepada user tertentu. Sebagai contoh, kita ingin menampilkan link halaman `private` dan halaman `response` hanya kepada admin. Tambahkan code berikut pada view `home.blade.php`:
+
+```php
+@can('go-to-private')
+    <br><a href="{{ url('/private') }}">Private</a>
+@endcan
+@can('go-to-response')
+    <br><a href="{{ url('/response') }}">Private with response</a>
+@endcan
+```
