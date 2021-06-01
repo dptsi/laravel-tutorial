@@ -5,19 +5,6 @@
 ## Daftar Isi
 - [Latar belakang topik](#latar-belakang)  
 - [Konsep-konsep](#konsep)
-    - [Gates](#gates)
-       - [Menulis gates](#menulis-gates)
-       - [Authorizing actions](#authorize-actions)
-       - [Gate responses](#gate-responses)
-    - [Policies](#policies)
-       - [Menulis policies](#menulis-policies)
-       - [Guest users](#guest)
-       - [Policy Filters](#policy-filters)
-       - [Authorizing actions using policies](#authorize-policies)
-         - [Via user model](#via-model)
-         - [Via controller helpers](#via-controllers)
-         - [Via middleware](#via-middleware)
-         - [Via blade templates](#via-blade)
 - [Langkah-langkah tutorial](#tutorial)
  
 
@@ -33,64 +20,7 @@ Biasanya dalam suatu sistem atau aplikasi, kita akan menemukan banyak user yang 
 
 Otorisasi mengizinkan user yang sudah terotentikasi untuk mengakses resource tertentu dalam sebuah sistem. Sebagai contoh, ketika sebuah user mencoba untuk mengakses bagian admin, sistem akan melakukan verifikasi (mengotorisasi) apakah user memiliki izin untuk mengakses bagian tersebut. Jika user memiliki izin, maka user akan diberi otorisasi dan diberikan akses ke bagian admin. Jika tidak, akses user tersebut akan ditolak.
 
-Laravel menyediakan 2 cara untuk mengotorisasi aksi, yaitu dengan menggunakan gates dan policies.
-
-<a name="gates"/>
-
-### Gates
-
-<a name="menulis-gates"/>
-
-#### Menulis Gates
-
-Gates adalah otorisasi menggunakan pendekatan closure. Biasanya gates didefinisikan dalam method `boot` dari class `App\Providers\AuthServiceProvider` dengan menggunakan `Gate` facade. Pada gates, kita menggunakan method `define` untuk mendeklarasikan otorisasi baru yang menerima dua parameter. Parameter pertama adalah nama yang nantinya akan digunakan sebagai referensi untuk mengotorisasi user. Parameter kedua adalah closure. Pada closure, parameter pertama akan menerima user instance (defaultnya adalah user yang sedang login saat itu) dan dapat menerima argumen tambahan seperti model eloquent. 
-
-Sebagai contoh, kita akan mendefinisikan gate untuk menentukan apakah user dapat mengupdate model `App\Models\Post`. Gate ini akan membandingkan id user dengan user_id pemilik post:
-
-```php
-use App\Models\Post;
-use App\Models\user;
-use Illuminate\Support\Facades\Gate;
-
-public function boot(){
-    $this->registerPolicies();
-    
-    Gate::define('update-post', function(User $user, Post $post) {
-        return $user->id === $post->user_id;
-    });
-}
-```
-
-Seperti controllers, gates juga bisa didefinisikan menggunakan class callback array :
-
-```php
-<?php
-namespace App;
-class PostPolicy 
-{
-    public function update (User $user, Post $post) {
-        return $user->id === $post->user_id;
-    }
-}
-```
-
-Lalu di class `App\Providers\AuthServiceProvider`:
-
-```php
-use App\Policies\PostPolicy;
-use Illuminate\Support\Facades\Gate;
-
-public function boot()
-{
-    $this->registerPolicies();
-
-    Gate::define('update-post', [PostPolicy::class, 'update']);
-}
-````
-
-<a name="authorize-actions"/>
-
-#### Authorizing Actions
+Laravel menyediakan 2 cara untuk mengotorisasi aksi, yaitu dengan menggunakan gates dan policies. Gates adalah otorisasi menggunakan pendekatan closure. Sedangkan Policies adalah class yang mengatur logika otorisasi pada suatu model atau resource. 
 
 Beberapa method yang dapat digunakan untuk melakukan otorisasi adalah :
 
@@ -108,7 +38,6 @@ if (Gate::allows('update-post', $post)) {
 
 negasi dari `allows`. Seperti `allows`, denies juga akan mereturn boolean.
 
-
 ```php
 if (Gate::denies('update-post', $post)) {
         abort(403);        
@@ -117,7 +46,13 @@ if (Gate::denies('update-post', $post)) {
 
 **3. check** 
 
-Checks if a single or array of abilities are allowed. Check akan mereturn boolean.
+Mengecek apakah satu atau array gates diizinkan. Check akan mereturn boolean.
+
+```php
+if (Gate::check(['update-post', 'delete-post'], $post)) {
+    // The user can update or delete the post...
+}
+```
 
 **4. any**
 
@@ -186,311 +121,7 @@ Gate::after(function ($user, $ability, $result, $arguments) {
 
 Jika closure `before` atau `after` mereturn non-null maka hasil tersebut akan dianggap hasil dari pengecekan otorisasi.
 
-
 Pada contoh diatas, kita hanya perlu mempassing `$post` karena Laravel sudah secara otomatis mempassing user yang sedang login saat ini.
-
-<a name="gate-responses"/>
-
-#### Gate Responses
-
-Method yang telah disebutkan sebelumnya akan mereturn boolean. Terkadang, kita ingin mereturn response yang lebih detil. Untuk itu, kita dapat mereturn `Illuminate\Auth\Access\Response` dari gate:
-
-```php
-use App\Models\User;
-use Illuminate\Auth\Access\Response;
-use Illuminate\Support\Facades\Gate;
-
-Gate::define('edit-settings', function (User $user) {
-    return $user->isAdmin
-                ? Response::allow()
-                : Response::deny('You must be an administrator.');
-});
-```
-
-Method `Gate::allows` akan tetap mereturn boolean. Kita dapat menggunakan method `Gate::inspect` untuk mendapatkan respons yang lebih lengkap:
-
-```php
-$response = Gate::inspect('edit-settings');
-
-if ($response->allowed()) {
-    // The action is authorized...
-} else {
-    echo $response->message();
-}
-```
-
-<a name="policies"/>
-
-### Policies
-
-Policies adalah class yang mengatur logika otorisasi pada suatu model atau resource. Kita dapat membuat class policy dengan menggunakan Artisan command `make:policy` dengan opsi `--model`. Policy ini akan diletakkan di directory `app/Policies`. Setelah class policy dibuat, kita harus mendaftarkan policy tersebut pada `App\Providers\AuthServiceProvider`. Dengan ini, Laravel dapat mengetahui policy mana yang akan digunakan untuk mengotorisasi aksi terhadap suatu model. 
-
-Laravel juga dapat menemukan policies secara otomatis selama model dan policy tersebut memenuhi konvensi penamaan Laravel. Policies harus berada pada directory `Policies`. Laravel akan mengecek policies di folder `app/Models/Policies` lalu `app/Policies`. Nama policy juga harus sesuai dengan nama model dan memiliki akhiran `Policy`. Sebagai contoh, model `User` akan memiliki class policy `UserPolicy`.
-
-Kita juga dapat membuat custom policy discovery menggunakan method `Gate:guessPolicyNamesUsing`. Method ini dapat dipanggil pada method `boot` di `AuthServiceProvider`:
-
-```php
-use Illuminate\Support\Facades\Gate;
-
-Gate::guessPolicyNamesUsing(function ($modelClass) {
-    // Return the name of the policy class for the given model...
-});
-```
-
-<a name="menulis-policies"/>
-
-#### Menulis Policies
-
-Kita dapat menambahkan beberapa method untuk setiap aksi yang akan diotorisasikan di class policy. Sebagai contoh :
-
-```php
-<?php
-
-namespace App\Policies;
-
-use App\Models\Post;
-use App\Models\User;
-
-class PostPolicy
-{
-    /**
-     * Determine if the given post can be updated by the user.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Post  $post
-     * @return bool
-     */
-    public function update(User $user, Post $post)
-    {
-        return $user->id === $post->user_id;
-    }
-}
-```
-
-Kita dapat menambahkan beberapa method tambahan seperti `view` ataupun `delete` untuk otorisasi beberapa aksi yang melibatkan model `Post`. Penamaan method di policy bersifat bebas. Kita juga dapat menggunakan method `Gate:: ` yang sudah dijelaskan sebelumnya dan mereturn instance `Illuminate\Auth\Access\Response` pada policy.  
-
-Terkadang, ada beberapa method policy yang hanya perlu menerima instance dari user yang sedang login saat ini. Situasi ini umum terjadi ketika mengotorisasi aksi `create`.
-
-```php
-public function create(User $user)
-{
-    return $user->role == 'writer';
-}
-```
-
-<a name="guest"/>
-
-#### Guest Users
-
-Secara default, semua gates dan policies secara otomatis mereturn `false` jika user tidak login. Namun, kita dapat mendeklarasikan sebuah type-hint "optional" atau menyediakan nilai default null pada parameter user:
-
-```php
-<?php
-
-namespace App\Policies;
-
-use App\Models\Post;
-use App\Models\User;
-
-class PostPolicy
-{
-    /**
-     * Determine if the given post can be updated by the user.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Post  $post
-     * @return bool
-     */
-    public function update(?User $user, Post $post)
-    {
-        return optional($user)->id === $post->user_id;
-    }
-}
-```
-
-<a name="policy-filters"/>
-
-#### Policy Filters
-
-Kita dapat menggunakan method `before` ataupun `after` pada policy:
-
-```php
-use App\Models\User;
-
-/**
- * Perform pre-authorization checks.
- *
- * @param  \App\Models\User  $user
- * @param  string  $ability
- * @return void|bool
- */
-public function before(User $user, $ability)
-{
-    if ($user->isAdministrator()) {
-        return true;
-    }
-}
-```
-
-Method `before` tidak akan dijalankan jika class tersebut tidak mempunyai method dengan nama yang sama dengan nama ability yang akan dicek.
-
-<a name="authorize-policies"/>
-
-#### Authorizing Actions Using Policies
-
-<a name="via-model"/>
-
-**Via The User Model**
-
-Model pada Laravel mempunyai 2 method untuk otorisasi, yaitu `can` dan `cannot`. Method ini menerima nama aksi yang ingin kita otorisasi dan model yang bersangkutan:
-
-```php
-<?php
-
-namespace App\Http\Controllers;
-
-use App\Http\Controllers\Controller;
-use App\Models\Post;
-use Illuminate\Http\Request;
-
-class PostController extends Controller
-{
-    /**
-     * Update the given post.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Post $post)
-    {
-        if ($request->user()->cannot('update', $post)) {
-            abort(403);
-        }
-
-        // Update the post...
-    }
-}
-```
-
-Jika sebuah policy sudah didaftarkan pada model tersebut, method `can` akan secara otomatis memanggil policy tersebut. Jika tidak ada policy yang didaftarkan, maka method `can` akan memanggil gate yang sesuai dengan nama aksi tersebut.
-
-Beberapa aksi seperti `create` tidak memerlukan instance model. Sehingga, kita dapat mempassing nama class pada method `can`.
-
-```php
-if ($request->user()->cannot('create', Post::class)) {
-    abort(403);
-}
-```
-
-<a name="via-controllers"/>
-
-**Via Controller Helpers**
-
-Laravel menyediakan beberapa method `authorize` yang merupakan extend dari class `App\Http\Controllers\Controller`.
-
-```php
-public function update(Request $request, Post $post)
-{
-    $this->authorize('update', $post);
-
-    // The current user can update the blog post...
-}
-```
-
-Jika method policy tidak memerlukan instance model, kita dapat mempassing nama class:
-```php
-public function create(Request $request)
-{
-    $this->authorize('create', Post::class);
-
-    // The current user can create blog posts...
-}
-```
-
-Jika kita menggunakan resource controllers, kita dapat menggunakan method `authorizeResource` pada constructor controller. Method ini akan menambahkan middleware `can` yang sesuai pada method di resource controller. Method ini menerima nama class model sebagai argumen pertama dan nama route / request parameter yang akan berisi id model sebagai argumen kedua. 
-
-```php
-<?php
-
-namespace App\Http\Controllers;
-
-use App\Http\Controllers\Controller;
-use App\Models\Post;
-use Illuminate\Http\Request;
-
-class PostController extends Controller
-{
-    /**
-     * Create the controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(Post::class, 'post');
-    }
-}
-```
-
-Method controller dibawah ini akan dipetakan ke method policy yang sesuai. Ketika sebuah request di arahkan ke method controller, method policy yang sesuai akan secara otomatis dipanggil sebelum method controller dijalankan:
-
-| **Method Controller** | **Method Policy** |
-| --------------------- | ----------------- |
-| index                 | viewAny           |
-| show                  | view              |
-| create                | create            |
-| store                 | create            |
-| edit                  | update            |
-| update                | update            |
-| destroy               | delete            |
-
-<a name="via-middleware"/>
-
-**Via Middleware**
-
-Laravel mempunyai middleware yang dapat melakukan otorisasi aksi sebelum request sampai ke routes atau controllers. Secara default, middleware `Illuminate\Auth\Middleware\Authorize` mempunyai key `can` pada class `App\Http\Kernel`.
-
-```php
-use App\Models\Post;
-
-Route::put('/post/{post}', function (Post $post) {
-    // The current user may update the post...
-})->middleware('can:update,post');
-```
-
-Pada contoh ini, kita mempassing middleware `can` dengan dua argumen. Argumen pertama adalah nama aksi yang kita ingin melakukan otorisasi dan argumen kedua adalah parameter route yang ingin kita pass ke method policy. Dalam contoh ini, model `App\Models\Post` akan di passing ke method policy. 
-
-<a name="via-blade"/>
-
-**Via Blade Templates**
-
-Ketika membuat template Blade, kita dapat menampilkan beberapa bagian dari halaman hanya kepada user tertentu. Sebagai contoh, kita ingin menampilkan form update hanya jika user tersebut dapat mengupdate post. Kita dapat menggunakan directives `@can` dan `@cannot`.
-
-```php
-@can('update', $post)
-    <!-- The current user can update the post... -->
-@elsecan('create', App\Models\Post::class)
-    <!-- The current user can create new posts... -->
-@else
-    <!-- ... -->
-@endcan
-
-@cannot('update', $post)
-    <!-- The current user cannot update the post... -->
-@elsecannot('create', App\Models\Post::class)
-    <!-- The current user can now create new posts... -->
-@endcannot
-```
-
-Kita juga dapat menggunakan `@canany` jika aksi berupa array:
-```php
-@canany(['update', 'view', 'delete'], $post)
-    <!-- The current user can update, view, or delete the post... -->
-@elsecanany(['create'], \App\Models\Post::class)
-    <!-- The current user can create a post... -->
-@endcanany
-```
 
 <a name="tutorial"/>
 
@@ -529,15 +160,15 @@ Lalu, migrasikan database tersebut:
 
 Buatlah view `private.blade.php`. View ini nantinya hanya dapat diakses oleh admin yang sudah login:
 
-```php
+```blade.php
 @extends('layouts.app')
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            Halaman private, hanya admin yang dapat melihat halaman ini.
-            <br> <a href="{{ url('/home') }}">Kembali</a>
+            Private page, only admin can access this page.
+            <br> <a href="{{ url('/home') }}">Back</a>
         </div>  
     </div>
 </div>
@@ -546,7 +177,7 @@ Buatlah view `private.blade.php`. View ini nantinya hanya dapat diakses oleh adm
 
 Kemudian, buatlah view `response.blade.php`. Seperti view `private`, view ini hanya dapat diakses oleh admin yang sudah login:
 
-```php
+```blade.php
 @extends('layouts.app')
 
 @section('content')
@@ -554,7 +185,7 @@ Kemudian, buatlah view `response.blade.php`. Seperti view `private`, view ini ha
     <div class="row justify-content-center">
         <div class="col-md-8">
             {{ $msg }}
-            <br> <a href="{{ url('/home') }}">Kembali</a>
+            <br> <a href="{{ url('/home') }}">Back</a>
         </div>
     </div>
 </div>
@@ -563,7 +194,7 @@ Kemudian, buatlah view `response.blade.php`. Seperti view `private`, view ini ha
 
 Selanjutnya, buatlah view `post.blade.php`. View ini akan dapat dilihat oleh semua user, termasuk guest user. View ini akan menampilkan data table post:
 
-```php
+```blade.php
 @extends('layouts.app')
 
 @section('content')
@@ -573,10 +204,10 @@ Selanjutnya, buatlah view `post.blade.php`. View ini akan dapat dilihat oleh sem
             <a href="{{ url('post/create') }}">Create</a>
             <table style="width:100%">
                 <tr>
-                  <th>post ID</th>
+                  <th>ID</th>
                   <th>Name</th>
-                  <th>user ID</th>
-                  <th>Aksi</th>
+                  <th>User ID</th>
+                  <th>Action</th>
                 </tr>
                 @foreach($posts as $post)
                 <tr>
@@ -587,7 +218,7 @@ Selanjutnya, buatlah view `post.blade.php`. View ini akan dapat dilihat oleh sem
                 </tr>
                 @endforeach
             </table>
-            <br> <a href="{{ url('/') }}">Kembali</a>
+            <br> <a href="{{ url('/') }}">Back</a>
         </div>
     </div>
 </div>
@@ -596,7 +227,7 @@ Selanjutnya, buatlah view `post.blade.php`. View ini akan dapat dilihat oleh sem
 
 Kemudian, buatlah view `post-detail.blade.php`. User yang menekan link edit atau delete pada view sebelumnya akan diarahkan ke view ini:
 
-```php
+```blade.php
 @extends('layouts.app')
 
 @section('content')
@@ -604,11 +235,34 @@ Kemudian, buatlah view `post-detail.blade.php`. User yang menekan link edit atau
     <div class="row justify-content-center">
         <div class="col-md-8">
             {{ $msg }}
-            <br> <a href="{{ url('/post') }}">Kembali</a>
+            <br> <a href="{{ url('/post') }}">Back</a>
         </div>
     </div>
 </div>
 @endsection
+```
+
+Tambahkan code dibawah ini pada view `welcome.blade.php`:
+
+```blade.php
+<div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
+    @if (Route::has('login'))
+        <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+            @auth
+                <a href="{{ url('/home') }}" class="text-sm text-gray-700 underline">Home</a>
+            @else
+                <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Log in</a>
+
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
+                @endif
+            @endauth
+        </div>
+    @endif
+    <div class="hidden px-6 py-4 sm:block">
+        <a href="{{ url('/post') }}" class="text-sm text-gray-700 underline">View Post</a>
+    </div>
+</div>
 ```
 
 Tambahkan code di bawah ini pada route `routes\web.php`:
@@ -623,9 +277,12 @@ Route::get('/post/edit/{id}', [PostController::class, 'edit']);
 
 ### Langkah ketiga - membuat gate
 
-Buka class `App\Providers\AuthServiceProvider` dan tambahkan gate seperti contoh dibawah ini. Gate `before` akan dijalankan pertama kali dan gate `after` akan dijalankan terakhir. Pada tutorial ini, kita akan menggunakan before. Gate dengan nama `go-to-private` dan `update-post` hanya akan mengizinkan user admin mengakses resource tertentu. Gate dengan nama `go-to-responses` digunakan untuk mendemonstrasikan penggunaan response pada gate.
+Biasanya gates didefinisikan dalam method `boot` dari class `App\Providers\AuthServiceProvider` dengan menggunakan `Gate` facade. Pada gates, kita menggunakan method `define` untuk mendeklarasikan otorisasi baru yang menerima dua parameter. Parameter pertama adalah nama yang nantinya akan digunakan sebagai referensi untuk mengotorisasi user. Parameter kedua adalah closure. Pada closure, parameter pertama akan menerima user instance (defaultnya adalah user yang sedang login saat itu) dan dapat menerima argumen tambahan seperti model eloquent. 
+
+Buka class `App\Providers\AuthServiceProvider` dan tambahkan gate seperti dibawah ini. Gate `before` akan dijalankan pertama kali sebelum otorisasi lainnya. Gate dengan nama `go-to-private` dan `update-post` hanya akan mengizinkan user admin mengakses resource tertentu. Gate dengan nama `go-to-responses` digunakan untuk mendemonstrasikan penggunaan response pada gate dan mereturn `Illuminate\Auth\Access\Response`.
 
 ```php
+use Illuminate\Auth\Access\Response;
  public function boot()
 {
     $this->registerPolicies();
@@ -652,7 +309,7 @@ Buka class `App\Providers\AuthServiceProvider` dan tambahkan gate seperti contoh
                     : Response::deny('You must be an administrator.');
     });
 
-    // after
+    // after, dapat digunakan sebagai pengganti before dan akan dijalankan terakhir
     // Gate::after(function ($user, $ability) {
     //     if ($user->isAdmin) {
     //         return true;
@@ -661,11 +318,14 @@ Buka class `App\Providers\AuthServiceProvider` dan tambahkan gate seperti contoh
 }
 ```
 
-Kemudian, kita akan menerapkan gate tersebut pada controller `app\Http\Controllers\HomeController`. Jika user dapat melewati gate tertentu, maka controller akan mereturn view yang sesuai. Untuk tutorial ini, kita akan menggunakan `Gate::allows` untuk otorisasi ke halaman `private` dan Gate response untuk otorisasi ke halaman `response`:
+Kemudian, kita akan menerapkan gate tersebut pada controller `app\Http\Controllers\HomeController`. Jika user dapat melewati gate tertentu, maka controller akan mereturn view yang sesuai. Untuk tutorial ini, kita akan menggunakan `Gate::allows` untuk otorisasi ke halaman `private`  dan Gate response untuk otorisasi ke halaman `response`. Method `Gate::allows` pada fungsi response akan tetap mereturn boolean, sehingga kita akan menggunakan method `Gate::inspect` untuk mendapatkan respons yang lebih lengkap:
 
 ```php
-public function private()
-{
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\Response;
+use App\Http\Models\User;
+use DB;
+
 public function private()
 {
     // 1. allows
@@ -690,11 +350,11 @@ public function private()
     // if (Gate::any(['go-to-private', 'update-private'])) {
     //     return view('private');
     // }
-    // return 'user cannot go to this page or update the page';
+    // return 'User cannot go to this page or update the page';
 
     // 5. none
     // if (Gate::none(['go-to-private', 'update-private'])) {
-    //     return 'user cannot go to this page or update the page';
+    //     return 'User cannot go to this page or update the page';
     // }
     // return view('private');
 
@@ -705,13 +365,13 @@ public function private()
     // 7. for user - allows
     // $user = DB::table('users')->where('id', '1')->first();
     // if (Gate::forUser($user)->allows('go-to-private')) {
-    //     return 'user with ID 1 can go to private page';
+    //     return 'User with ID 1 can go to private page';
     // }
 
     // 8. for user - denies
     // $user = DB::table('users')->where('id', '2')->first();
     // if (Gate::forUser($user)->denies('go-to-private')) {
-    //     return 'user with ID 2 cannot go to private page';
+    //     return 'User with ID 2 cannot go to private page';
     // }
 }
 
@@ -727,29 +387,28 @@ public function response()
 }
 ```
 
-### Langkah keempat - hasil gates
-
 Jalankan command `php artisan serve` dan buka http://localhost:8000/. Output halaman private adalah sebagai berikut:
 Ketika diakses oleh admin :
-![alt text](/img/authorization-output-admin-private.PNG)
+![alt text](/img/authorization-3-admin-private.PNG)
 
 ketika diakses oleh user biasa :
-![alt text](/img/authorization-output-user-private.PNG)
+![alt text](/img/authorization-3-user-private.PNG)
 
 dan berikut adalah output halaman response ketika diakses oleh admin :
-![alt text](/img/authorization-output-admin-response.PNG)
+![alt text](/img/authorization-3-admin-response.PNG)
 
 ketika diakses oleh user biasa :
-![alt text](/img/authorization-output-user-response.PNG)
+![alt text](/img/authorization-3-user-response.PNG)
 
-### Langkah kelima - membuat policy
+### Langkah keempat - membuat policy
 
-Buatlah policy untuk model Post dengan menjalankan command berikut
+Buatlah model post dengan tambahan kolom `name` dan `user_id` yang berupa id dari user pemilik post. Kemudian, buatlah policy untuk model Post dengan menggunakan artisan command berikut :
+
 ```
 php artisan make:policy PostPolicy --model=Post
 ```
 
-Setelah itu, kita perlu mendaftarkan policy ini di `App\Providers\AuthServiceProvider`.
+Policy ini akan diletakkan di directory `app/Policies`. Setelah class policy dibuat, kita harus mendaftarkan policy tersebut pada `App\Providers\AuthServiceProvider`. Dengan ini, Laravel dapat mengetahui policy mana yang akan digunakan untuk mengotorisasi aksi terhadap suatu model. 
 
 ```php
 protected $policies = [
@@ -757,7 +416,9 @@ protected $policies = [
 ];
 ```
 
-Setelah itu, kita dapat menambahkan method untuk setiap request otorisasi pada class `PostPolicy` seperti pada kode dibawah ini:
+Laravel juga dapat menemukan policies secara otomatis selama model dan policy tersebut memenuhi konvensi penamaan Laravel. Policies harus berada pada directory `Policies`. Laravel akan mengecek policies di folder `app/Models/Policies` lalu `app/Policies`. Nama policy juga harus sesuai dengan nama model dan memiliki akhiran `Policy`.
+
+Selanjutnya, kita dapat menambahkan method untuk setiap request otorisasi pada class `PostPolicy` seperti pada kode dibawah ini:
 
 ```php
 public function viewAny(User $user)
@@ -782,53 +443,83 @@ public function delete(User $user, Post $post)
 
 ```
 
-### Langkah keenam - menggunakan policy dengan user model
+Jalankan command `php artisan serve` dan buka http://localhost:8000/. Ketika kita menekan link **View Post**, kita dapat melihat list dari post meskipun user belum melakukan login (Guest User). Hal ini dikarenakan pada method `viewAny`, user bersifat optional.
+![alt text](/img/authorization-4.PNG)
 
-Kita dapat memanggil method `can` atau `cannot` pada user model. Tambahkan code dibawah ini pada `PostController`:
+### Langkah kelima - menggunakan policy dengan model user
+
+Model pada Laravel mempunyai 2 method untuk otorisasi, yaitu `can` dan `cannot`. Method ini menerima nama aksi yang ingin kita otorisasi dan model yang bersangkutan. Jika sebuah policy sudah didaftarkan pada model tersebut, method `can` akan secara otomatis memanggil policy tersebut. Jika tidak ada policy yang didaftarkan, maka method `can` akan memanggil gate yang sesuai dengan nama aksi tersebut.
+
+Buatlah controller untuk `Post` berupa `PostController` dan tambahkan code dibawah ini:
 
 ```php
-public function create()
+public function edit($id)
 {
     $user = Auth::user();
-    if ($user->can('create', Post::class)) {
-        return view('post-detail', ['msg' => 'user can create post']); 
+    $post = Post::find($id);
+
+    if ($user && $user->can('update', $post)) {
+        return view('post-detail', ['msg' => 'User can edit post']); 
     }else{
         abort(403);
     }
 }
 ```
 
-`create` adalah nama aksi otorisasi dan `Post::class` adalah model yang bersangkutan.
+Method `can` akan secara otomatis memanggil policy yang sesuai dengan model `Post`. Jika user biasa mencoba untuk mengedit post user lain, maka akan muncul error berikut:
+![alt text](/img/authorization-5-error.PNG)
 
-### Langkah ketujuh - menggunakan policy dengan helper controller
+Jika user biasa mencoba untuk mengedit postnya sendiri, akan muncul output berikut:
+![alt text](/img/authorization-5.PNG)
+
+### Langkah keenam - menggunakan policy dengan helper controller
 
 Laravel mempunyai method `authorize` pada controllers. Method ini akan melakukan throw exception `Illuminate\Auth\Access\AuthorizationException` ketika user tidak memiliki akses. Tambahkan code dibawah ini pada `PostController`:
 
 ```php
-public function edit($id)
+public function create()
 {
-    $post = Post::find($id);
+    $this->authorize('create', Post::class);
 
-    $this->authorize('update', $post);
-
-    return view('post-detail', ['msg' => 'user can edit post']); 
+    return view('post-detail', ['msg' => 'User can create post']); 
 }
 ```
 
-### Langkah kedelepan - menggunakan policy dengan middleware
+`create` adalah nama aksi otorisasi dan `Post::class` adalah model yang bersangkutan. Ketika user yang belum login mencoba untuk membuat post, error 403 akan ditampilkan :
+![alt text](/img/authorization-6-guest.PNG)
 
-Policy juga dapat digunakan pada middleware. Tambahkan code dibawah ini pada route :
+Jika user sudah login, maka akan muncul halaman berikut :
+![alt text](/img/authorization-6.PNG)
+
+Method controller dibawah ini akan dipetakan ke method policy yang sesuai. Ketika sebuah request di arahkan ke method controller, method policy yang sesuai akan secara otomatis dipanggil sebelum method controller dijalankan:
+
+| **Method Controller** | **Method Policy** |
+| --------------------- | ----------------- |
+| index                 | viewAny           |
+| show                  | view              |
+| create                | create            |
+| store                 | create            |
+| edit                  | update            |
+| update                | update            |
+| destroy               | delete            |
+
+
+### Langkah ketujuh - menggunakan policy dengan middleware
+
+Laravel mempunyai middleware yang dapat melakukan otorisasi aksi sebelum request sampai ke routes atau controllers. Tambahkan code dibawah ini pada route :
+
 ```php
 Route::get('/post/delete/{post}', [PostController::class, 'destroy'])->middleware('can:delete,post');
 ```
 
 Middleware `can` akan menerima dua argumen, yaitu nama aksi yang akan diotorisasi dan route parameter yang akan dipassing ke method policy, dalam hal ini adalah model `Post`.
 
-### Langkah kesembilan - menggunakan policy dengan blade template
 
-Ketika membuat template Blade, kita dapat menampilkan beberapa bagian dari halaman hanya kepada user tertentu. Sebagai contoh, kita ingin menampilkan link halaman `private` dan halaman `response` hanya kepada admin. Tambahkan code berikut pada view `home.blade.php`:
+### Langkah kedelapan - menggunakan policy dengan blade template
 
-```php
+Ketika membuat template Blade, kita dapat menampilkan beberapa bagian dari halaman hanya kepada user tertentu. Sebagai contoh, kita ingin menampilkan link halaman `private` dan halaman `response` hanya kepada admin. Kita dapat menggunakan method `can` atau `cannot`. Tambahkan code berikut pada view `home.blade.php`:
+
+```blade.php
 @can('go-to-private')
     <br><a href="{{ url('/private') }}">Private</a>
 @endcan
@@ -836,3 +527,18 @@ Ketika membuat template Blade, kita dapat menampilkan beberapa bagian dari halam
     <br><a href="{{ url('/response') }}">Private with response</a>
 @endcan
 ```
+
+Kita juga dapat menggunakan method `canany` jika aksi berupa array :
+
+```blade.php
+ @canany(['go-to-private', 'go-to-response'])
+    <br><a href="{{ url('/private') }}">Private</a>
+    <br><a href="{{ url('/response') }}">Private with response</a>
+@endcanany
+```
+
+Ketika user biasa login, output halaman home adalah sebagai berikut :
+![alt text](/img/authorization-8-user.PNG)
+
+Sedangkan output halaman home untuk user admin adalah :
+![alt text](/img/authorization-8-admin.PNG)
