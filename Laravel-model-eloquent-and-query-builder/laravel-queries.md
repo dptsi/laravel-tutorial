@@ -61,6 +61,17 @@ foreach ($users as $user) {
     echo $user->name;
 }
 ```
+#### Debugging 
+
+untuk mengecek apakah variabel cars terisi dengan isi-isian maka kita dapat menggunakan fitur debug yang disediakan oleh laravel yaitu die and dump /dd
+
+```php
+dd($cars)
+```
+atau karena laravel juga ditulis dalam bahasa php maka  kita juga bisa menggunakan var_dump() , echo() ,print() , dan print_r()
+```php
+var_dump($cars)
+```
 
 #### Mengambil Satu Baris / Kolom Dari Tabel ( Metode get(),value(),where(),first() ,find() )
 
