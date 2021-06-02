@@ -46,7 +46,7 @@ if (Gate::denies('update-post', $post)) {
 
 **3. check** 
 
-Mengecek apakah satu atau array gates diizinkan. Check akan mereturn boolean.
+Mengecek apakah user dapat melewati array gates. Check akan mereturn boolean.
 
 ```php
 if (Gate::check(['update-post', 'delete-post'], $post)) {
@@ -56,7 +56,7 @@ if (Gate::check(['update-post', 'delete-post'], $post)) {
 
 **4. any**
 
-Digunakan untuk melakukan otorisasi beberapa gate dalam waktu yang sama. Any akan mereturn boolean.
+Mengecek apakah user dapat melewati salah satu dari array gates. Any akan mereturn boolean.
 
 ```php
 if (Gate::any(['update-post', 'delete-post'], $post)) {
