@@ -43,7 +43,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('update-private', function ($user) {
-           return($user->isAdmin);
+           return true;
         });
 
         // Gate responses

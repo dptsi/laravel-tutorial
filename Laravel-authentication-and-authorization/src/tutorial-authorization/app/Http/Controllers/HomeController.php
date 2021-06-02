@@ -38,10 +38,10 @@ class HomeController extends Controller
     public function private()
     {
         // 1. allows
-        if (Gate::allows('go-to-private')) {
-            return view('private');
-        }
-        return 'You are not admin!';
+        // if (Gate::allows('go-to-private')) {
+        //     return view('private');
+        // }
+        // return 'You are not admin!';
 
         // 2. denies, hasilnya akan sama dengan allows
         // if (Gate::denies('go-to-private')) {
@@ -50,7 +50,7 @@ class HomeController extends Controller
         // return view('private');
 
         // 3. check
-        // if (Gate::check('go-to-private')) {
+        // if (Gate::check(['go-to-private', 'update-private'])) {
         //     return view('private');
         // }
         // return 'You are not admin!';

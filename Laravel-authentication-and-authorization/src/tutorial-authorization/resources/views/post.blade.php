@@ -21,7 +21,11 @@
                             <td>{{ $post->id }}</td>
                             <td>{{ $post->name }}</td>
                             <td>{{ $post->user_id }}</td>
-                            <td> <a href="{{ url('post/edit/'.$post->id) }}">Edit</a> <a href="{{ url('post/delete/'.$post->id) }}">Delete</a></td> 
+                            <td> 
+                                {{-- @canany(['update', 'delete'], $post) --}}
+                                <a href="{{ url('post/edit/'.$post->id) }}">Edit</a> <a href="{{ url('post/delete/'.$post->id) }}">Delete</a>
+                                {{-- @endcanany --}}
+                            </td> 
                         </tr>
                         @endforeach
                     </tbody>

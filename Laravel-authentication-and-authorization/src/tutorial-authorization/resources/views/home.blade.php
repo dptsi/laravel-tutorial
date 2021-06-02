@@ -15,17 +15,8 @@
                     @endif
 
                     {{ __('You are logged in!') }}
-
-                    {{-- @can('go-to-private')
-                        <br><a href="{{ url('/private') }}">Private</a>
-                    @endcan
-                    @can('go-to-response')
-                        <br><a href="{{ url('/response') }}">Private with response</a>
-                    @endcan --}}
-                    {{-- @canany(['go-to-private', 'go-to-response']) --}}
                         <br><a href="{{ url('/private') }}">Private</a>
                         <br><a href="{{ url('/response') }}">Private with response</a>
-                    {{-- @endcanany --}}
                         <br><a href="{{ url('/post') }}" class="text-sm text-gray-700 underline">View Post</a>
                 </div>
             </div>
