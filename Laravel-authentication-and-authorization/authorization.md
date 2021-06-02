@@ -640,3 +640,24 @@ public function after(User $user, $ability)
 ```
 
 Dengan ini, user admin tidak dapat lagi mengedit post user lain.
+
+### Langkah kesebelas - membuat custom policy discovery
+
+Jika kita ingin membuat logika custom policy discovery, kita dapat menggunakan method `Gate::guessPolicyNamesUsing`. Tambahkan code ini pada class `AuthServiceProvider` :
+
+```php
+protected $policies = [
+    //'App\Models\Post' => 'App\Policies\PostPolicy',
+];
+
+public function boot()
+{
+    $this->registerPolicies();
+
+    Gate::guessPolicyNamesUsing(function ($modelClass) {
+        return 'App\\Policies\\' . class_basename($modelClass) . 'Policy';
+    });
+}
+```
+
+Dengan menggunakan guessPolicyNamesUsing, Laravel akan tetap dapat menemukan class policy yang sesuai.
