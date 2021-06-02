@@ -523,88 +523,30 @@ Route::get('/post/delete/{post}', [PostController::class, 'destroy'])->middlewar
 
 Middleware `can` akan menerima dua argumen, yaitu nama aksi yang akan diotorisasi dan route parameter yang akan dipassing ke method policy, dalam hal ini adalah model `Post`.
 
-
 ### Langkah kedelapan - menggunakan policy dengan blade template
 
-Ketika membuat template Blade, kita dapat menampilkan beberapa bagian dari halaman hanya kepada user tertentu. Sebagai contoh, kita ingin menampilkan link halaman `private` dan halaman `response` hanya kepada admin. Kita dapat menggunakan method `can` atau `cannot`. Tambahkan code berikut pada view `home.blade.php`:
+Ketika membuat template Blade, kita dapat menampilkan beberapa bagian dari halaman hanya kepada user tertentu. Sebagai contoh, kita ingin menampilkan link edit dan delete hanya kepada pemilik post. Kita dapat menggunakan method `can`, `cannot` atau `canany`. Tambahkan code berikut pada view `post.blade.php`:
 
 ```blade.php
-@can('go-to-private')
-    <br><a href="{{ url('/private') }}">Private</a>
-@endcan
-@can('go-to-response')
-    <br><a href="{{ url('/response') }}">Private with response</a>
-@endcan
+@foreach($posts as $post)
+<tr>
+    <td>{{ $post->id }}</td>
+    <td>{{ $post->name }}</td>
+    <td>{{ $post->user_id }}</td>
+    <td> 
+        @canany(['update', 'delete'], $post)
+        <a href="{{ url('post/edit/'.$post->id) }}">Edit</a> <a href="{{ url('post/delete/'.$post->id) }}">Delete</a>
+        @endcanany
+    </td> 
+</tr>
+@endforeach
 ```
 
-Kita juga dapat menggunakan method `canany` jika aksi berupa array :
+Outputnya adalah sebagai berikut :
 
-```blade.php
- @canany(['go-to-private', 'go-to-response'])
-    <br><a href="{{ url('/private') }}">Private</a>
-    <br><a href="{{ url('/response') }}">Private with response</a>
-@endcanany
-```
+![alt text](/Laravel-authentication-and-authorization/img/authorization-8.PNG)
 
-Ketika user biasa login, output halaman home adalah sebagai berikut :
-
-![alt text](/Laravel-authentication-and-authorization/img/authorization-8-user.PNG)
-
-Sedangkan output halaman home untuk user admin adalah :
-
-![alt text](/Laravel-authentication-and-authorization/img/authorization-8-admin.PNG)
-
-
-### Langkah kesembilan - menggunakan policy response
-
-Response juga dapat digunakan pada policy. Tambahkan code berikut pada class `PostPolicy`:
-
-```php
-use Illuminate\Auth\Access\Response;
-
-
-public function update(User $user, Post $post)
- {
-     return $user->id === $post->user_id
-             ? Response::allow()
-             : Response::deny('You do not own this post.');
- }
-```
-
-Kemudian, tambahkan code berikut pada controller `PostController` :
-
-```php
-use Illuminate\Support\Facades\Gate;
-
-
- public function edit($id)
-   {
-       $user = Auth::user();
-       $post = Post::find($id);
-
-       // menggunakan model user
-       // if ($user && $user->can('update', $post)) {
-       //     return view('post-detail', ['msg' => 'User can edit post']); 
-       // }else{
-       //     abort(403);
-       // }
-
-       // menggunakan response
-       $response = Gate::inspect('update', $post);
-
-       if ($response->allowed()) {
-           return view('post-detail', ['msg' => 'User can edit post']); 
-       } else {
-           echo $response->message();
-       }
-   }
-```
-
-Ketika user biasa mencoba untuk mengedit post oleh admin, akan muncul output berikut :
-
-![alt text](/Laravel-authentication-and-authorization/img/authorization-9.PNG)
-
-### Langkah kesepuluh - menggunakan policy before
+### Langkah kesembilan - menggunakan policy before
 
 Method `before` atau `after` juga dapat digunakan pada policy. Kita dapat menambahkan method `before` pada class `PostPolicy` :
 
@@ -641,7 +583,7 @@ public function after(User $user, $ability)
 
 Dengan ini, user admin tidak dapat lagi mengedit post user lain.
 
-### Langkah kesebelas - membuat custom policy discovery
+### Langkah kesepuluh - membuat custom policy discovery
 
 Jika kita ingin membuat logika custom policy discovery, kita dapat menggunakan method `Gate::guessPolicyNamesUsing`. Tambahkan code ini pada class `AuthServiceProvider` :
 
