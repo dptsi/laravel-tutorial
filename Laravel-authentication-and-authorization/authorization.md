@@ -299,7 +299,7 @@ use Illuminate\Auth\Access\Response;
     });
 
     Gate::define('update-private', function ($user) {
-       return($user->isAdmin);
+       return true;
     });
 
     // Gate responses
@@ -341,7 +341,7 @@ public function private()
     // return view('private');
 
     // 3. check
-    // if (Gate::check('go-to-private')) {
+    // if (Gate::check(['go-to-private', 'update-private'])) {
     //     return view('private');
     // }
     // return 'You are not admin!';
@@ -419,8 +419,6 @@ protected $policies = [
     'App\Models\Post' => 'App\Policies\PostPolicy',
 ];
 ```
-
-Laravel juga dapat menemukan policies secara otomatis selama model dan policy tersebut memenuhi konvensi penamaan Laravel. Policies harus berada pada directory `Policies`. Laravel akan mengecek policies di folder `app/Models/Policies` lalu `app/Policies`. Nama policy juga harus sesuai dengan nama model dan memiliki akhiran `Policy`.
 
 Selanjutnya, kita dapat menambahkan method untuk setiap request otorisasi pada class `PostPolicy` seperti pada kode dibawah ini:
 
@@ -585,7 +583,8 @@ Dengan ini, user admin tidak dapat lagi mengedit post user lain.
 
 ### Langkah kesepuluh - membuat custom policy discovery
 
-Jika kita ingin membuat logika custom policy discovery, kita dapat menggunakan method `Gate::guessPolicyNamesUsing`. Tambahkan code ini pada class `AuthServiceProvider` :
+
+Laravel dapat menemukan policies secara otomatis selama model dan policy tersebut memenuhi konvensi penamaan Laravel. Policies harus berada pada directory `Policies`. Laravel akan mengecek policies di folder `app/Models/Policies`. Nama policy juga harus sesuai dengan nama model dan memiliki akhiran `Policy`. Jika kita ingin membuat logika custom policy discovery, kita dapat menggunakan method `Gate::guessPolicyNamesUsing`. Tambahkan code ini pada class `AuthServiceProvider` :
 
 ```php
 protected $policies = [
