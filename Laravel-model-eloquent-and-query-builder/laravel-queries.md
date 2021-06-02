@@ -6,24 +6,13 @@
 
 Query Builder merupakan salah satu cara untuk menjalankan query database dengan
 lebih mudah, Query Builder juga telah dilengkapi dengan fitur keamanan untuk mencegah
-terjadinya SQL Injextion (adalah sebuah aksi hacking yang dilakukan di aplikasi client dengan
-cara memodifikasi perintah SQL yang ada di memori aplikasi client). Selain itu kita dapat
-menggunakan query builder tanpa harus membuat model terlebih dahulu
-
-Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
+terjadinya SQL Injection (adalah sebuah aksi hacking yang dilakukan di aplikasi client dengan cara memodifikasi perintah SQL yang ada di memori aplikasi client). Selain itu kita dapat menggunakan query builder tanpa harus membuat model terlebih dahulu
 
 ## Konsep-konsep
 
-
-Misal: jelaskan mengenai pengertian, konsep, alur, dll.
-
-
 ### Setting env
 
-Untuk mempraktekan contoh dari latihan menampilkan data dengan QUERY BUILDER
-pertama kita harus memeriksa file `.env` apakah projek sudah terhubung dengan database atau
-belum. File ini terletak pada bagian luar projek laravel yang dibuat, dan pastikan pada bagian
-mysql sudah terkonfigurasi seperti pada gambar dibawah:
+Untuk mempraktekan contoh dari latihan menampilkan data dengan QUERY BUILDER pertama kita harus memeriksa file `.env` apakah projek sudah terhubung dengan database atau belum. File ini terletak pada bagian luar projek laravel yang dibuat, dan pastikan pada bagian mysql sudah terkonfigurasi seperti pada gambar dibawah:
 
 ```
 DB_CONNECTION=mysql
@@ -33,7 +22,6 @@ DB_DATABASE=model_pbkke
 DB_USERNAME=root
 DB_PASSWORD=
 ```
-
 
 ### Ubah Controller dengan Database Query Builder
 
@@ -123,11 +111,9 @@ foreach ($titles as $name => $title) {
 }
 ```
 
-#### Hasil Chunking ( Metode Lazy() )
+#### Hasil Chunking
 
-Jika Anda perlu bekerja dengan ribuan rekaman database, pertimbangkan untuk menggunakan `chunk()` metode yang disediakan oleh kelas facade DB. Metode ini mengambil sebagian kecil hasil pada satu waktu dan memasukkan setiap potongan ke dalam penutupan untuk diproses. Misalnya, mari ambil seluruh userstabel dalam potongan 100 catatan sekaligus:
-
-misal terdapat 3 data di database
+Jika Anda perlu bekerja dengan ribuan rekaman database, pertimbangkan untuk menggunakan `chunk()` metode yang disediakan oleh kelas facade DB. Metode ini mengambil sebagian kecil hasil pada satu waktu dan memasukkan setiap potongan ke dalam penutupan untuk diproses. misal terdapat 3 data di database
 
 lalu menggunakan metode `chunk()`
 
@@ -214,8 +200,13 @@ $cars = $query->addSelect('founded')->get();
 
 
 #### Raw Expression
-DB::raw()digunakan untuk membuat perintah SQL sewenang-wenang yang tidak diurai lebih jauh oleh pembuat kueri. Oleh karena itu, mereka dapat membuat vektor untuk serangan melalui injeksi SQL.
+DB::raw()digunakan untuk membuat perintah SQL sewenang-wenang yang tidak diurai lebih jauh oleh pembuat kueri.
 
+```sql
+SELECT COUNT(*) AS founded_count, founded
+WHERE founded < 1999
+GROUP BY founded
+```
 ```php
       $cars = DB::table('cars')
              ->select(DB::raw('count(*) as founded_count, founded'))
@@ -224,10 +215,8 @@ DB::raw()digunakan untuk membuat perintah SQL sewenang-wenang yang tidak diurai 
              ->get();
 ```
 
-
+#### Raw Method
 ##### SelectRaw
-metode `selectRaw()` dapat digunakan di tempat addSelect(DB::raw(...)). Metode ini menerima larik pengikatan opsional sebagai argumen keduanya:
-
 ```php
 $cars = DB::table('cars')
             ->select(DB::raw('count(*) as founded_count, founded'))
@@ -243,7 +232,7 @@ $cars = DB::table('cars')
                ->selectRaw('((founded - ?) * (-1)) as berdiri_selama', [2021])
                ->get();
 
-        stackoverflow
+        // stackoverflow
         $cars = DB::table('cars')
             ->selectRaw('COUNT(*) AS result')
             ->get();
@@ -254,7 +243,7 @@ $cars = DB::table('cars')
 
         $cars = DB::select(DB::raw("SELECT COUNT(*) AS result FROM cars"));
 
-            Returns an array of Php object
+            //Returns an array of Php object
 ```
 
 ##### WhereRaw/orWhereRaw
@@ -283,33 +272,72 @@ $cars = DB::table('cars')
 
 ##### OrderByRaw
 ```php
-        $cars = DB::table('cars')
-                // ->orderByRaw('updated_at - created_at DESC')
-                ->orderByRaw('name asc')
-                ->get();
+$cars = DB::table('cars')
+        // ->orderByRaw('updated_at - created_at DESC')
+        ->orderByRaw('name asc')
+        ->get();
 ```
 
 ##### GroupByRaw
 ```php
-        $cars = DB::table('cars')
-                ->select('name', 'founded')
-                ->groupByRaw('name, founded')
-                ->get();
+$cars = DB::table('cars')
+        ->select('name', 'founded')
+        ->groupByRaw('name, founded')
+        ->get();
 
-        $cars = DB::table('cars')
-                ->select(DB::raw('founded , COUNT(id) as JUMLAH'))
-                ->groupBy(DB::raw('founded'))
-                ->get();
+$cars = DB::table('cars')
+        ->select(DB::raw('founded , COUNT(id) as JUMLAH'))
+        ->groupBy(DB::raw('founded'))
+        ->get();
 ```
 #### Joins
 ##### Inner Join Clause
+```php
+$cars = DB::table('cars')
+        ->join('car_models', 'cars.id', '=', 'car_models.id')
+        ->join('car_production_dates', 'car_models.id', '=', 'car_production_dates.id')
+        ->select('car_models.model_name', 'car_production_dates.created_at')
+        ->get();
+```
 ##### Left Join / Right Join Clause
+```php
+$cars = DB::table('car_models')
+            ->leftJoin('engines', 'car_models.id', '=', 'engines.id')
+            ->get();
+```
+```php
+$cars = DB::table('car_models')
+            ->rightJoin('engines', 'car_models.id', '=', 'engines.id')
+            ->get();
+```
 ##### Cross Join Clause
+```php
+$cars = DB::table('car_models')
+            ->crossJoin('engines')
+            ->get();
+```
 ##### Advanced Join Clauses
-##### Subquery Joins
+```php
+$cars = DB::table('car_models')
+                    ->join('engines', function ($join) {
+                        $join->on('car_models.id', '=', 'engines.id')
+                             ->where('engines.id', '<', 3);
+                    })
+                    ->get();
+```
+<!-- ##### Subquery Joins -->
 
 #### Unions
+```php
+$first = DB::table('car_models')
+                ->whereNotNull('model_name');
+        dd($first);
 
+        $cars = DB::table('car_models')
+                ->whereNotNull('car_id')
+                ->union($first)
+                ->get();
+```
 #### Menggunakan clausa `Where`
 
 ```php
@@ -364,18 +392,89 @@ $cars = DB::table('cars')
     ->get();
 ```
 
-
+#### Tambahan klausa Where
 ```php
+$cars = DB::table('cars')
+            ->whereBetween('founded', [1800, 1900])
+            ->get();   
 ```
 ```php
+$cars = DB::table('cars')
+            ->whereNotBetween('founded', [1800, 1900])
+            ->get();
 ```
 ```php
+$cars = DB::table('cars')
+            ->whereIn('id', [1, 2, 3])
+            ->whereIn('id', [1, 2, 3, 99])
+            ->get();
 ```
 ```php
+$cars = DB::table('cars')
+            ->whereNotIn('id', [1, 2, 3])
+            ->get();
 ```
 ```php
+$cars = DB::table('cars')
+            ->whereNull('updated_at')
+            ->get();
 ```
 ```php
+$cars = DB::table('cars')
+            ->whereNotNull('updated_at')
+            ->get();
+```
+```php
+$cars = DB::table('cars')
+            ->whereDate('created_at', '2021-05-28')                 
+            ->get();
+```
+```php
+$cars = DB::table('cars')
+            ->whereMonth('created_at', '5')
+            ->get();
+```
+```php
+$cars = DB::table('cars')
+            ->whereDay('created_at', '28')
+            ->get();
+```
+```php
+$cars = DB::table('cars')
+            ->whereYear('created_at', '2021')
+            ->get();
+```
+```php
+$cars = DB::table('cars')
+            ->whereTime('created_at', '=', '15:07:35')
+            ->get();
+```
+```php
+$cars = DB::table('cars')
+            ->whereColumn('name', 'founded')
+            ->get();
+```
+```php
+$cars = DB::table('cars')
+            ->whereColumn('updated_at', '>', 'created_at')
+            ->get();
+```
+```php
+$cars = DB::table('cars')
+        ->whereColumn([
+            ['name', '=', 'founded'],
+            ['updated_at', '>', 'created_at'],
+        ])->get();
+```
+```php
+$cars =  ();
+            $cars = DB::table('cars')
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                        ->from('tabe; lain')
+                        ->whereColumn('cars.id', 'cars.founded');
+            })
+            ->get();
 ```
 
 ### Ordering, Grouping, Limit & Offset
