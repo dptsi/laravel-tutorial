@@ -8,10 +8,7 @@ Query Builder merupakan salah satu cara untuk menjalankan query database dengan
 lebih mudah, Query Builder juga telah dilengkapi dengan fitur keamanan untuk mencegah
 terjadinya SQL Injection (adalah sebuah aksi hacking yang dilakukan di aplikasi client dengan cara memodifikasi perintah SQL yang ada di memori aplikasi client). Selain itu kita dapat menggunakan query builder tanpa harus membuat model terlebih dahulu
 
-## Konsep-konsep
-
 ### Setting env
-
 Untuk mempraktekan contoh dari latihan menampilkan data dengan QUERY BUILDER pertama kita harus memeriksa file `.env` apakah projek sudah terhubung dengan database atau belum. File ini terletak pada bagian luar projek laravel yang dibuat, dan pastikan pada bagian mysql sudah terkonfigurasi seperti pada gambar dibawah:
 
 ```
@@ -48,7 +45,7 @@ class CarController extends Controller
     {
         $cars = DB::table('cars')->get();
 
-        return view('user.index', ['cars' => $cars]);
+        return view('cars.index', ['cars' => $cars]);
     }
 }
 ```
