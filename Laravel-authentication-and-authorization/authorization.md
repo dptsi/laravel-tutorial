@@ -309,7 +309,7 @@ use Illuminate\Auth\Access\Response;
                     : Response::deny('You must be an administrator.');
     });
 
-    // after, dapat digunakan sebagai pengganti before dan akan dijalankan terakhir
+    // after, akan dijalankan terakhir
     // Gate::after(function ($user, $ability) {
     //     if ($user->isAdmin) {
     //         return true;
@@ -553,3 +553,90 @@ Ketika user biasa login, output halaman home adalah sebagai berikut :
 Sedangkan output halaman home untuk user admin adalah :
 
 ![alt text](/Laravel-authentication-and-authorization/img/authorization-8-admin.PNG)
+
+
+### Langkah kesembilan - menggunakan policy response
+
+Response juga dapat digunakan pada policy. Tambahkan code berikut pada class `PostPolicy`:
+
+```php
+use Illuminate\Auth\Access\Response;
+
+
+public function update(User $user, Post $post)
+ {
+     return $user->id === $post->user_id
+             ? Response::allow()
+             : Response::deny('You do not own this post.');
+ }
+```
+
+Kemudian, tambahkan code berikut pada controller `PostController` :
+
+```php
+use Illuminate\Support\Facades\Gate;
+
+
+ public function edit($id)
+   {
+       $user = Auth::user();
+       $post = Post::find($id);
+
+       // menggunakan model user
+       // if ($user && $user->can('update', $post)) {
+       //     return view('post-detail', ['msg' => 'User can edit post']); 
+       // }else{
+       //     abort(403);
+       // }
+
+       // menggunakan response
+       $response = Gate::inspect('update', $post);
+
+       if ($response->allowed()) {
+           return view('post-detail', ['msg' => 'User can edit post']); 
+       } else {
+           echo $response->message();
+       }
+   }
+```
+
+Ketika user biasa mencoba untuk mengedit post oleh admin, akan muncul output berikut :
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-9.PNG)
+
+### Langkah kesepuluh - menggunakan policy before
+
+Method `before` atau `after` juga dapat digunakan pada policy. Kita dapat menambahkan method `before` pada class `PostPolicy` :
+
+```php
+public function before(User $user, $ability)
+{
+    if ($user->isAdmin) {
+        return true;
+    }
+}
+```
+
+dengan ini, fungsi before akan dijalankan terlebih dahulu dan user admin dapat melakukan aksi apapun, termasuk mengedit postingan user lain. 
+
+![alt text](/Laravel-authentication-and-authorization/img/authorization-10-before.PNG)
+
+Jika kita ingin memberikan semua akses kepada user admin namun tetap membatasi hal tersebut, kita dapat menggunakan method `after` yang akan dijalankan setelah pengecekan otorisasi lainnya :
+
+```php
+// public function before(User $user, $ability)
+// {
+//     if ($user->isAdmin) {
+//         return true;
+//     }
+// }
+
+public function after(User $user, $ability)
+{
+    if ($user->isAdmin) {
+        return true;
+    }
+}
+```
+
+Dengan ini, user admin tidak dapat lagi mengedit post user lain.
