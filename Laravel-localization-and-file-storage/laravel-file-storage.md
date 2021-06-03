@@ -209,4 +209,39 @@ Untuk uji coba file storage, akan dibuat sebuah modul untuk upload file.
 
 ### Langkah pertama
 
+Di Halaman welcome Laravel (resources/views/welcome.blade.php), Kita ganti konten dalam welcome page menjadi upload file:
+```
+<div>
+    <form action="upload" method="post" enctype="multipart/form-data">
+        @csrf
+        <input type="file" name="image" id="">
+        <button type="submit">Submit</button>
+    </form>
+</div>
+```
+
 ### Langkah kedua
+
+Selanjutnya, ditambahkan route ke untuk suatu controller di `routes/web.php`. Kita beri nama HomeController:
+```
+Route::post('upload', 'App\Http\Controllers\HomeController@upload');
+```
+
+### Langkah ketiga
+
+Kita tambahkan controller dengan menggunakan artisan:
+```
+php artisan make:controller HomeController
+```
+
+### Langkah keempat
+
+Terakhir, ditambahkan fungsi upload ke dalam controller:
+```
+public function upload(Request $request){
+    $path = $request->file('image')->store('');
+    dd($path);
+}
+```
+
+Controller ini akan melakukan `store` file yang telah diupload ke direktori `storage/app`, dan akan memperlihatkan nama file setelah dilakukan upload.
