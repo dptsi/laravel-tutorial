@@ -10,11 +10,11 @@ Bahasa adalah kemampuan yang dimiliki manusia untuk berkomunikasi dengan manusia
 
 Laravel menyediakan fitur lokalisasi yang menyediakan cara mudah untuk mengambil string dalam berbagai bahasa, memungkinkan kita untuk dengan mudah mendukung beberapa bahasa dalam aplikasi kita.
 
-Laravel menyediakan dua cara untuk mengelola string terjemahan. Pertama, string bahasa dapat disimpan dalam file di dalam direktori ```php resources/lang ```. Dalam direktori ini, terdapat subdirektori untuk setiap bahasa yang didukung oleh aplikasi. Ini adalah pendekatan yang digunakan Laravel dalam mengelola string terjemahan untuk fitur bawaan Laravel seperti validasi pesan kesalahan. Kedua, string terjemahan dapat didefinisikan dalam file JSON yang ditempatkan di dalam direktori ```php resources/lang ```. Saat mengambil pendekatan ini, setiap bahasa yang didukung oleh aplikasi kita akan memiliki file JSON yang sesuai di dalam direktori ini. Cara ini direkomendasikan unutk aplikasi yang berskala besar.
+Laravel menyediakan dua cara untuk mengelola string terjemahan. Pertama, string bahasa dapat disimpan dalam file di dalam direktori `resources/lang`. Dalam direktori ini, terdapat subdirektori untuk setiap bahasa yang didukung oleh aplikasi. Ini adalah pendekatan yang digunakan Laravel dalam mengelola string terjemahan untuk fitur bawaan Laravel seperti validasi pesan kesalahan. Kedua, string terjemahan dapat didefinisikan dalam file JSON yang ditempatkan di dalam direktori ` resources/lang`. Saat mengambil pendekatan ini, setiap bahasa yang didukung oleh aplikasi kita akan memiliki file JSON yang sesuai di dalam direktori ini. Cara ini direkomendasikan unutk aplikasi yang berskala besar.
 
 ### Mengonfigurasi Lokal
 
-Bahasa default untuk aplikasi kita disimpan dalam file konfigurasi ```php config/app.php ``` bagian ```php locale ```. Kita bebas mengubah nilai ini agar sesuai dengan kebutuhan aplikasi kita.
+Bahasa default untuk aplikasi kita disimpan dalam file konfigurasi `config/app.php` bagian `locale`. Kita bebas mengubah nilai ini agar sesuai dengan kebutuhan aplikasi kita.
 
 Kita  dapat mengubah bahasa default untuk satu permintaan HTTP saat dijalankan menggunakan metode `setLocale` yang disediakan oleh Laravel
 ```php
@@ -47,14 +47,14 @@ return [
 #### String Terjemahan Sebagai Key
 Untuk aplikasi dengan skala besar, mendefinisikan setiap string dengan "short key" dapat membingungkan kita ketika merujuk key dalam view kita dan akan rumit untuk terus-menerus menemukan kunci untuk setiap string terjemahan yang didukung oleh aplikasi kita.
 
-Karena itu, Laravel dapat mendefinisikan string terjemahan menggunakan terjemahan "default" dari string sebagai key. File terjemahan yang menggunakan string terjemahan sebagai key disimpan sebagai file JSON di direktori ```php resources/lang ```.
+Karena itu, Laravel dapat mendefinisikan string terjemahan menggunakan terjemahan "default" dari string sebagai key. File terjemahan yang menggunakan string terjemahan sebagai key disimpan sebagai file JSON di direktori `resources/lang`.
 ```php
 {
     "I love programming.": "Saya suka pemrograman"
 }
 ```
 ### Memanggil String Terjemahan
-Kita dapat mengambil string terjemahan dari file bahasa kita menggunakan fungsi pembantu __ . Jika kita menggunakan "short keys" untuk mendefinisikan string terjemahan, kita harus mempassing file yang berisi key dan key itu sendiri ke fungsi __ menggunakan sintaks "." . Sebagai contoh, mari kita panggil string terjemahan welcome dari file bahasa ```php resources/lang/en/messages.php ```.
+Kita dapat mengambil string terjemahan dari file bahasa kita menggunakan fungsi pembantu __ . Jika kita menggunakan "short keys" untuk mendefinisikan string terjemahan, kita harus mempassing file yang berisi key dan key itu sendiri ke fungsi __ menggunakan sintaks "." . Sebagai contoh, mari kita panggil string terjemahan welcome dari file bahasa `resources/lang/en/messages.php`.
 ```php
 echo __('messages.welcome');
 ```
@@ -105,8 +105,8 @@ Kita juga dapat menentukan atribut placeholder dalam string pluralisasi. Placeho
 echo trans_choice('time.minutes_ago', 5, ['value' => 5]);
 ```
 ### Mengganti Paket File Bahasa
-Beberapa paket mungkin memiliki file bahasanya sendiri. Daripada mengubah beberapa baris pada inti file paket, kita dapat menimpanya dengan menempatkan file di direktori ```php resources/lang/vendor/{package}/{locale} ```.
-Contoh, jika kita ingin menimpa string terjemahan bahasa inggris pada messages.php untuk paket ```php skyrim/heathfire ```, kita harus menempatkan file bahasa pada ```php resources/lang/vendor/hearthfire/en/messages.php ```. Dalam file ini, kita hanya harus menentukan string terjemahan yang ingin kita timpa. Setiap string terjemahan yang tidak kita timpa akan tetap dimuat dari file bahasa asli paket.
+Beberapa paket mungkin memiliki file bahasanya sendiri. Daripada mengubah beberapa baris pada inti file paket, kita dapat menimpanya dengan menempatkan file di direktori ` resources/lang/vendor/{package}/{locale}`.
+Contoh, jika kita ingin menimpa string terjemahan bahasa inggris pada messages.php untuk paket `skyrim/heathfire`, kita harus menempatkan file bahasa pada `resources/lang/vendor/hearthfire/en/messages.php`. Dalam file ini, kita hanya harus menentukan string terjemahan yang ingin kita timpa. Setiap string terjemahan yang tidak kita timpa akan tetap dimuat dari file bahasa asli paket.
 
 ## Langkah-langkah tutorial
 
