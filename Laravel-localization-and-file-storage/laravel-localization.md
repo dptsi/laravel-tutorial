@@ -50,7 +50,7 @@ Untuk aplikasi dengan skala besar, mendefinisikan setiap string dengan "short ke
 Karena itu, Laravel dapat mendefinisikan string terjemahan menggunakan terjemahan "default" dari string sebagai key. File terjemahan yang menggunakan string terjemahan sebagai key disimpan sebagai file JSON di direktori `resources/lang`.
 ```php
 {
-    "I love programming.": "Saya suka pemrograman"
+    "I love programming.": "Saya suka pemrograman."
 }
 ```
 ### Memanggil String Terjemahan
