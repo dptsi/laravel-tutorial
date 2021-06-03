@@ -1,4 +1,4 @@
-# Topik 2
+# Laravel File Storage
 
 [Kembali](readme.md)
 
@@ -16,7 +16,7 @@ Laravel memiliki abstraksi filesystem dari package PHP Flysystem buatan Frank de
 
 File konfigurasi untuk filesystem laravel terdapat di `config/filesystems.php`. Dalam file, dapat dikonfigurasi "disk" filesystem. Tiap disk merepresentasikan driver storage dan lokasi storage. Contoh konfigurasi untuk tiap driver tersedia di dalam file konfigurasi sehingga kita dapat dengan mudah memodifikasi konfigurasi.
 
-#### Local Driver
+- Local Driver
 
 Saat memakai `local` driver, semua operasi file relatif terhadap direktori `root` yang didefinisi dalam file config `filesystems`. Default adalah direktori `storage/app`. Seperti contoh, method berikut akan melakukan write ke `storage/app/example.txt`:
 ```
@@ -25,11 +25,11 @@ use Illuminate\Support\Facades\Storage;
 Storage::disk('local')->put('example.txt', 'Contents');
 ```
 
-#### Public Disk
+- Public Disk
 
 Disk `public` dalam file config `filesystems` dimaksudkan untuk file yang dapat diakses publik. Disk `public` memakai driver `local` dan menyimpan file-filenya di dalam `storage/app/public` sebagai default.
 
-#### Caching
+- Caching
 
 Caching digunakan untuk meningkatkan performa. Untuk mengaktifkan caching, dapat ditambahkan `cache` dalam konfigurasi. Opsi `cache` berupa array yang berisi nama `disk`, waktu `expire` dalam hitungan detik, dan `prefix` cache:
 ```
@@ -89,6 +89,7 @@ Storage::put('file.jpg', $resource);
 ```
 
 - `putFile` dan `putFileAs`
+
 Method `putFile` dan `putFileAs` digunakan untuk automatic streaming suatu file. Automatic streaming meringankan beban memori:
 
 ```
@@ -153,6 +154,7 @@ class UserAvatarController extends Controller
 Untuk menghapus file, dapat digunakan method-method berikut:
 
 - `delete`
+
 Method `delete` menerima nama file tunggal atau file array yang akan dihapus:
 ```
 use Illuminate\Support\Facades\Storage;
@@ -171,6 +173,7 @@ Storage::disk('s3')->delete('path/file.jpg');
 ### Direktori
 Beberapa method yang berhubungan dengan manajemen direktori adalah sebagai berikut:
 - `files` dan `allFiles`
+
 Method `files` mengembalikan array dari semua file yang ada dalam direktori. `allFiles` digunakan jika kita ingin melibatkan semua subdirektori di dalamnya:
 ```
 use Illuminate\Support\Facades\Storage;
@@ -180,6 +183,7 @@ $files = Storage::files($directory);
 $files = Storage::allFiles($directory);
 ```
 - `directories` dan `allDirectories`
+
 Method `directories` mengembalikan array dari semua direktori yang ada dalam direktori. `allDirectories` digunakan jika kita ingin melibatkan semua subdirektori di dalamnya:
 ```
 $directories = Storage::directories($directory);
@@ -187,11 +191,13 @@ $directories = Storage::directories($directory);
 $directories = Storage::allDirectories($directory);
 ```
 - `makeDirectory`
+
 Method `makeDirectory` akan membuatkan suatu direktori beserta subdirektori yang diperlukan:
 ```
 Storage::makeDirectory($directory);
 ```
 - `deleteDirectory`
+
 Method `deleteDirectory` akan menghapus direktori dan semua file didalamnya:
 ```
 Storage::deleteDirectory($directory);
@@ -199,24 +205,43 @@ Storage::deleteDirectory($directory);
 
 ## Langkah-langkah tutorial
 
+Untuk uji coba file storage, akan dibuat sebuah modul untuk upload file.
+
 ### Langkah pertama
 
-Misal: Buat class `Contoh`
-
-```php
-<?php
-
-namespace DummyNamespace;
-
-
-class Contoh
-{
-    public function fungsi($request)
-    {
-        ...
-    }
-
-}
+Di Halaman welcome Laravel `resources/views/welcome.blade.php`, Kita ganti konten dalam welcome page menjadi upload file:
+```
+<div>
+    <form action="upload" method="post" enctype="multipart/form-data">
+        @csrf
+        <input type="file" name="image" id="">
+        <button type="submit">Submit</button>
+    </form>
+</div>
 ```
 
 ### Langkah kedua
+
+Selanjutnya, ditambahkan route ke untuk suatu controller di `routes/web.php`. Kita beri nama HomeController:
+```
+Route::post('upload', 'App\Http\Controllers\HomeController@upload');
+```
+
+### Langkah ketiga
+
+Kita tambahkan controller dengan menggunakan artisan:
+```
+php artisan make:controller HomeController
+```
+
+### Langkah keempat
+
+Terakhir, ditambahkan fungsi upload ke dalam controller:
+```
+public function upload(Request $request){
+    $path = $request->file('image')->store('');
+    dd($path);
+}
+```
+
+Controller ini akan melakukan `store` file yang telah diupload ke direktori `storage/app`, dan akan memperlihatkan nama file setelah dilakukan upload.
