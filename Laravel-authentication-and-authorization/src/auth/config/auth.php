@@ -41,16 +41,16 @@ return [
             'provider' => 'users',
         ],
 
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
-        ],
+        // 'api' => [
+        //     'driver' => 'token',
+        //     'provider' => 'users',
+        //     'hash' => false,
+        // ],
 
         // CUSTOM
-        'custom' => [
-            'driver' => 'session',
-            'provider' => 'custom',
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
         ],
 
     ],
@@ -83,10 +83,9 @@ return [
         //     'table' => 'users',
         // ],
 
-        'custom' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
+        // 'users' => [
+        //     'driver' => 'mongo',
+        // ],
     ],
 
     /*

@@ -54,8 +54,9 @@ class AuthController extends Controller
         return view('dashboard', compact(['user', 'id']));
     }
 
-    public function check(Request $request){
-        if(Auth::guard('custom')->check()){
+    // CHECK AUTHENTICATION
+    public function check(){
+        if(Auth::check()){
             return redirect('dashboard');
         }
         else{

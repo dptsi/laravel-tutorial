@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Services\Auth\JwtGuard;
+// use App\Extensions\MongoUserProvider;
+use Illuminate\Support\Facades\Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,5 +28,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        // GUARD
+        Auth::extend('jwt', function ($app, $name, array $config) {
+            // Return an instance of Illuminate\Contracts\Auth\Guard...
+
+            return new JwtGuard(Auth::createUserProvider($config['provider']));
+        });
+
+        // PROVIDER
+        // Auth::provider('mongo', function ($app, array $config) {
+        //     // Return an instance of Illuminate\Contracts\Auth\UserProvider...
+
+        //     return new MongoUserProvider($app->make('mongo.connection'));
+        // });
     }
 }

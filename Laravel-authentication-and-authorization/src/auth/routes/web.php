@@ -30,10 +30,6 @@ Route::get('/check', [AuthController::class, 'check'])->name('check');
 Route::get('/manual-login', [AuthController::class, 'show'])->name('manual login');
 Route::post('/manual-login', [AuthController::class, 'authenticate']);
 
-// CUSTOM GUARD
-// Route::get('/manual-login', [AuthController::class, 'show'])->middleware('stateless')->name('manual login');
-// Route::post('/manual-login', [AuthController::class, 'authenticate']);
-
 // HTTP AUTHENTICATION
 Route::get('/profile', function() {
     return view('profile');
