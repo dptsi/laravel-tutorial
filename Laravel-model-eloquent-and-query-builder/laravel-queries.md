@@ -628,8 +628,6 @@ DB::table('cars')
 
 
 ##### Memperbarui Kolom JSON
-mbo gapaham
-
 ```php
 $affected = DB::table('cars')
               ->where('id', 1)
