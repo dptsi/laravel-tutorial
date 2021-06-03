@@ -205,24 +205,8 @@ Storage::deleteDirectory($directory);
 
 ## Langkah-langkah tutorial
 
+Untuk uji coba file storage, akan dibuat sebuah modul untuk upload file.
+
 ### Langkah pertama
-
-Misal: Buat class `Contoh`
-
-```php
-<?php
-
-namespace DummyNamespace;
-
-
-class Contoh
-{
-    public function fungsi($request)
-    {
-        ...
-    }
-
-}
-```
 
 ### Langkah kedua
