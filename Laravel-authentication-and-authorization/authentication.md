@@ -208,9 +208,9 @@ Laravel Breeze sudah mengimplementasikan throttling, yaitu jika user memasukkan 
 Autentikasi dengan HTTP atau HTTP Basic Authentication menyediakan cara autentikasi tanpa perlu setting halaman login. Caranya adalah dengan menggunakan middleware `auth.basic` pada rute yang diinginkan. Middleware ini sudah termasuk dalam framework Laravel sehingga tidak perlu dibuat sendiri.
 
 ```php
-Route::get('/profile', function () {
-    // Only authenticated users may access this route...
-})->middleware('auth.basic');
+Route::get('/profile', function() {
+    return view('profile');
+})->middleware('auth.basic')->name('profile');
 ```
 
 Berikut adalah tampilan login menggunakan HTTP. Secara default, kolom `email` pada tabel `users` digunakan sebagai `username` di sini.
