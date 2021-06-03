@@ -245,6 +245,7 @@ Formulir berubah menjadi bahasa indonesia
 
 Disini kita akan membuat agar user dapat memilih bahasa yang diinginkan.
 Buat controller baru dan menambahkan fungsi index.
+
 `php artisan make:controller LocalizationController`
 
 ```php
@@ -267,6 +268,7 @@ class LocalizationController extends Controller
 ### Langkah kelima
 
 Buat middleware baru dan tambahkan middleware ke `kernel.php` pada `middlewareGroups`.
+
 `php artisan make:middleware Localization`
 
 ```php
