@@ -16,7 +16,7 @@ Laravel memiliki abstraksi filesystem dari package PHP Flysystem buatan Frank de
 
 File konfigurasi untuk filesystem laravel terdapat di `config/filesystems.php`. Dalam file, dapat dikonfigurasi "disk" filesystem. Tiap disk merepresentasikan driver storage dan lokasi storage. Contoh konfigurasi untuk tiap driver tersedia di dalam file konfigurasi sehingga kita dapat dengan mudah memodifikasi konfigurasi.
 
-#### Local Driver
+- Local Driver
 
 Saat memakai `local` driver, semua operasi file relatif terhadap direktori `root` yang didefinisi dalam file config `filesystems`. Default adalah direktori `storage/app`. Seperti contoh, method berikut akan melakukan write ke `storage/app/example.txt`:
 ```
@@ -25,11 +25,11 @@ use Illuminate\Support\Facades\Storage;
 Storage::disk('local')->put('example.txt', 'Contents');
 ```
 
-#### Public Disk
+- Public Disk
 
 Disk `public` dalam file config `filesystems` dimaksudkan untuk file yang dapat diakses publik. Disk `public` memakai driver `local` dan menyimpan file-filenya di dalam `storage/app/public` sebagai default.
 
-#### Caching
+- Caching
 
 Caching digunakan untuk meningkatkan performa. Untuk mengaktifkan caching, dapat ditambahkan `cache` dalam konfigurasi. Opsi `cache` berupa array yang berisi nama `disk`, waktu `expire` dalam hitungan detik, dan `prefix` cache:
 ```
