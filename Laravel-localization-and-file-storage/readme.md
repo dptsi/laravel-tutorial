@@ -4,5 +4,5 @@
 
 ## Daftar isi
 
-- [Topik 1](topic-1.md)
+- [Laravel Localization](laravel-localization.md)
 - [File Storage](laravel-file-storage.md)
