@@ -222,11 +222,6 @@ Buat route baru untuk menampilkan view yang telah kita buat.
 Route::get('/form', function () {
     return view('formulir');
 });
-
-Route::get('/form/{locale}', function ($locale) {
-    App::setLocale($locale);
-    return view('formulir');
-});
 ```
 Lalu kita coba jalankan dengan mengakses `http://127.0.0.1:8000/form`
 ![](img/localization/guest-form.png)
@@ -244,7 +239,7 @@ Formulir berubah menjadi bahasa indonesia
 ### Langkah keempat
 
 Disini kita akan membuat agar user dapat memilih bahasa yang diinginkan.
-Buat controller baru dan menambahkan fungsi index.
+Buat controller baru. Tambahkan fungsi index dan `use Illuminate\Support\Facades\App;` seperti berikut.
 
 `php artisan make:controller LocalizationController`
 
@@ -254,6 +249,7 @@ Buat controller baru dan menambahkan fungsi index.
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class LocalizationController extends Controller
 {
@@ -267,7 +263,7 @@ class LocalizationController extends Controller
 
 ### Langkah kelima
 
-Buat middleware baru dan tambahkan middleware ke `kernel.php` pada `middlewareGroups`.
+Buat middleware baru. Tambahkan if statement dan `use Illuminate\Support\Facades\App;` seperti berikut.
 
 `php artisan make:middleware Localization`
 
@@ -278,6 +274,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class Localization
 {
@@ -297,6 +294,9 @@ class Localization
     }
 }
 ```
+### Langkah keenam
+
+Tambahkan middleware ke `kernel.php` pada middlewareGroups.
 ```php
 protected $middlewareGroups = [
         'web' => [
@@ -311,7 +311,14 @@ protected $middlewareGroups = [
         ],
 ```
 
-### Langkah keenam
+### Langkah ketujuh
+
+Buat route baru untuk mengakses LocalizationController dan mempassing locale ke fungsi index.
+```php
+Route::get('/form/{locale}', 'App\Http\Controllers\LocalizationController@index');
+```
+
+### Langkah kedelapan
 
 Selanjutnya disini kita tambahkan kode pada view `formulir.blade.php` untuk menggunakan dropdown dalam pemilihan bahasa.
 ```php
@@ -322,6 +329,16 @@ Selanjutnya disini kita tambahkan kode pada view `formulir.blade.php` untuk meng
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+			   @switch($locale)
+                                @case('en')
+                                <img src="{{asset('img/en.png')}}"> English
+                                @break
+                                @case('id')
+                                <img src="{{asset('img/id.png')}}"> Indonesia
+                                @break
+                                @default
+                                <img src="{{asset('img/en.png')}}"> English
+                            @endswitch    
                             <span class="caret"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -333,6 +350,15 @@ Selanjutnya disini kita tambahkan kode pada view `formulir.blade.php` untuk meng
             </div>
         </nav>
 ```
+
+Pada kode bagian ini
+```php
+<a class="dropdown-item" href="/form/en"><img src="{{asset('img/en.png')}}"> English</a>
+<a class="dropdown-item" href="/form/id"><img src="{{asset('img/id.png')}}"> Indonesia</a>
+```
+dropdown tombol yang dimana jika kita memencet tombol English maka kita akan menuju /form/en dan jika kita memencet tombol Indonesia kita akan menuju /form/id, yang dimana en atau id ini akan dipassing oleh route yang telah kita buat tadi ke LocalizationController sebagai locale.
+
+
 jalankan `http://127.0.0.1:8000/form`
 ![](img/localization/dropdown.png)
 ![](img/localization/dropdown-id.png)
