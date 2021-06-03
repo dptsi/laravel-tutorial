@@ -240,3 +240,98 @@ Mengubah bahasa default Laravel pada `config/app.php` dengan id
 Lalu kita jalankan kembali `http://127.0.0.1:8000/form`
 ![](img/localization/guest-form-id.png)
 Formulir berubah menjadi bahasa indonesia
+
+### Langkah keempat
+
+Disini kita akan membuat agar user dapat memilih bahasa yang diinginkan.
+Buat controller baru dan menambahkan fungsi index. Locale akan disimpan di session sehingga middleware dapat mendaftarkan ke aplikasinya.
+`php artisan make:controller LocalizationController`
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class LocalizationController extends Controller
+{
+    public function index($locale){
+        App::setlocale($locale);
+        session()->put('locale', $locale);
+        return redirect()->back();
+    }
+}
+```
+
+### Langkah kelima
+
+Buat middleware baru dan tambahkan middleware ke `kernel.php` pada `middlewareGroups`.
+`php artisan make:middleware Localization`
+
+```php
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+
+class Localization
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        if (session()->has('locale')) {
+            App::setlocale(session()->get('locale'));
+        }
+        return $next($request);
+    }
+}
+```
+```php
+protected $middlewareGroups = [
+        'web' => [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            // \Illuminate\Session\Middleware\AuthenticateSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\Localization::class,
+        ],
+```
+
+### Langkah keenam
+
+Selanjutnya disini kita tambahkan kode pada view `formulir.blade.php` untuk menggunakan dropdown dalam pemilihan bahasa.
+```php
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark container">
+            <div class="collapse navbar-collapse" id="navbarToggler">
+                <ul class="navbar-nav ml-auto">
+                    @php $locale = session()->get('locale'); @endphp
+                    <li class="nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/form/en"><img src="{{asset('img/en.png')}}"> English</a>
+                            <a class="dropdown-item" href="/form/id"><img src="{{asset('img/id.png')}}"> Indonesia</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+```
+jalankan `http://127.0.0.1:8000/form`
+![](img/localization/dropdown.png)
+![](img/localization/dropdown-id.png)
+
