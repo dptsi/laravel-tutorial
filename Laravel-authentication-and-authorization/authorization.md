@@ -584,7 +584,7 @@ Dengan ini, user admin tidak dapat lagi mengedit post user lain.
 ### Langkah kesepuluh - membuat custom policy discovery
 
 
-Laravel dapat menemukan policies secara otomatis selama model dan policy tersebut memenuhi konvensi penamaan Laravel. Policies harus berada pada directory `Policies`. Laravel akan mengecek policies di folder `app/Models/Policies`. Nama policy juga harus sesuai dengan nama model dan memiliki akhiran `Policy`. Jika kita ingin membuat logika custom policy discovery, kita dapat menggunakan method `Gate::guessPolicyNamesUsing`. Tambahkan code ini pada class `AuthServiceProvider` :
+Laravel dapat menemukan policies secara otomatis selama model dan policy tersebut memenuhi konvensi penamaan Laravel. Policies harus berada pada directory `Policies`. Laravel akan mengecek policies di folder `app/Models/Policies` kemudian `app/Policies`. Nama policy juga harus sesuai dengan nama model dan memiliki akhiran `Policy`. Jika kita ingin membuat logika custom policy discovery, kita dapat menggunakan method `Gate::guessPolicyNamesUsing`. Tambahkan code ini pada class `AuthServiceProvider` :
 
 ```php
 protected $policies = [
