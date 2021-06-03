@@ -46,6 +46,13 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        // CUSTOM
+        'custom' => [
+            'driver' => 'session',
+            'provider' => 'custom',
+        ],
+
     ],
 
     /*
@@ -75,6 +82,11 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        'custom' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
     ],
 
     /*
@@ -112,6 +124,10 @@ return [
     |
     */
 
+    // OLD TIMEOUT
     'password_timeout' => 10800,
+
+    // NEW TIMEOUT
+    // 'password_timeout' => 30,
 
 ];

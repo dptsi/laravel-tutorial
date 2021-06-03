@@ -20,13 +20,6 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
-    // public function retrieve(user $user, id $id){
-    //     $user = Auth::user();
-    //     $id = Auth::id();
-
-    //     return view('dashboard');
-    // }
-
     /**
      * Handle an incoming authentication request.
      *
@@ -55,6 +48,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        // Auth::logoutOtherDevices($password);
 
         return redirect('/');
     }

@@ -47,7 +47,11 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        // LOGIN USING USER INSTANCE
         Auth::login($user);
+
+        // LOGIN USING PRIMARY KEY
+        // Auth::loginUsingId(1);
 
         return redirect(RouteServiceProvider::HOME);
     }
