@@ -209,13 +209,6 @@ $cars = $query->addSelect('founded')->get();
 
 #### Raw Expression
 DB::raw()digunakan untuk membuat perintah SQL sewenang-wenang yang tidak diurai lebih jauh oleh pembuat kueri.
-
-```sql
-SELECT COUNT(*) AS founded_count
-FROM founded
-WHERE founded < 1999
-GROUP BY founded
-```
 ```php
       $cars = DB::table('cars')
              ->select(DB::raw('count(*) as founded_count, founded'))
