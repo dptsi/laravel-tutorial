@@ -45,7 +45,7 @@ return [
 ];
 ```
 #### String Terjemahan Sebagai Key
-Untuk aplikasi dengan skala besar, mendefinisikan setiap string dengan "short key" dapat membingungkan kita ketika merujuk key dalam view kita dan akan rumit untuk terus-menerus menemukan kunci untuk setiap string terjemahan yang didukung oleh aplikasi kita.
+Untuk aplikasi dengan skala besar, mendefinisikan setiap string dengan "short key" dapat membingungkan kita ketika merujuk key dalam view kita dan akan rumit untuk terus-menerus menemukan key untuk setiap string terjemahan yang didukung oleh aplikasi kita.
 
 Karena itu, Laravel dapat mendefinisikan string terjemahan menggunakan terjemahan "default" dari string sebagai key. File terjemahan yang menggunakan string terjemahan sebagai key disimpan sebagai file JSON di direktori `resources/lang`.
 ```php
