@@ -71,6 +71,18 @@ use Illuminate\Support\Facades\Auth;
     }
 ```
 
+#### Mengecek apakah user sudah terautentikasi
+
+Kita dapat menggunakan metode `check` pada `Auth` facade yang akan mereturn `true` jika user terautentikasi.
+
+```php
+use Illuminate\Support\Facades\Auth;
+
+if (Auth::check()) {
+    // The user is logged in...
+}
+```
+
 ### Langkah kedua : Autentikasi lainnya
 
 #### 1. Manual
@@ -347,4 +359,209 @@ Setelah user mengkonfirmasi passwordnya, aplikasi tidak akan meminta user untuk 
 
 ### Langkah keenam : Custom guards
 
+Untuk membuat custom guard, kita dapat menggunakan metode `extend` dari `Auth` facade. Metode ini dipanggil pada `service provider`. Berikut adalah code untuk menambahkan custom guard pada `AuthServiceProvider`.
+
+```php
+<?php
+
+namespace App\Providers;
+
+use App\Services\Auth\JwtGuard;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+
+class AuthServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application authentication / authorization services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->registerPolicies();
+
+        Auth::extend('jwt', function ($app, $name, array $config) {
+            // Return an instance of Illuminate\Contracts\Auth\Guard...
+
+            return new JwtGuard(Auth::createUserProvider($config['provider']));
+        });
+    }
+}
+```
+
+setelah custom guard didefinisikan, maka selanjutnya guard dapat direferensikan melalui file `auth.php` pada folder config.
+
+```php
+'guards' => [
+    'api' => [
+        'driver' => 'jwt',
+        'provider' => 'users',
+    ],
+],
+```
+
 ### Langkah ketujuh : Custom user providers
+
+Custom user provider dibutuhkan untuk membuat user provider autentikasi sendiri, yang mana biasa dibutuhkan apabila kita tidak menggunakan database relasional untuk menyimpan data. Digunakan metode `provider` dari facade `Auth` untuk membuat custom user provider.
+
+```php
+<?php
+
+namespace App\Providers;
+
+use App\Extensions\MongoUserProvider;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+
+class AuthServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application authentication / authorization services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->registerPolicies();
+
+        Auth::provider('mongo', function ($app, array $config) {
+            // Return an instance of Illuminate\Contracts\Auth\UserProvider...
+
+            return new MongoUserProvider($app->make('mongo.connection'));
+        });
+    }
+}
+```
+
+setelah itu, provider diregistrasi pada `auth.php`.
+
+```php
+'providers' => [
+    'users' => [
+        'driver' => 'mongo',
+    ],
+],
+```
+selanjutnya provider dapat direferensikan pada konfigurasi `guards`.
+
+```php
+'guards' => [
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
+    ],
+],
+```
+
+### Langkah kedelapan : Contract pada autentikasi
+
+Interface berikut digunakan untuk mekanisme autentikasi Laravel dapat bekerja sesuai dengan data yang ada.
+
+#### User Provider Contract
+```php
+<?php
+
+namespace Illuminate\Contracts\Auth;
+
+interface UserProvider
+{
+    public function retrieveById($identifier);
+    public function retrieveByToken($identifier, $token);
+    public function updateRememberToken(Authenticatable $user, $token);
+    public function retrieveByCredentials(array $credentials);
+    public function validateCredentials(Authenticatable $user, array $credentials);
+}
+```
+
+- `retrieveByID` : fungsi untuk menerima key yang merepresentasikan user.
+- `retrieveByToken` : gunsi yang mengambil data user berdasarkan identifier dan `remember me` token.
+- `updateRememberToken` : mengupdate `remember_token` user dengan `$token` baru. Token baru ini diberikan setelah sukses autentikasi dengan `remember me` atau setelah user logout.
+- `retrieveByCredentials` : menerima array berisi credentials dari `Auth::attempt` saat mencoba autentikasi.
+- `validateCredentials` : membandingkan `$user` dengan `$credentials` yang diberikan untuk proses autentikasi.
+
+#### Authenticable Contract
+
+User provider mereturn implementasi dari interface ini dari metode `retrieveById`, `retrieveByToken`, dan `retrieveByCredentials`
+
+```php
+<?php
+
+namespace Illuminate\Contracts\Auth;
+
+interface Authenticatable
+{
+    public function getAuthIdentifierName();
+    public function getAuthIdentifier();
+    public function getAuthPassword();
+    public function getRememberToken();
+    public function setRememberToken($value);
+    public function getRememberTokenName();
+}
+```
+
+- `getAuthIdentifierName` : mereturn nama dari primary key user.
+- `getAuthIdentifier` : mereturn primary key user.
+- `getAuthPassword` : mereturn password user setelah di-hash.
+- `getRememberToken`, `setRememberToken`, `getRememberTokenName` : berkaitan dengan token untuk fitur `remember me`.
+
+### Events
+
+Terdapat sejumlah events pada proses autentikasi yang dapat disambungkan dengan listener pada `EventServiceProvider`.
+
+```php
+/**
+ * The event listener mappings for the application.
+ *
+ * @var array
+ */
+protected $listen = [
+    'Illuminate\Auth\Events\Registered' => [
+        'App\Listeners\LogRegisteredUser',
+    ],
+
+    'Illuminate\Auth\Events\Attempting' => [
+        'App\Listeners\LogAuthenticationAttempt',
+    ],
+
+    'Illuminate\Auth\Events\Authenticated' => [
+        'App\Listeners\LogAuthenticated',
+    ],
+
+    'Illuminate\Auth\Events\Login' => [
+        'App\Listeners\LogSuccessfulLogin',
+    ],
+
+    'Illuminate\Auth\Events\Failed' => [
+        'App\Listeners\LogFailedLogin',
+    ],
+
+    'Illuminate\Auth\Events\Validated' => [
+        'App\Listeners\LogValidated',
+    ],
+
+    'Illuminate\Auth\Events\Verified' => [
+        'App\Listeners\LogVerified',
+    ],
+
+    'Illuminate\Auth\Events\Logout' => [
+        'App\Listeners\LogSuccessfulLogout',
+    ],
+
+    'Illuminate\Auth\Events\CurrentDeviceLogout' => [
+        'App\Listeners\LogCurrentDeviceLogout',
+    ],
+
+    'Illuminate\Auth\Events\OtherDeviceLogout' => [
+        'App\Listeners\LogOtherDeviceLogout',
+    ],
+
+    'Illuminate\Auth\Events\Lockout' => [
+        'App\Listeners\LogLockout',
+    ],
+
+    'Illuminate\Auth\Events\PasswordReset' => [
+        'App\Listeners\LogPasswordReset',
+    ],
+];
+```
