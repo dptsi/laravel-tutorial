@@ -5,4 +5,4 @@
 ## Daftar isi
 
 - [Laravel Localization](laravel-localization.md)
-- [File Storage](laravel-file-storage.md)
+- [Laravel File Storage](laravel-file-storage.md)
