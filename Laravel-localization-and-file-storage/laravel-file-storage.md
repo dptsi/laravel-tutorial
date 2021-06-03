@@ -89,6 +89,7 @@ Storage::put('file.jpg', $resource);
 ```
 
 - `putFile` dan `putFileAs`
+
 Method `putFile` dan `putFileAs` digunakan untuk automatic streaming suatu file. Automatic streaming meringankan beban memori:
 
 ```
@@ -153,6 +154,7 @@ class UserAvatarController extends Controller
 Untuk menghapus file, dapat digunakan method-method berikut:
 
 - `delete`
+
 Method `delete` menerima nama file tunggal atau file array yang akan dihapus:
 ```
 use Illuminate\Support\Facades\Storage;
@@ -171,6 +173,7 @@ Storage::disk('s3')->delete('path/file.jpg');
 ### Direktori
 Beberapa method yang berhubungan dengan manajemen direktori adalah sebagai berikut:
 - `files` dan `allFiles`
+
 Method `files` mengembalikan array dari semua file yang ada dalam direktori. `allFiles` digunakan jika kita ingin melibatkan semua subdirektori di dalamnya:
 ```
 use Illuminate\Support\Facades\Storage;
@@ -180,6 +183,7 @@ $files = Storage::files($directory);
 $files = Storage::allFiles($directory);
 ```
 - `directories` dan `allDirectories`
+
 Method `directories` mengembalikan array dari semua direktori yang ada dalam direktori. `allDirectories` digunakan jika kita ingin melibatkan semua subdirektori di dalamnya:
 ```
 $directories = Storage::directories($directory);
@@ -187,11 +191,13 @@ $directories = Storage::directories($directory);
 $directories = Storage::allDirectories($directory);
 ```
 - `makeDirectory`
+
 Method `makeDirectory` akan membuatkan suatu direktori beserta subdirektori yang diperlukan:
 ```
 Storage::makeDirectory($directory);
 ```
 - `deleteDirectory`
+
 Method `deleteDirectory` akan menghapus direktori dan semua file didalamnya:
 ```
 Storage::deleteDirectory($directory);
