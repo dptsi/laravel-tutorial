@@ -220,12 +220,18 @@ Di Halaman welcome Laravel `resources/views/welcome.blade.php`, Kita ganti konte
 </div>
 ```
 
+![](img/file-storage/SC1.png)
+
+![](img/file-storage/1_WelcomePage.png)
+
 ### Langkah kedua
 
 Selanjutnya, ditambahkan route ke untuk suatu controller di `routes/web.php`. Kita beri nama HomeController:
 ```
 Route::post('upload', 'App\Http\Controllers\HomeController@upload');
 ```
+
+![](img/file-storage/SC2.png)
 
 ### Langkah ketiga
 
@@ -244,4 +250,14 @@ public function upload(Request $request){
 }
 ```
 
-Controller ini akan melakukan `store` file yang telah diupload ke direktori `storage/app`, dan akan memperlihatkan nama file setelah dilakukan upload.
+![](img/file-storage/SC3.png)
+
+### Hasil
+
+Form dari view memiliki action `upload`, yang akan diroute ke `App\Http\Controllers\HomeController@upload`. Route akan memanggil controller HomeController dan menjalankan method upload. Method upload akan membuatkan suatu path yang digunakan untuk menyimpan file upload. `dd($path)` akan melakukan dump variabel `$path` yang akan menunjukkan nama file baru yang telah diupload.
+
+![](img/file-storage/1_WelcomePage.png)
+
+![](img/file-storage/2_Dump.png)
+
+![](img/file-storage/3_Result.png)
