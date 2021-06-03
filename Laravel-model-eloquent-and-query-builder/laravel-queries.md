@@ -63,7 +63,7 @@ foreach ($users as $user) {
 ```
 #### Debugging 
 
-untuk mengecek apakah variabel cars terisi dengan isi-isian maka kita dapat menggunakan fitur debug yang disediakan oleh laravel yaitu die and dump /dd
+untuk mengecek apakah variabel cars terisi maka kita dapat menggunakan fitur debug yang disediakan oleh laravel yaitu die and dump /dd
 
 ```php
 dd($cars)
