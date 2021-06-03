@@ -244,7 +244,7 @@ Formulir berubah menjadi bahasa indonesia
 ### Langkah keempat
 
 Disini kita akan membuat agar user dapat memilih bahasa yang diinginkan.
-Buat controller baru dan menambahkan fungsi index. Locale akan disimpan di session sehingga middleware dapat mendaftarkan ke aplikasinya.
+Buat controller baru dan menambahkan fungsi index.
 `php artisan make:controller LocalizationController`
 
 ```php
