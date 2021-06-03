@@ -42,6 +42,35 @@ berikut adalah tampilan halaman default laravel setelah menginstall Laravel Bree
 
 ![authentication 1](/Laravel-authentication-and-authorization/img/authentication-1.png)
 
+#### Mengambil data user terautentikasi
+
+Kita dapat mengakses data terkait user yang terautentikasi dengan metode `user` dari `Auth` facade.
+
+```php
+use Illuminate\Support\Facades\Auth;
+
+    public function retrieve(){
+        $user = Auth::user()->name;
+        $id = Auth::id();
+
+        return view('dashboard', compact(['user', 'id']));
+    }
+```
+
+selain itu, kita juga dapat mengakses user terautentikasi melalui `Illuminate\Http\Request` pada controller dengan metode `user`.
+
+```php
+use Illuminate\Support\Facades\Auth;
+
+    public function retrieve(Request $request){
+        // ALTERNATIVE
+        $user = $request->user()->name;
+        $id = $request->user()->id;
+
+        return view('dashboard', compact(['user', 'id']));
+    }
+```
+
 ### Langkah kedua : Autentikasi lainnya
 
 #### 1. Manual
@@ -86,7 +115,81 @@ class LoginController extends Controller
 
 Metode `attempt` menerima argumen pertama berupa array key atau pasangan nilai yang akan digunakan untuk mencari user pada database. Pada contoj di atas, user akan dicari berdasarkan `email`, yang apabila ditemukan maka password yang sudah di-hash di database akan dibandingkan dengan password yang ada di array. Metode `attempt` akan mereturn `true` jika autentikasi berhasil.
 
-[REMEMBER ME]
+##### Remember me
+Kita dapat menambahkan argumen kedua pada metode `attempt` untuk mengimplementasikan fitur `remember me`. Jika nilainya `true`, maka Laravel akan menjaga user tetap terautentikasi sampai user melakukan logout. Fitur ini menggunakan kolom `remember_token` pada tabel `users`.
+
+```php
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+
+            return redirect()->intended('dashboard');
+        }
+```
+
+##### Menambahkan guard
+
+Kita dapat menggunakan guard yang tersedia dalam mengautentikasi user. Dengan begini, kita dapat meengatur autentikasi untuk berbagai bagian yang berbeda dengan menggunakan model atau tabel yang berbeda.
+
+List dari guard yang tersedia dapat dilihat pada file `auth.php` dalam folder config.
+
+```php
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+            'hash' => false,
+        ],
+    ],
+```
+Berikut adalah contoh penggunaan guard `web`.
+
+```php
+        if (Auth::guard('web')->attempt($credentials, true)) {
+            $request->session()->regenerate();
+
+            return redirect()->intended('dashboard');
+        }
+```
+
+##### Throttling
+
+Laravel Breeze sudah mengimplementasikan throttling, yaitu jika user memasukkan data yang salah untuk login secara berulang kali, maka user tidak bisa melakukan login selama waktu yang ditentukan. Berikut adalah cuplikan throttling pada Laravel Breeze yang diimplementasikan pada `LoginRequest.php`.
+
+```php
+    public function ensureIsNotRateLimited()
+    {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+            return;
+        }
+
+        event(new Lockout($this));
+
+        $seconds = RateLimiter::availableIn($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'email' => trans('auth.throttle', [
+                'seconds' => $seconds,
+                'minutes' => ceil($seconds / 60),
+            ]),
+        ]);
+    }
+
+    /**
+     * Get the rate limiting throttle key for the request.
+     *
+     * @return string
+     */
+    public function throttleKey()
+    {
+        return Str::lower($this->input('email')).'|'.$this->ip();
+    }
+```
+
 
 #### 2. HTTP
 
@@ -101,8 +204,6 @@ Route::get('/profile', function () {
 Berikut adalah tampilan login menggunakan HTTP. Secara default, kolom `email` pada tabel `users` digunakan sebagai `username` di sini.
 
 ![authentication 2](/Laravel-authentication-and-authorization/img/authentication-2.png)
-
-[STATELESS]
 
 #### 3. Lainnya
 - Autentikasi instance user
@@ -172,26 +273,6 @@ public function logout(Request $request)
     return redirect('/');
 }
 ```
-
-#### Invalidate session pada device lain
-
-Laravel menyediakan cara untuk menginvalidasi atau me-*logout* session user yang aktif di device lain tanpa menginvalidasi session di device yang sekarang digunakan. Fitur ini biasa digunakan saat user mengganti password akun mereka dan ingin keluar dari device lain yang terautentikasi selain device yang sedang dipakai.
-
-Pertama-tama, pada kelas `App\Http\Kernel` bagian middleware `web`, uncomment middleware `Illuminate\Session\Middleware\AuthenticateSession`.
-
-```php
-    'web' => [
-        \App\Http\Middleware\EncryptCookies::class,
-        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-        \Illuminate\Session\Middleware\StartSession::class,
-        \Illuminate\Session\Middleware\AuthenticateSession::class,
-        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \App\Http\Middleware\VerifyCsrfToken::class,
-        \Illuminate\Routing\Middleware\SubstituteBindings::class,
-    ],
-```
-
-[LOGOUTOTHERDEVICES]
 
 ### Langkah kelima : Konfirmasi password
 
@@ -267,7 +348,3 @@ Setelah user mengkonfirmasi passwordnya, aplikasi tidak akan meminta user untuk 
 ### Langkah keenam : Custom guards
 
 ### Langkah ketujuh : Custom user providers
-
-### Langkah kedelapan : Social authentication
-
-### Langkah kesembilan : Events
