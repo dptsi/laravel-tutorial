@@ -362,4 +362,3 @@ dropdown tombol yang dimana jika kita memencet tombol English maka kita akan men
 jalankan `http://127.0.0.1:8000/form`
 ![](img/localization/dropdown.png)
 ![](img/localization/dropdown-id.png)
-
