@@ -236,7 +236,7 @@ Lalu kita jalankan kembali `http://127.0.0.1:8000/form`
 ![](img/localization/guest-form-id.png)
 Formulir berubah menjadi bahasa indonesia
 
-### Langkah keempat
+### Langkah kelima
 
 Disini kita akan membuat agar user dapat memilih bahasa yang diinginkan.
 Buat controller baru. Tambahkan fungsi index dan `use Illuminate\Support\Facades\App;` seperti berikut.
@@ -261,7 +261,7 @@ class LocalizationController extends Controller
 }
 ```
 
-### Langkah kelima
+### Langkah keenam
 
 Buat middleware baru. Tambahkan if statement dan `use Illuminate\Support\Facades\App;` seperti berikut.
 
@@ -294,7 +294,7 @@ class Localization
     }
 }
 ```
-### Langkah keenam
+### Langkah ketujuh
 
 Tambahkan middleware ke `kernel.php` pada middlewareGroups.
 ```php
@@ -311,14 +311,14 @@ protected $middlewareGroups = [
         ],
 ```
 
-### Langkah ketujuh
+### Langkah kedelapan
 
 Buat route baru untuk mengakses LocalizationController dan mempassing locale ke fungsi index.
 ```php
 Route::get('/form/{locale}', 'App\Http\Controllers\LocalizationController@index');
 ```
 
-### Langkah kedelapan
+### Langkah kesembilan
 
 Selanjutnya disini kita tambahkan kode pada view `formulir.blade.php` untuk menggunakan dropdown dalam pemilihan bahasa.
 ```php
