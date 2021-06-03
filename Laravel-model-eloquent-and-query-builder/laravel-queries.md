@@ -211,7 +211,8 @@ $cars = $query->addSelect('founded')->get();
 DB::raw()digunakan untuk membuat perintah SQL sewenang-wenang yang tidak diurai lebih jauh oleh pembuat kueri.
 
 ```sql
-SELECT COUNT(*) AS founded_count, founded
+SELECT COUNT(*) AS founded_count
+FROM founded
 WHERE founded < 1999
 GROUP BY founded
 ```
