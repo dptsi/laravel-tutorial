@@ -4,7 +4,7 @@
 
 ## Latar belakang topik
 
-Banyak aplikasi web yang menyediakan cara untuk mengautentikasi penggunanya melalui *login*. Fitur ini cukup kompleks dan beresiko untuk diimplementasikan ke dalam aplikasi web. Maka dari itu, Laravel menyediakan *tools* yang dibutuhkanm untuk mengimplementasikan autentikasi dengan cepat, aman, dan mudah.
+Banyak aplikasi web yang menyediakan cara untuk mengautentikasi penggunanya melalui *login*. Fitur ini cukup kompleks dan beresiko untuk diimplementasikan ke dalam aplikasi web. Maka dari itu, Laravel menyediakan *tools* yang dibutuhkan untuk mengimplementasikan autentikasi dengan cepat, aman, dan mudah.
 
 ## Konsep-konsep
 
@@ -41,6 +41,19 @@ npm install && npm run dev
 berikut adalah tampilan halaman default laravel setelah menginstall Laravel Breeze. Akan ada opsi `login` dan `register` di kanan atas halaman.
 
 ![authentication 1](/Laravel-authentication-and-authorization/img/authentication-1.png)
+
+berikut adalah tampilan `login`.
+
+![authentication 2](/Laravel-authentication-and-authorization/img/authentication-3.png)
+
+berikut adalah tampilan `register`.
+
+![authentication 2](/Laravel-authentication-and-authorization/img/authentication-4.png)
+
+berikut adalah tampilan `dashboard`.
+
+![authentication 2](/Laravel-authentication-and-authorization/img/authentication-5.png)
+
 
 #### Mengambil data user terautentikasi
 
@@ -217,6 +230,7 @@ Berikut adalah tampilan login menggunakan HTTP. Secara default, kolom `email` pa
 
 ![authentication 2](/Laravel-authentication-and-authorization/img/authentication-2.png)
 
+
 #### 3. Lainnya
 - Autentikasi instance user
 
@@ -356,6 +370,9 @@ Setelah user mengkonfirmasi passwordnya, aplikasi tidak akan meminta user untuk 
     // NEW TIMEOUT
     // 'password_timeout' => 30,
 ```
+berikut adalah tampilan halaman konfirmasi password.
+
+![authentication 6](/Laravel-authentication-and-authorization/img/authentication-6.png)
 
 ### Langkah keenam : Custom guards
 
@@ -475,7 +492,7 @@ interface UserProvider
 ```
 
 - `retrieveByID` : fungsi untuk menerima key yang merepresentasikan user.
-- `retrieveByToken` : gunsi yang mengambil data user berdasarkan identifier dan `remember me` token.
+- `retrieveByToken` : fungsi yang mengambil data user berdasarkan identifier dan `remember me` token.
 - `updateRememberToken` : mengupdate `remember_token` user dengan `$token` baru. Token baru ini diberikan setelah sukses autentikasi dengan `remember me` atau setelah user logout.
 - `retrieveByCredentials` : menerima array berisi credentials dari `Auth::attempt` saat mencoba autentikasi.
 - `validateCredentials` : membandingkan `$user` dengan `$credentials` yang diberikan untuk proses autentikasi.
