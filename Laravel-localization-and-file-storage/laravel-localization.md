@@ -113,8 +113,8 @@ Contoh, jika kita ingin menimpa string terjemahan bahasa inggris pada messages.p
 ### Langkah pertama
 
 Buat file baru untuk menyimpan string terjemahan. Untuk contoh disini menggunakan 2 bahasa yaitu bahasa inggris dan bahasa indonesia.
-`resources/lang/en/form`
-`resources/lang/id/form`
+`resources/lang/en/form.php`
+`resources/lang/id/form.php`
 
 
 ```php
