@@ -209,7 +209,7 @@ Untuk uji coba file storage, akan dibuat sebuah modul untuk upload file.
 
 ### Langkah pertama
 
-Di Halaman welcome Laravel (resources/views/welcome.blade.php), Kita ganti konten dalam welcome page menjadi upload file:
+Di Halaman welcome Laravel `resources/views/welcome.blade.php`, Kita ganti konten dalam welcome page menjadi upload file:
 ```
 <div>
     <form action="upload" method="post" enctype="multipart/form-data">
