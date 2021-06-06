@@ -12,6 +12,24 @@ Laravel mendukung berbagai caching backend populer seperti Memcached, Redis, Dyn
 
 Secara default, Laravel dikonfigurasikan untuk menggunakan file sebagai cache drivernya. Akan tetapi, untuk aplikasi yang lebih besar, disarankan untuk menggunakan driver yang lebih kuat seperti Memcached atau Redis.
 
+## Driver Prerequisites
+
+### Database
+
+Ketika ingin menggunakan `database` sebagai cache driver, kita perlu mengatur sebuah tabel yang akan menyimpan item cache. Contoh deklarasi `Schema` untuk tabel tersebut bisa dilihat pada kode di bawah.
+
+```php
+Schema::create('cache', function ($table) {
+    $table->string('key')->unique();
+    $table->text('value');
+    $table->integer('expiration');
+});
+```
+
+### Cache Driver Lain
+
+Apabila ingin menggunakan cache driver yang lain seperti [Memcached](https://laravel.com/docs/8.x/cache#memcached), [Redis](https://laravel.com/docs/8.x/cache#redis), dan [DynamoDB](https://laravel.com/docs/8.x/cache#dynamodb) dapat dilihat pada [Dokumentasi Cache Laravel](https://laravel.com/docs/8.x/cache).
+
 ## Langkah-langkah tutorial
 
 ### Langkah pertama: Mendapatkan cache instance
@@ -134,7 +152,7 @@ $value = Cache::pull('key');
 Menghapus item dari cache dapat dilakukan dengan menggunakan metode `forget`.
 
 ```php
-Cache::forget('key);
+Cache::forget('key');
 ```
 
 Selain itu, juga dapat dilakukan dengan memberikan nilai 0 atau negatif pada expiration time metode `put` seperti di bawah ini.
@@ -148,4 +166,109 @@ Atau kita juga dapat menghapus seluruh cache dengan menggunakan metode `flush`.
 
 ```php
 Cache::flush();
+```
+
+## Langkah Tambahan (Atomic Locks)
+### Driver Prerequisites
+
+Jika menggunakan database sebagai cache driver, terlebih dahulu kita perlu mengatur sebuah tabel yang akan berisi cache lock aplikasi kita. Untuk contoh deklarasi `Schema` dapat dilihat di bawah.
+
+```php
+Schema::create('cache_locks', function ($table) {
+    $table->string('key')->primary();
+    $table->string('owner');
+    $table->integer('expiration');
+});
+```
+
+### Langkah kelima: Mengelola locks
+
+Atomic locks memungkinkan kita memanipulasi locks terdistribusi tanpa mengkhawatirkan race condition. Kita dapat membuat serta mengelola locks dengan metode `Cache::lock`.
+
+```php
+use Illuminate\Support\Facades\Cache;
+
+$lock = Cache::lock('foo', 10);
+
+if ($lock->get()) {
+    // Lock acquired for 10 seconds...
+
+    $lock->release();
+}
+```
+
+Jika lock tidak tersedia ketika kita memintanya, kita dapat menginstruksikan Laravel untuk menunggu beberapa saat. Jika lock tidak dapat diperoleh dalam batas waktu tersebut, `Illuminate\Contracts\Cache\LockTimeoutException` akan di-throw seperti pada kode di bawah ini.
+
+```php
+use Illuminate\Contracts\Cache\LockTimeoutException;
+
+$lock = Cache::lock('foo', 10);
+
+try {
+    $lock->block(5);
+
+    // Lock acquired after waiting a maximum of 5 seconds...
+} catch (LockTimeoutException $e) {
+    // Unable to acquire lock...
+} finally {
+    optional($lock)->release();
+}
+```
+
+Kode di atas dapat disederhanakan dengan meneruskan closure ke metode `block` seperti di bawah ini.
+
+```php
+Cache::lock('foo', 10)->block(5, function () {
+    // Lock acquired after waiting a maximum of 5 seconds...
+});
+```
+
+## Cache Tags
+
+Cache tags tidak didukung saat menggunakan file, dynamodb, atau database sebagai cache driver. Dengan cache tags, kita juga ada menggunakan metode `put` untuk menyimpan tagged cache item, metode `get` untuk mengakses tagged cache item, dan metode `flush` untuk menghapus tagged cache item.
+
+```php
+
+// Storing Tagged Cache Items
+Cache::tags(['people', 'artists'])->put('John', $john, $seconds);
+Cache::tags(['people', 'authors'])->put('Anne', $anne, $seconds);
+
+// Accessing Tagged Cache Items
+$john = Cache::tags(['people', 'artists'])->get('John');
+$anne = Cache::tags(['people', 'authors'])->get('Anne');
+
+// Removing Tagged Cache Items
+Cache::tags(['people', 'authors'])->flush();
+Cache::tags('authors')->flush();
+
+```
+
+## Event
+
+Ketika mengeksekusi kode pada setiap operasi cache, kita juga dapat mendengarkan `event` yang dipicu oleh cache. Biasanya kita perlu menempatkan event listeners dalam class `App\Providers\EventServiceProvider` ke dalam aplikasi kita.
+
+```php
+/**
+ * The event listener mappings for the application.
+ *
+ * @var array
+ */
+protected $listen = [
+    'Illuminate\Cache\Events\CacheHit' => [
+        'App\Listeners\LogCacheHit',
+    ],
+
+    'Illuminate\Cache\Events\CacheMissed' => [
+        'App\Listeners\LogCacheMissed',
+    ],
+
+    'Illuminate\Cache\Events\KeyForgotten' => [
+        'App\Listeners\LogKeyForgotten',
+    ],
+
+    'Illuminate\Cache\Events\KeyWritten' => [
+        'App\Listeners\LogKeyWritten',
+    ],
+];
+
 ```
