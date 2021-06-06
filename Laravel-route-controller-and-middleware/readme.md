@@ -4,5 +4,7 @@
 
 ## Daftar isi
 
-- [Topik 1](topic-1.md)
-- [Topik 2](topic-2.md)
+-   [Laravel Route Basic](laravel-route-basic.md)
+-   [Laravel Route Dengan Parameter](laravel-route-parameter.md)
+-   [Laravel Middleware](laravel-middleware.md)
+-   [Laravel Controller](laravel-controller.md)
