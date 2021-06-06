@@ -4,7 +4,7 @@
 
 ## Latar belakang topik
 
-Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
+Setelah memahami cara membuat dan menggunakan sebuah package Composer, kunci pertama dari membuat sebuah package Laravel adalah **service provider.** Service provider adalah 
 
 ## Konsep-konsep
 

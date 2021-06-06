@@ -1,0 +1,6 @@
+{
+	"minimum-stability": "dev",
+	"require": {
+		"1maximuse/hello-composer": "9999999-dev"
+	}
+}

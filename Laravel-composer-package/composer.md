@@ -107,8 +107,6 @@ class HelloWorld {
         return "Hello, world!";
     }
 }
-
-?>
 ```
 
 ### Langkah keempat
@@ -219,8 +217,6 @@ use maximuse\HelloWorld\HelloWorld;
 $hello_world = new HelloWorld();
 
 echo $hello_world->hello();
-
-?>
 ```
 
 Dapat diperhatikan bahwa sebelum menggunakan semua kelas-kelas pada package dependency, diperlukan melakukan autoloading terlebih dahulu dengan menggunakan:
