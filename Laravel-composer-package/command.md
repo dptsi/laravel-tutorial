@@ -7,19 +7,19 @@ Pernah mendengar artisan? Yaa benar, Laravel dikirimkan dengan file executable `
 
 ## Konsep-konsep
 
-Command biasanya kita ketikkan pada Command Line Interface (CLI). Yang mana, kita dapat memasukkan command command yang kita butuhkan seperti `php artisan make:controller Post` dan `php artisan serve`. Pada modul ini kita akan belajar bagaimana cara membuat artisan command yang sederhana untuk end user kita.
+Command biasanya kita ketikkan pada Command Line Interface (CLI). Yang mana, kita dapat memasukkan command command yang kita butuhkan seperti `php artisan make:controller Post` dan `php artisan serve`. Kita perlu untuk membuat kelas yang mengextend `Command` pada `use Illuminate\Console\Command`. Kelas ini nantinya akan memiliki:
+- `$signature` yang merupakan merupakan command yang akan kita gunakan
+- `$description` yang merupakan deskripsi dari command ini
+- `handle()` yang merupakan method yang berisi apa yang akan command kita lakukan.
+
+Kelas ini akan berada pada folder `Console` pada `src/`. Pada modul ini kita akan belajar bagaimana cara membuat artisan command yang sederhana untuk end user kita.
 
 ## Langkah-langkah tutorial
 Pada tutorial ini, kita akan membuat command `php artisan helloworld:install` yang mana memudahkan user untuk mempublish file konfigurasi.
 
 ### Langkah pertama
 
-Buat folder bernama `Console` pada `src/` dan buat file bernama `InstallHelloWorld.php`. Kemudian, kita extend kelas ini dengan `Command` pada `use Illuminate\Console\Command`. Kelas ini akan memiliki properti beberapa komponen seperti:
-- `$signature` yang merupakan merupakan command yang akan kita gunakan
-- `$description` yang merupakan deskripsi dari command ini
-- `handle()` yang merupakan method yang berisi apa yang akan command kita lakukan
-
-Pada tutorial ini, kita akan memberi info ketika kita menginstall, kemudian kita akan memanggil command lain untuk mempublish file config, kita juga akan mengecek apakah file config sudah ada atau belum.
+Buat kelas bernama `InstallHelloWorld.php` dan letakkan pada `src/Console`. Kita akan kita gunakan sebagai kelas pengatur command kita. Kelas ini akan memberi info ketika kita menginstall, kemudian akan memanggil command lain untuk mempublish file config, juga akan mengecek apakah file config sudah ada atau belum.
 
 ```php
 <?php

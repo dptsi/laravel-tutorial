@@ -2,10 +2,10 @@
 
 namespace maximuse\HelloWorld;
 
-class HelloWorld {
-    public function hello() {
+class HelloWorld
+{
+    public function hello()
+    {
         return "Hello, world!";
     }
 }
-
-?>

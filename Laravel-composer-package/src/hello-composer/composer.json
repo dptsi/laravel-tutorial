@@ -3,16 +3,35 @@
     "description": "Simple hello world Composer package.",
     "type": "library",
     "authors": [
-      {
-        "name": "Emmanuel Maximus",
-        "email": "geofanny.emmanuel@gmail.com"
-      }
+        {
+            "name": "Emmanuel Maximus",
+            "email": "geofanny.emmanuel@gmail.com"
+        }
     ],
     "license": "MIT",
     "require": {},
+    "require-dev": {
+        "orchestra/testbench": "6.0",
+        "phpunit/phpunit": "^9.5"
+    },
     "autoload": {
         "psr-4": {
             "maximuse\\HelloWorld\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "maximuse\\HelloWorld\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "maximuse\\HelloWorld\\CalculatorServiceProvider"
+            ],
+            "aliases": {
+                "Calculator": "maximuse\\HelloWorld\\Facades\\Calculator"
+            }
+        }
     }
-  }
+}

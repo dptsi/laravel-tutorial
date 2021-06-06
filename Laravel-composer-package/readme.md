@@ -8,9 +8,9 @@
 - [Orchestra Testbench & Testing](orchestra-testbench-testing.md)
 - [Service Provider](service-provider.md)
 - [Facade](facade.md)
+- [Configuration](configuration.md)
 - [Command](command.md)
-- [Konfigurasi]
-- [Model & Migrasi]
-- [Controller, Route, View]
-- [Event System]
-- [Middleware]
+- [Models & Migrations](models-migrations.md)
+- [Controller, Route, View](controller-route-view.md)
+- [Events & Listeners](events-listeners.md)
+- [Middleware](middleware.md)

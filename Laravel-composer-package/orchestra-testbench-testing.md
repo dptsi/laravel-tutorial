@@ -1,10 +1,10 @@
-# Topik 2
+# Orchestra Testbench & Testing
 
 [Kembali](readme.md)
 
 ## Latar belakang topik
 
-Dalam pembuatan sebuah package Laravel kita akan membutuhkan akses ke komponen-komponen bawaan dari Laravel (Illuminate). Kita tidak menggunakan project Laravel secara langsung sebagai dependency, oleh karena itu kita dapat mengggunakan sebuah package untuk membantu, [Orchestra Testbench](https://github.com/orchestral/testbench).
+Dkalam pembuatan sebuah package Laravel kita akan membutuhkan akses ke komponen-komponen bawaan dari Laravel (Illuminate). Kita tidak menggunakan project Laravel secara langsung sebagai dependency, oleh karena itu kita dapat mengggunakan sebuah package untuk membantu, [Orchestra Testbench](https://github.com/orchestral/testbench).
 
 ## Konsep-konsep
 
