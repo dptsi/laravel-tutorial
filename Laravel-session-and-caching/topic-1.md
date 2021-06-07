@@ -1,4 +1,4 @@
-# Topik 1
+# Session
 
 [Kembali](readme.md)
 
@@ -8,7 +8,7 @@ Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
 
 ## Konsep-konsep
 
-Misal: jelaskan mengenai pengertian, konsep, alur, dll.
+
 
 ## Langkah-langkah tutorial
 
