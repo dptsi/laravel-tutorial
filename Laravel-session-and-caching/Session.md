@@ -36,8 +36,13 @@ Dapat juga menggunakan artisan command **session:table** untuk melakukan generat
 Untuk session driver menggunakan **redis** dapat dilihat pada dokumentasi [Redis](https://laravel.com/docs/8.x/redis#configuration).
 
 ## Langkah-langkah tutorial
+Dalam mengoperasikan session dapat menggunakan 2 cara :
+1. **Request Instance**
+2. **Global Session Helper**
+3. 
+Namun, session sering kali menggunakan **Request Instance** untuk operasi sessions dengan bantuan permintaan HTTP.
 
-### Langkah pertama
+### Langkah pertama : 
 
 Misal: Buat class `Contoh`
 
