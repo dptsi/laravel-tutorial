@@ -7,7 +7,7 @@
 Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
 
 ## Konsep-konsep
-Session menyediakan cara untuk menyimpan informasi pengguna di beberapa permintaan di server. File Konfigurasi session disimpan di **config/session/php**. Secara default, Laravel dikonfigurasi untuk menggunakan **file** session driver yang kompatibel dengan banyak aplikasi. Konfigurasi Session driver menentukan dimana session data akan disimpan untuk setiap permintaan. Jenis backend popular untuk session driver antara lain :
+Session menyediakan cara untuk menyimpan informasi pengguna di beberapa permintaan di server. File Konfigurasi session disimpan di `config/session/php`. Secara default, Laravel dikonfigurasi untuk menggunakan `file` session driver yang kompatibel dengan banyak aplikasi. Konfigurasi Session driver menentukan dimana session data akan disimpan untuk setiap permintaan. Jenis backend popular untuk session driver antara lain :
 1. **File** - sessions yang disimpan di **storage/framework/sessions**.
 2. **Cookie** - sessions yang disimpan di secure, encrypted cookies.
 3. **Database** - sessions yang disimpan di relational database.
@@ -17,7 +17,7 @@ Session menyediakan cara untuk menyimpan informasi pengguna di beberapa perminta
 
 ## Driver Prerequisites
 ### Database
-Ketika menggunakan **database** session driver, maka perlu membuat sebuah tabel atau migrasi untuk menyimpan **session record**. Schema untuk tabel :
+Ketika menggunakan `database` session driver, maka perlu membuat sebuah tabel atau migrasi untuk menyimpan **session record**. Schema untuk tabel :
 ```php
 Schema::create('sessions', function ($table) {
     $table->string('id')->primary();
@@ -28,39 +28,55 @@ Schema::create('sessions', function ($table) {
     $table->integer('last_activity')->index();
 });
 ```
-Dapat juga menggunakan artisan command **session:table** untuk melakukan generate migrasi sessions.<br>
+Dapat juga menggunakan artisan command `session:table` untuk melakukan generate migrasi sessions.<br>
 `php artisan session:table`<br>
 `php artisan migrate`
 
 ### Redis
-Untuk session driver menggunakan **redis** dapat dilihat pada dokumentasi [Redis](https://laravel.com/docs/8.x/redis#configuration).
+Untuk session driver menggunakan redis dapat dilihat pada dokumentasi [Redis](https://laravel.com/docs/8.x/redis#configuration).
 
 ## Langkah-langkah tutorial
 Dalam mengoperasikan session dapat menggunakan 2 cara :
-1. **Request Instance**
-2. **Global Session Helper**
-3. 
+1. **Request Instance** - operasi sessions di controller.
+2. **Global Session Helper** - operasi sessions di controller dan dapat digunakan dalam file html.
 Namun, session sering kali menggunakan **Request Instance** untuk operasi sessions dengan bantuan permintaan HTTP.
 
-### Langkah pertama : 
-
-Misal: Buat class `Contoh`
-
+### Langkah pertama : Membuat Controller
+Untuk membuat controller dapat menggunakan Artisan command `php artisan make:controller NamaController`. 
+Controller yang telah dibuat dapat ditemukan di **app/Http/Controllers**. 
 ```php
 <?php
 
+namespace App\Http\Controllers;
 
-namespace DummyNamespace;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-
-class Contoh
+class SessionController extends Controller
 {
-    public function fungsi($request)
+    /**
+     * Show the profile for the given user.
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return Response
+     */
+    public function show(Request $request, $id)
     {
-        ...
-    }
+        $value = $request->session()->get('key');
 
+        //
+    }
 }
 ```
+### Langkah kedua : Menyimpan Item / Data di Session
+Untuk menyimpan data di session, kita dapat menggunakan `put` method :
+```php
+// Via a request instance...
+$request->session()->put('key', 'value');
 
-### Langkah kedua
+// Via the global "session" helper...
+session(['key' => 'value']);
+```
+
+
