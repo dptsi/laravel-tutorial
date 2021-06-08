@@ -69,8 +69,8 @@ class SessionController extends Controller
     }
 }
 ```
-### Langkah kedua : Menyimpan Item / Data di Session
-Untuk menyimpan data di session, kita dapat menggunakan `put` method :
+### Langkah kedua : Menyimpan item di Session
+Untuk menyimpan item di session, kita dapat menggunakan `put` method :
 ```php
 // Via a request instance...
 $request->session()->put('key', 'value');
@@ -78,7 +78,7 @@ $request->session()->put('key', 'value');
 // Via the global "session" helper...
 session(['key' => 'value']);
 ```
-Untuk mendapatkan hasil penyimpanan data berupa array di dalam session, dapat menggunkan code sebagai berikut :
+Untuk mendapatkan hasil penyimpanan item berupa array di dalam session, dapat menggunakan code sebagai berikut :
 ```php
 // Via a request instance...
 $request->session()->put('key', ['value']);
@@ -91,4 +91,44 @@ session(['key' => ['value']]);
 ```php
  $request->session()->push('nama', 'nada');
  ```
- 
+## Langkah ketiga : Mengambil item dari session
+Untuk mengambil item dari session, maka dapat menggunakan `get`method. Apabila item value tidak ada di dalam session, kita dapat meneruskan default value sebagai argumen kedua untuk metode `get`. 
+```php
+// Via a request instance...
+$value = $request->session()->get('key');
+$value = $request->session()->get('key', 'default');
+
+// Via the global "session" helper...
+$value = session('key');
+$value = session('key', 'default');
+```
+#### Mengambil semua session data 
+Jika ingin mengambil semua data di dalam session, kita dapat menggunakan `all` method :
+```php
+$data = $request->session()->all();
+```
+#### Memeriksa keberadaan item di dalam session
+Untuk memeriksa keberadaan item, kita bisa menggunakan `has` method. Metode ini mengembalikan `true` jika item ada dan tidak bernilai `null` :
+```php
+if ($request->session()->has('key')) {
+    //
+}
+```
+Untuk memeriksa apakah item ada di dalam session, bahkan jika bernilai `null`, kita bisa menggunakan `exist` method :
+```php
+if ($request->session()->exists('users')) {
+    //
+}
+```
+Metode lain yang dapat digunakan adalah `missing` method. Metode ini mengembalikan nilai `true` jika item tidak ada di dalam session atau bernilai `null` :
+```php
+if ($request->session()->missing('users')) {
+    //
+}
+```
+#### Mengambil dan menghapus item
+`pull` method akan mengambil dan menghapus item dari session :
+```php
+$value = $request->session()->pull('key', 'default');
+```
+
