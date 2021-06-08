@@ -69,8 +69,8 @@ class SessionController extends Controller
     }
 }
 ```
-### Langkah kedua : Menyimpan item di Session
-Untuk menyimpan item di session, kita dapat menggunakan `put` method :
+### Langkah kedua : Menyimpan Data
+Untuk menyimpan item di session, kita dapat menggunakan metode `put` :
 ```php
 // Via a request instance...
 $request->session()->put('key', 'value');
@@ -87,12 +87,12 @@ $request->session()->put('key', ['value']);
 session(['key' => ['value']]);
 ```
 #### Memasukkan value ke array session
-`push` method bisa digunakan untuk memasukkan atau mendorong sebuah value baru ke dalam session array. Misalnya, **nama** disini berisi sebuah array dari nama-nama user, kita dapat memasukkan sebuah value baru ke dalam array seperti ini :
+Metode `push` bisa digunakan untuk memasukkan atau mendorong sebuah value baru ke dalam session array. Misalnya, **nama** disini berisi sebuah array dari nama-nama user, kita dapat memasukkan sebuah value baru ke dalam array seperti ini :
 ```php
  $request->session()->push('nama', 'nada');
  ```
-## Langkah ketiga : Mengambil item dari session
-Untuk mengambil item dari session, maka dapat menggunakan `get`method. Apabila item value tidak ada di dalam session, kita dapat meneruskan default value sebagai argumen kedua untuk metode `get`. 
+## Langkah ketiga : Mengambil Data
+Untuk mengambil item dari session, maka dapat menggunakan metode `get`. Apabila item value tidak ada di dalam session, kita dapat meneruskan default value sebagai argumen kedua untuk metode `get`. 
 ```php
 // Via a request instance...
 $value = $request->session()->get('key');
@@ -103,32 +103,63 @@ $value = session('key');
 $value = session('key', 'default');
 ```
 #### Mengambil semua session data 
-Jika ingin mengambil semua data di dalam session, kita dapat menggunakan `all` method :
+Jika ingin mengambil semua data di dalam session, kita dapat menggunakan metode `all`:
 ```php
 $data = $request->session()->all();
 ```
 #### Memeriksa keberadaan item di dalam session
-Untuk memeriksa keberadaan item, kita bisa menggunakan `has` method. Metode ini mengembalikan `true` jika item ada dan tidak bernilai `null` :
+Untuk memeriksa keberadaan item, kita bisa menggunakan metode `has`. Metode ini mengembalikan `true` jika item ada dan tidak bernilai `null` :
 ```php
 if ($request->session()->has('key')) {
     //
 }
 ```
-Untuk memeriksa apakah item ada di dalam session, bahkan jika bernilai `null`, kita bisa menggunakan `exist` method :
+Untuk memeriksa apakah item ada di dalam session, bahkan jika bernilai `null`, kita bisa menggunakan metode `exist`:
 ```php
 if ($request->session()->exists('key')) {
     //
 }
 ```
-Metode lain yang dapat digunakan adalah `missing` method. Metode ini mengembalikan nilai `true` jika item tidak ada di dalam session atau bernilai `null` :
+Metode lain yang dapat digunakan adalah metode `missing`. Metode ini mengembalikan nilai `true` jika item tidak ada di dalam session atau bernilai `null` :
 ```php
 if ($request->session()->missing('key')) {
     //
 }
 ```
 #### Mengambil dan menghapus item
-`pull` method akan mengambil dan menghapus item dari session :
+Metode `pull` akan mengambil dan menghapus item dari session :
 ```php
 $value = $request->session()->pull('key', 'default');
 ```
+#### Increment dan Decrement Values
+Jika session data berisi integer ingin ditambah atau dikurangi, kita dapat mengguanakan metode `increment` dan `decrement` :
+```php
+$request->session()->increment('count');
 
+$request->session()->increment('count', $incrementBy = 2);
+
+$request->session()->decrement('count');
+
+$request->session()->decrement('count', $decrementBy = 2);
+```
+### Langkat keempat : Menghapus Data
+Metoda `forget` akan menghapus sebuah data dari session :
+```php
+// Forget a single key...
+$request->session()->forget('key');
+
+// Forget multiple keys...
+$request->session()->forget(['key1', 'key2']);
+```
+Jika kita ingin menghapus semua data dari session, kita dapat menggunakan metode `flush` :
+```php
+$request->session()->flush();
+```
+# Langkah Lainnya 
+## Flash Data
+## Regenerating Session ID
+
+# Session Blocking
+
+# Custom Session Drivers
+## 
