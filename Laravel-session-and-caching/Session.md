@@ -29,7 +29,7 @@ Schema::create('sessions', function ($table) {
 });
 ```
 Dapat juga menggunakan artisan command **session:table** untuk melakukan generate migrasi sessions. 
-`php artisan session:table`
+`php artisan session:table`<br>
 `php artisan migrate`
 
 ## Langkah-langkah tutorial
