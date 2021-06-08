@@ -28,7 +28,9 @@ Schema::create('sessions', function ($table) {
     $table->integer('last_activity')->index();
 });
 ```
-
+Dapat juga menggunakan artisan command **session:table** untuk melakukan generate migrasi sessions. 
+`php artisan session:table`
+`php artisan migrate`
 
 ## Langkah-langkah tutorial
 
