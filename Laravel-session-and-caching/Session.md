@@ -116,13 +116,13 @@ if ($request->session()->has('key')) {
 ```
 Untuk memeriksa apakah item ada di dalam session, bahkan jika bernilai `null`, kita bisa menggunakan `exist` method :
 ```php
-if ($request->session()->exists('users')) {
+if ($request->session()->exists('key')) {
     //
 }
 ```
 Metode lain yang dapat digunakan adalah `missing` method. Metode ini mengembalikan nilai `true` jika item tidak ada di dalam session atau bernilai `null` :
 ```php
-if ($request->session()->missing('users')) {
+if ($request->session()->missing('key')) {
     //
 }
 ```
