@@ -18,16 +18,15 @@ Session menyediakan cara untuk menyimpan informasi pengguna di beberapa perminta
 ## Driver Prerequisites
 ### Database
 Ketika menggunakan **database** session driver, maka perlu membuat sebuah tabel atau migrasi untuk menyimpan **session record**. Schema untuk tabel :
-```
-	Schema::create('sessions', function ($table) 
-    {
-        $table->string('id')->primary();
-        $table->foreignId('user_id')->nullable()->index();
-        $table->string('ip_address', 45)->nullable();
-        $table->text('user_agent')->nullable();
-        $table->text('payload');
-        $table->integer('last_activity')->index();
-    });
+```php
+Schema::create('sessions', function ($table) {
+    $table->string('id')->primary();
+    $table->foreignId('user_id')->nullable()->index();
+    $table->string('ip_address', 45)->nullable();
+    $table->text('user_agent')->nullable();
+    $table->text('payload');
+    $table->integer('last_activity')->index();
+});
 ```
 
 
