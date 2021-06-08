@@ -28,9 +28,12 @@ Schema::create('sessions', function ($table) {
     $table->integer('last_activity')->index();
 });
 ```
-Dapat juga menggunakan artisan command **session:table** untuk melakukan generate migrasi sessions. 
+Dapat juga menggunakan artisan command **session:table** untuk melakukan generate migrasi sessions.<br>
 `php artisan session:table`<br>
 `php artisan migrate`
+
+### Redis
+Untuk session driver menggunakan **redis** dapat dilihat pada dokumentasi [Redis](https://laravel.com/docs/8.x/redis#configuration).
 
 ## Langkah-langkah tutorial
 
