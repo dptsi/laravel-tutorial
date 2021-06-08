@@ -78,5 +78,17 @@ $request->session()->put('key', 'value');
 // Via the global "session" helper...
 session(['key' => 'value']);
 ```
+Untuk mendapatkan hasil penyimpanan data berupa array di dalam session, dapat menggunkan code sebagai berikut :
+```php
+// Via a request instance...
+$request->session()->put('key', ['value']);
 
-
+// Via the global "session" helper...
+session(['key' => ['value']]);
+```
+#### Memasukkan value ke array session
+`push` method bisa digunakan untuk memasukkan atau mendorong sebuah value baru ke dalam session array. Misalnya, **nama** disini berisi sebuah array dari nama-nama user, kita dapat memasukkan sebuah value baru ke dalam array seperti ini :
+```php
+ $request->session()->push('nama', 'nada');
+ ```
+ 
