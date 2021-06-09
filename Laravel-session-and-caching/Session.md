@@ -78,7 +78,7 @@ public function store (Request $request){
 }
 ```
 Dalam pengoperasiannya, silahkan menggunakan salah satu cara penyimpanan diatas, request instance atau global helper. Saat dijalankan, maka akan muncul tulisan dari echo di atas :
-![alt text](C:\xampp\htdocs\pbkk_coba\public\images\store.jpg)
+JPG
 
 Untuk mendapatkan hasil penyimpanan item berupa array di dalam session, dapat menggunakan code sebagai berikut :
 ```php
