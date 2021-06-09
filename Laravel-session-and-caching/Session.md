@@ -42,14 +42,13 @@ Dalam mengoperasikan session dapat menggunakan 2 cara :
 Namun, session sering kali menggunakan **Request Instance** untuk operasi sessions dengan bantuan permintaan HTTP.
 
 ### Langkah pertama : Membuat Controller
-Untuk membuat controller dapat menggunakan Artisan command `php artisan make:controller NamaController`. 
-Controller yang telah dibuat dapat ditemukan di **app/Http/Controllers**. 
+Untuk membuat controller dapat menggunakan Artisan command `php artisan make:controller NamaController`. Disini saya membuat controller dengan nama `SessionController`. Controller yang telah dibuat dapat ditemukan di **app/Http/Controllers**. 
 ```php
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 
 class SessionController extends Controller
@@ -61,30 +60,39 @@ class SessionController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show(Request $request, $id)
-    {
-        $value = $request->session()->get('key');
-
-        //
-    }
 }
 ```
 ### Langkah kedua : Menyimpan Data
-Untuk menyimpan item di session, kita dapat menggunakan metode `put` :
+Pada langkah kedua ini adalah langkah pertama untuk berinteraksi dengan session dan method-method yang digunakan dalam session. Tentunya saat ini di dalam session masih belum ada data yang disimpan. Maka untuk menyimpan item atau data di session, kita dapat menggunakan metode `put` :
 ```php
-// Via a request instance...
-$request->session()->put('key', 'value');
-
-// Via the global "session" helper...
-session(['key' => 'value']);
+public function store (Request $request){
+    // REQUEST INSTANCE
+    $request->session()->put('nama', 'vania');
+    $request->session()->put('alamat', 'pasuruan');
+    
+    // GLOBAL HELPER
+    $nama = Session (['nama' => 'vania']);
+    $alamat = Session (['alamat' => 'pasuruan']);
+    
+    echo "Data telah disimpan";
+}
 ```
+Dalam pengoperasiannya, silahkan menggunakan salah satu cara penyimpanan diatas, request instance atau global helper. Saat dijalankan, maka akan muncul tulisan dari echo di atas :
+
+
 Untuk mendapatkan hasil penyimpanan item berupa array di dalam session, dapat menggunakan code sebagai berikut :
 ```php
-// Via a request instance...
-$request->session()->put('key', ['value']);
-
-// Via the global "session" helper...
-session(['key' => ['value']]);
+public function store (Request $request){
+    // REQUEST INSTANCE
+    $request->session()->put('nama', ['vania']);
+    $request->session()->put('alamat', ['pasuruan']);
+    
+    // GLOBAL HELPER
+    $nama = Session (['nama' => ['vania']]);
+    $alamat = Session (['alamat' => ['pasuruan']]);
+    
+    echo "Data telah disimpan";
+}
 ```
 #### Memasukkan value ke array session
 Metode `push` bisa digunakan untuk memasukkan atau mendorong sebuah value baru ke dalam session array. Misalnya, **nama** disini berisi sebuah array dari nama-nama user, kita dapat memasukkan sebuah value baru ke dalam array seperti ini :
