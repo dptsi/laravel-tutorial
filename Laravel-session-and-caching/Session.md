@@ -37,12 +37,12 @@ Untuk session driver menggunakan redis dapat dilihat pada dokumentasi [Redis](ht
 
 ## Langkah-langkah tutorial
 Dalam mengoperasikan session dapat menggunakan 2 cara :
-1. **Request Instance** - operasi sessions di controller.
-2. **Global Session Helper** - operasi sessions di controller dan dapat digunakan dalam file html.
-Namun, session sering kali menggunakan **Request Instance** untuk operasi sessions dengan bantuan permintaan HTTP.
+1. `Request Instance` : operasi sessions di controller.
+2. `Global Session Helper` : operasi sessions di controller dan dapat digunakan dalam file html.
+Namun, session sering kali menggunakan `Request Instance` untuk melakukan operasi sessions dengan bantuan permintaan HTTP.
 
 ### Langkah pertama : Membuat Controller
-Untuk membuat controller dapat menggunakan Artisan command `php artisan make:controller NamaController`. Disini saya membuat controller dengan nama `SessionController`. Controller yang telah dibuat dapat ditemukan di **app/Http/Controllers**. 
+Untuk membuat controller dapat menggunakan Artisan command `php artisan make:controller NamaController`. Disini saya membuat controller dengan nama `SessionController`. Controller yang telah dibuat dapat ditemukan di `app/Http/Controllers`. 
 ```php
 <?php
 
@@ -63,7 +63,7 @@ class SessionController extends Controller
 }
 ```
 ### Langkah kedua : Menyimpan Data
-Pada langkah kedua ini adalah langkah pertama untuk berinteraksi dengan session dan method-method yang digunakan dalam session. Tentunya saat ini di dalam session masih belum ada data yang disimpan. Maka untuk menyimpan item atau data di session, kita dapat menggunakan metode `put` :
+Pada langkah kedua ini adalah langkah pertama untuk berinteraksi dengan session dan beberapa metode yang digunakan dalam session. Tentunya saat ini di dalam session masih belum ada data yang disimpan. Maka untuk menyimpan item atau data di session, kita dapat menggunakan metode `put` :
 ```php
 public function store (Request $request){
     // REQUEST INSTANCE
@@ -77,10 +77,10 @@ public function store (Request $request){
     echo "Data telah disimpan";
 }
 ```
-Silahkah pilih salah satu dari jenis pengoperasian diatas yaitu menggunakan request instance atau global helper. Hasil yang didapatkan setelah mengoperasikan code session diatas yaitu sebagai berikut :
+Silahkah pilih salah satu dari jenis pengoperasian diatas yaitu menggunakan `request instance` atau `global helper`. Hasil yang didapatkan setelah mengoperasikan fungsi session diatas yaitu sebagai berikut :
 JPG - STORE
 
-Untuk mendapatkan hasil penyimpanan item berupa array di dalam session, dapat menggunakan fungsi sebagai berikut :
+Untuk mendapatkan hasil penyimpanan item berupa `array` di dalam session, dapat menggunakan fungsi sebagai berikut :
 ```php
 public function store (Request $request){
     // REQUEST INSTANCE
@@ -94,7 +94,7 @@ public function store (Request $request){
     echo "Data telah disimpan";
 }
 ```
-Hasil yang di dapatkan dari code session diatas yaitu sebagai berikut :
+Hasil yang di dapatkan dari fungsi session diatas yaitu sebagai berikut :
 JPG - store
 
 #### Memasukkan value ke array session
@@ -107,7 +107,7 @@ public function push(Request $request){
     echo "Data telah dipush";
 }
 ```
-Hasil yang di dapatkan setelah mengoperasikan code session diatas yaitu sebagai berikut :
+Hasil yang di dapatkan setelah mengoperasikan fungsi session diatas yaitu sebagai berikut :
 JPG - push
  
 ### Langkah ketiga : Mengambil Data
@@ -126,13 +126,13 @@ public function show(Request $request){
     print_r($address);
 }
 ```
-Metode ini akan menampilkan hasil data yang disimpan di dalam session. Hasil data session yang disimpan saat melakukan operasi store tanpa array di langkah pertama adalah sebagai berikut :
+Metode ini akan menampilkan hasil data yang disimpan di dalam session. Hasil data session yang disimpan saat melakukan operasi `store tanpa array `di langkah pertama adalah sebagai berikut :
 JPG - SHOW
 
-Hasil data session yang disimpan saat melakukan operasi store menggunakan array di langkah pertama adalah sebagai berikut :
+Hasil data session yang disimpan saat melakukan operasi `store menggunakan array` di langkah pertama adalah sebagai berikut :
 JPG - show array
 
-Hasil dari push value di langkah pertama adalah sebagai berikut :
+Hasil dari `push` value di langkah pertama adalah sebagai berikut :
 JPG - show push
 
 #### Mengambil semua session data 
@@ -147,17 +147,6 @@ Maka akan mendapatkan hasil tampilan seperti berikut :
 JPG - showall
 
 ### Langkat keempat : Menghapus Data
-Metode `forget` akan menghapus sebuah data dari session :
-```php
-public function delete(Request $request){
-    // menghapus key nama
-    $request->session()->forget('nama');
-    echo "Data telah dihapus";
-}
-
-// Forget multiple keys...
-$request->session()->forget(['key1', 'key2']);
-```
 #### Mengambil dan menghapus item
 Terdapat 2 jenis metode untuk menghapus data atau item dari session. Cara pertama adalah dengan menggunakan metode `flush`, yang mana akan menghapus semua data di dalam session :
 ```php
@@ -171,12 +160,17 @@ JPG - flush.
 Maka semua data akan terhapus semua :
 JPG - flush show
 
+#### Menghapus item tertentu
 Cara kedua adalah dengan metode `forget` yang mana akan menghapus data dalam item tertentu. Disini kita bisa melakukan penyimpanan data kembali ke dalam session sesuai dengan tahapan yang telah dijelaskan sebelumnya, yaitu `put` dan `push` dalam bentuk array. Lalu, kita coba untuk menghapus item `nama` dari session dengan menggunakan metode `forget` :
 ```php
 public function delete(Request $request){
     // menghapus key nama
     $request->session()->forget('nama');
-    echo "Data telah dihapus";
+
+    // Forget multiple keys...
+    // $request->session()->forget(['nama', 'alamat']);
+     
+     echo "Data telah dihapus";
 }
 ```
 JPG - delete
@@ -213,12 +207,12 @@ public function pull(Request $request){
 Disini saya akan melakukan `pull` pada item `nama` :
 JPG - PULL
 
-# Langkah Lainnya 
-## Flash Data
+## Langkah Lainnya 
+### Flash Data
 Metode `flash` adalah metode yang digunakan untuk membuat session yang bersifat sekali pakai. Session yang kita buat dengan metode ini hanya akan berlaku untuk satu buah proses setelah suatu session dibuat. Sehingga `flash` ini sangat efektif untuk digunakan pada proses yang singkat, seperti menampilkan pesan notifikasi. Setelah itu, session yang dibuat dengan `flash` langsung hilang dihapus secara otomatis.<br>
 Jenis notifikasi yang biasanya digunakan adalah **error, warning,** dan **success**.<br>
 
-### Langkah pertama : Membuat file html
+#### Langkah pertama : Membuat file html
 Pertama, membuat file html untuk menampilkan fitur notifikasi. Disini saya membuat 3 notifikasi sesuai dengan penjelasan diatas :
 ```php
  <a href="{{ url('flash') }}" class="btn btn-danger btn-sm">
@@ -246,7 +240,7 @@ Pertama, membuat file html untuk menampilkan fitur notifikasi. Disini saya membu
 </div>
 @endif
 ```
-### Langkah kedua : memanggil file html
+#### Langkah kedua : memanggil file html
 Langkah kedua adalah membuat fungsi untuk memanggil file html di file controller :
 ```php
 public function index(Request $request)
@@ -256,7 +250,7 @@ public function index(Request $request)
     );
 }
 ```
-### Langkah ketiga : menampilkan flash
+#### Langkah ketiga : menampilkan flash
 Tahap ketiga adalah membuat fungsi `flash` seperti berikut ini :
 ```php
 public function flash(){
@@ -274,7 +268,7 @@ JPG - flash error
 Potongan code ketiga akan menampilkan: `Ini Pesan warning!!!` dengan `mode alert: warning` :
 JPG - flash warning
 
-## Increment dan Decrement Values
+### Increment dan Decrement Values
 Jika session data berisi integer yang ingin ditambah atau dikurangi, kita dapat menggunakan metode `increment` dan `decrement` :
 ```php
 // INCREMENT
@@ -306,10 +300,78 @@ jpg - decrement
 Sedangkan pada code baris kedua di fungsi `decrement`, angka yang muncul adalah hasil angka sebelumnya dikurangi 3 setelah melakukan refresh :
 jpg - decrement2
 
-## Regenerating Session ID
-Regenerasi session ID sering dilakukan untuk mencegah pengguna jahat dalam mengeksploitasi serangan fiksasi sesi pada aplikasi Anda.
-Laravel secara otomatis membuat ulang ID sesi selama otentikasi jika Anda menggunakan salah satu starter kit aplikasi Laravel atau Laravel Fortify; namun, jika Anda perlu membuat ulang ID sesi secara manual, Anda dapat menggunakan metode regenerasi:
-# Session Blocking
+### Regenerating Session ID
+Regenerasi session ID sering dilakukan untuk mencegah pengguna jahat dalam mengeksploitasi serangan fiksasi sesi pada aplikasi kita. Laravel secara otomatis membuat ulang ID sesi selama otentikasi jika kita menggunakan salah satu starter kit aplikasi Laravel atau Laravel Fortify. Namun, jika kita perlu membuat ulang ID sesi secara manual, kita dapat menggunakan metode `regenerate`:
+```php
+$request->session()->regenerate();
+```
+Jika kita perlu membuat ulang ID sesi dan menghapus semua data dari session dalam satu pernyataan, kita dapat menggunakan metode `validate`:
+```php
+$request->session()->invalidate();
+```
+## Session Blocking
 
-# Custom Session Drivers
-## 
+## Custom Session Drivers
+### Langkah pertama : Mengimplementasikan driver
+Jika tidak ada driver session yang sesuai dengan kebutuhan aplikasi kita, Laravel memungkinkan untuk membuat pengendali session kita sendiri. Driver session kustom harus mengimplementasikan `SessionHandlerInterface` bawaan PHP. Antarmuka ini hanya berisi beberapa metode sederhana. Implementasi `MongoDB` terlihat seperti berikut:
+```php
+<?php
+
+namespace App\Extensions;
+
+class MongoSessionHandler implements \SessionHandlerInterface
+{
+    public function open($savePath, $sessionName) {}
+    public function close() {}
+    public function read($sessionId) {}
+    public function write($sessionId, $data) {}
+    public function destroy($sessionId) {}
+    public function gc($lifetime) {}
+}
+```
+Berikut ini adalah penjelasan fungsi dari setiap metode-metode diatas :
+1. `open` method : biasanya digunakan dalam sistem penyimpanan session berbasis file. Karena Laravel dikirimkan dengan driver sesi `file`, kita jarang perlu memasukkan apapun ke dalam metode ini. Kita bisa membiarkan metode ini kosong.
+2. `close` method : seperti metode `open`, metode ini juga biasanya dapat diabaikan. Untuk sebagian besar driver, metode ini tidak diperlukan.
+3. `read` method : metode ini harus mengembalikan `string` dari session data yang terkait dengan dengan `$sessionId` yang diberikan. Tidak perlu melakukan serialisasi atau penyandian lainnya saat mengambil atau menyimpan session data di driver kita, karena Laravel akan melakukan serialisasi untuk kita.
+4. `write` method : metode ini harus menulis string `$data` yang diberikan terkait dengan `$sessionId` ke beberapa siste penyimpanan persisten, seperti `MongoDB` atau sistem penyimpanan lainnya. 
+5. `destroy` method : metode ini harus menghapus data yang terkait dengan `$sessionId` dari penyimpanan persisten.
+6. `gc` method : metode ini harus menghancurkan semua session data yang lebih lama dari ` $lifetime` yang diberikan, yang mana merupakan `UNIX timestamp`. Untuk sistem yang dapat kedaluwarsa sendiri seperti Memcached dan Redis, metode ini dapat dibiarkan kosong. 
+
+### Langkah kedua : Mendaftarkan driver
+Setelah driver kita diimplementasikan, kita dapat mendaftarkannya ke Laravel. Untuk menambahkan driver tambahan ke session backend Laravel, kita dapat menggunakan metode `extend` yang disediakan oleh session `facade`. Kita harus memanggil metode `extend` dari metode `boot` service provider. Kita dapat melakukan ini dari `App\Providers\AppServiceProvider` yang ada atau membuat provider baru:
+```php
+<?php
+
+namespace App\Providers;
+
+use App\Extensions\MongoSessionHandler;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\ServiceProvider;
+
+class SessionServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Session::extend('mongo', function ($app) {
+            // Return an implementation of SessionHandlerInterface...
+            return new MongoSessionHandler;
+        });
+    }
+}
+```
+Setelah session driver terdaftar, kita dapat menggunakan driver `Mongo` di file konfigurasi `config/session.php`.
