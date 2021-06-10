@@ -223,6 +223,28 @@ Cache::lock('foo', 10)->block(5, function () {
 });
 ```
 
+## Cache Helper
+Selain menggunakan facade `Cache`, kita juga dapat menggunakan fungsi global `cache` untuk mengambil dan menyimpan data item via cache. Berikut sintaks untuk mengambil data item di cache.
+
+```php
+$value = cache('key');
+```
+
+Untuk menyimpan data item, kita sediakan array key-value dan expiration time ke fungsi yang akan menyimpan nilai tersebut ke dalam cache selama expiration time yang ditentukan.
+
+```php
+cache(['key' => 'value'], $seconds);
+cache(['key' => 'value'], now()->addMinutes(10));
+```
+
+Ketika fungsi `cache` dipanggil tanpa argumen apapun, dia akan mengembalikan instance dari implementasi `Illuminate\Contracts\Cache\Factory` yang memungkinkan kita memangil metode caching lain seperti contoh di bawah ini.
+
+```php
+cache()->remember('users', $seconds, function () {
+    return DB::table('users')->get();
+});
+```
+
 ## Cache Tags
 
 Cache tags tidak didukung saat menggunakan file, dynamodb, atau database sebagai cache driver. Dengan cache tags, kita juga ada menggunakan metode `put` untuk menyimpan tagged cache item, metode `get` untuk mengakses tagged cache item, dan metode `flush` untuk menghapus tagged cache item.
