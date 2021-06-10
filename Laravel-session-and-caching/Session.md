@@ -6,7 +6,7 @@
 Pada protokol HTTP, protokol ini adalah protokol yang tidak memiliki state, yang mana server tidak mungkin mengingat pengguna tertentu di antara beberapa permintaan. Sehingga, sessions disini menyediakan cara untuk menyimpan informasi pengguna di beberapa permintaan. Informasi pengguna tersebut biasanya ditempatkan di penyimpanan/backend persisten yang dapat diakses dari permintaan berikutnya. Laravel mendukung penyimpanan/backend populer seperti Memcached, Redis, dan database.
 
 ## Konsep-konsep
-Session menyediakan cara untuk menyimpan informasi pengguna di beberapa permintaan di server. File Konfigurasi session disimpan di `config/session/php`. Secara default, Laravel dikonfigurasi untuk menggunakan `file` session driver yang kompatibel dengan banyak aplikasi. Konfigurasi Session driver menentukan dimana session data akan disimpan untuk setiap permintaan. Jenis backend popular untuk session driver antara lain :
+Session menyediakan cara untuk menyimpan informasi pengguna di beberapa permintaan di server. File Konfigurasi session disimpan di `config/session.php`. Secara default, Laravel dikonfigurasi untuk menggunakan `file` session driver yang kompatibel dengan banyak aplikasi. Konfigurasi Session driver menentukan dimana session data akan disimpan untuk setiap permintaan. Jenis backend popular untuk session driver antara lain :
 1. `File` - sessions yang disimpan di **storage/framework/sessions**.
 2. `Cookie` - sessions yang disimpan di secure, encrypted cookies.
 3. `Database` - sessions yang disimpan di relational database.
@@ -146,7 +146,7 @@ Maka akan mendapatkan hasil tampilan seperti berikut :
 ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/show_all2.JPG)
 
 ### Langkat keempat : Menghapus Data
-#### Mengambil dan menghapus item
+#### Menghapus semua item
 Terdapat 2 jenis metode untuk menghapus data atau item dari session. Cara pertama adalah dengan menggunakan metode `flush`, yang mana akan menghapus semua data di dalam session :
 ```php
  public function flush(Request $request){
