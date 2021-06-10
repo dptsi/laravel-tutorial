@@ -156,7 +156,7 @@ Terdapat 2 jenis metode untuk menghapus data atau item dari session. Cara pertam
     echo "Data telah dihapus semua";
 }
 ```
-JPG - flush. ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flush.JPG)
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flush.JPG)
 Maka semua data akan terhapus dan penyimpanan di dalam session akan kosong kembali.
 
 #### Menghapus item tertentu
@@ -204,9 +204,9 @@ public function pull(Request $request){
 }
 ```
 Disini saya akan melakukan `pull` pada item `nama` :
-JPG - PULL ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/pull.JPG)
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/pull.JPG)
 
-## Langkah Lainnya 
+## Langkah Tambahkan 
 ### Flash Data
 Metode `flash` adalah metode yang digunakan untuk membuat session yang bersifat sekali pakai. Session yang kita buat dengan metode ini hanya akan berlaku untuk satu buah proses setelah suatu session dibuat. Sehingga `flash` ini sangat efektif untuk digunakan pada proses yang singkat, seperti menampilkan pesan notifikasi. Setelah itu, session yang dibuat dengan `flash` langsung hilang dihapus secara otomatis.<br>
 Jenis notifikasi yang biasanya digunakan adalah **error, warning,** dan **success**.<br>
@@ -259,13 +259,13 @@ public function flash(){
 }
 ```
 Potongan code pertama akan menampilkan: `Ini Pesan Berhasil~` dengan `mode alert: success` :
-JPG - flash success ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flash_success.JPG)
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flash_success.JPG)
 
 Potongan code kedua akan menampilkan: `Ini Pesan error!` dengan `mode alert: error` :
-JPG - flash error ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flash_error.JPG)
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flash_error.JPG)
 
 Potongan code ketiga akan menampilkan: `Ini Pesan warning!!!` dengan `mode alert: warning` :
-JPG - flash warning ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flash_warning.JPG)
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flash_warning.JPG)
 
 ### Increment dan Decrement Values
 Jika session data berisi integer yang ingin ditambah atau dikurangi, kita dapat menggunakan metode `increment` dan `decrement` :
@@ -287,17 +287,17 @@ public function decrement(Request $request){
 }
 ```
 Saat melakukan running pada fungsi `increment` di code baris pertama, hasil pertama yang keluar adalah angka 1. Jika kita melakukan refresh, maka akan menjadi angka 2, dan seterusnya. 
-JPG - increment ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/increment.JPG)
-JPG - increment2 ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/increment2.JPG)
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/increment.JPG)
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/increment2.JPG)
 
 Sedangkan pada code baris kedua di fungsi `increment`, angka yang dihasilkan akan bertambah 2 setiap kali di refresh :
-jpg - increment6 ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/increment4.JPG)
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/increment4.JPG)
 
 Disini saya menambah angka hingga menghasilkan angka 10. Kemudian, saya mencoba melakukan running fungsi `decrement` pada code baris pertama sehingga angka akan berkurang 1 menjadi angka 9 :
-jpg - decrement ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/decrement.JPG)
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/decrement.JPG)
 
 Sedangkan pada code baris kedua di fungsi `decrement`, angka yang muncul adalah hasil angka sebelumnya dikurangi 3 setelah melakukan refresh :
-jpg - decrement2 ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/decrement2.JPG)
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/decrement2.JPG)
 
 ### Regenerating Session ID
 Regenerasi session ID sering dilakukan untuk mencegah pengguna jahat dalam mengeksploitasi serangan fiksasi sesi pada aplikasi kita. Laravel secara otomatis membuat ulang ID sesi selama otentikasi jika kita menggunakan salah satu starter kit aplikasi Laravel atau Laravel Fortify. Namun, jika kita perlu membuat ulang ID sesi secara manual, kita dapat menggunakan metode `regenerate`:
@@ -308,6 +308,19 @@ Jika kita perlu membuat ulang ID sesi dan menghapus semua data dari session dala
 ```php
 $request->session()->invalidate();
 ```
+
+## Penggunaan Session Driver Database
+Sebelumnya session disimpan menggunakan `file`. Untuk kali ini, kita akan menggunakan session driver `database` dimana session akan disimpan di dalam database. Langkah pertama adalah mengganti jenis `SESSION_DRIVER` pada file `.env` dan `session.php` ke database.<br>
+- Dalam file `session.php`.
+```php
+'driver' => env('SESSION_DRIVER', 'database'),
+```
+- Dalam file `.env`.
+```php
+SESSION_DRIVER=database
+```
+Setelah itu, kita bisa mencoba akses salah satu fungsi session yang berada di dalam controller. Saat melakukan akses, maka session akan disimpan di dalam database.
+
 ## Session Blocking
 Untuk memanfaatkan session blocking, kita bisa menggunakan driver `cache` yang mendukung `atomics locks`. Secara default, Laravel mengizinkan permintaan menggunakan session yang sama untuk dieksekusi secara bersamaan. Untuk beberapa kasus, kehilangan session data dapat terjadi di sebagian kecil aplikasi yang membuat permintaan bersamaan ke route yang berbeda yang keduanya menulis data ke session.<br>
 Untuk mengurangi ini, Laravel menyediakan fungsionalitas yang memungkinkan kita membatasi permintaan bersamaan untuk session tertentu. Untuk memulai, kita cukup menghubungkan metode `block` ke route kita. Saat penguncian ini ditahan, setiap permintaan yang masuk ke `/profile` atau `/order` pada contoh di bawah ini yang berbagi session ID yang sama akan menunggu permintaan pertama selesai dieksekusi sebelum melanjutkan eksekusinya:  
