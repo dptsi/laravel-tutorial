@@ -325,7 +325,7 @@ SESSION_DRIVER=database
 ```
 ### Langkah ketiga : Percobaan akses session
 kita bisa mencoba akses salah satu fungsi session yang berada di dalam controller. Saat melakukan akses, maka session akan disimpan di dalam database.
-![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/decrement2.JPG)
+![alt text](hhttps://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/session_db.JPG)
 
 ## Session Blocking
 Untuk memanfaatkan session blocking, kita bisa menggunakan driver `cache` yang mendukung `atomics locks`. Secara default, Laravel mengizinkan permintaan menggunakan session yang sama untuk dieksekusi secara bersamaan. Untuk beberapa kasus, kehilangan session data dapat terjadi di sebagian kecil aplikasi yang membuat permintaan bersamaan ke route yang berbeda yang keduanya menulis data ke session.<br>
