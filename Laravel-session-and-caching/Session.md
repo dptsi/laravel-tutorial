@@ -78,7 +78,7 @@ public function store (Request $request){
 }
 ```
 Silahkah pilih salah satu dari jenis pengoperasian diatas yaitu menggunakan `request instance` atau `global helper`. Hasil yang didapatkan setelah mengoperasikan fungsi session diatas yaitu sebagai berikut :
-JPG - STORE
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/store.JPG)
 
 Untuk mendapatkan hasil penyimpanan item berupa `array` di dalam session, dapat menggunakan fungsi sebagai berikut :
 ```php
