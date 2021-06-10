@@ -8,7 +8,6 @@ Untuk mempermudah perawatan suatu aplikasi, biasanya terdapat pemisahan terhadap
 
 ## Konsep-konsep
 
-Misal: jelaskan mengenai pengertian, konsep, alur, dll.
 Laravel merupakan kerangka kerja berbasis MVC, dimana dalam V dalam MVC tersebut merupakan kependekan dari View. View ini adalah data yang akan ditampilkan kepada pengguna pada browser mereka dan pengguna juga dapat berinteraksi dengan View ini.
 Pada tutorial di bawah akan dijelaskan cara membuat, menampilkan, dan memberikan data ke dalam View. 
 
