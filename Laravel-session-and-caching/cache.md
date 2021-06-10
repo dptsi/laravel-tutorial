@@ -71,7 +71,7 @@ Cache::put('key', 'value');
 Kita juga dapat meneruskan DateTime instance pada metode `put` untuk mewakili waktu expired dari suatu item cache.
 
 ```php
-Cache::put('key', 'value', now()->addMinutes);
+Cache::put('key', 'value', now()->addMinutes(1));
 ```
 
 #### Simpan jika tidak ada
@@ -168,7 +168,9 @@ Atau kita juga dapat menghapus seluruh cache dengan menggunakan metode `flush`.
 Cache::flush();
 ```
 
-## Langkah Tambahan (Atomic Locks)
+## Atomic Locks
+Untuk memanfaatkan fitur ini, kita harus menggunakan cache driver memcached, redis, dynamodb, database, file, atau array sebagai cache driver default. Selain itu, semua server harus berkomunikasi dengan server cache pusat yang sama. 
+
 ### Driver Prerequisites
 
 Jika menggunakan database sebagai cache driver, terlebih dahulu kita perlu mengatur sebuah tabel yang akan berisi cache lock aplikasi kita. Untuk contoh deklarasi `Schema` dapat dilihat di bawah.
@@ -181,7 +183,7 @@ Schema::create('cache_locks', function ($table) {
 });
 ```
 
-### Langkah kelima: Mengelola locks
+### Mengelola locks
 
 Atomic locks memungkinkan kita memanipulasi locks terdistribusi tanpa mengkhawatirkan race condition. Kita dapat membuat serta mengelola locks dengan metode `Cache::lock`.
 
@@ -247,7 +249,7 @@ cache()->remember('users', $seconds, function () {
 
 ## Cache Tags
 
-Cache tags tidak didukung saat menggunakan file, dynamodb, atau database sebagai cache driver. Dengan cache tags, kita juga ada menggunakan metode `put` untuk menyimpan tagged cache item, metode `get` untuk mengakses tagged cache item, dan metode `flush` untuk menghapus tagged cache item.
+Cache tags tidak didukung saat menggunakan file, dynamodb, atau database sebagai cache driver. Dengan cache tags, kita juga dapat menggunakan metode `put` untuk menyimpan tagged cache item, metode `get` untuk mengakses tagged cache item, dan metode `flush` untuk menghapus tagged cache item.
 
 ```php
 
