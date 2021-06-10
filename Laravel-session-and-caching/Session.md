@@ -338,6 +338,12 @@ Route::post('/order', function () {
     //
 })->block($lockSeconds = 10, $waitSeconds = 10)
 ```
+Jika tidak satu pun dari argumen ini dilewatkan, kunci akan diperoleh maksimal 10 detik dan permintaan akan menunggu maksimal 10 detik saat mencoba mendapatkan kunci: 
+```php
+Route::post('/profile', function () {
+    //
+})->block()
+```
 
 ## Custom Session Drivers
 ### Langkah pertama : Mengimplementasikan driver
