@@ -310,7 +310,7 @@ $request->session()->invalidate();
 ```
 
 ## Penggunaan Session Driver Database
-Sebelumnya session disimpan menggunakan `file`. Untuk kali ini, kita akan menggunakan session driver `database` dimana session akan disimpan di dalam database. ###
+Sebelumnya session disimpan menggunakan `file`. Untuk kali ini, kita akan menggunakan session driver `database` dimana session akan disimpan di dalam database.
 ### Langkah pertama : Membuat migrate session
 Seperti penjelasan sebelumnya, Laravel menyediakan pembuatan migrate table session dengan menggunakan Artisan command `php artisan session:table`. Setelah dibuat, kita bisa melakukan migrate ke dalam database dengan command `php artisan migrate`
 ### Langkah kedua : Mengganti jenis session driver
@@ -325,7 +325,7 @@ SESSION_DRIVER=database
 ```
 ### Langkah ketiga : Percobaan akses session
 kita bisa mencoba akses salah satu fungsi session yang berada di dalam controller. Saat melakukan akses, maka session akan disimpan di dalam database.
-![alt text](hhttps://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/session_db.JPG)
+
 
 ## Session Blocking
 Untuk memanfaatkan session blocking, kita bisa menggunakan driver `cache` yang mendukung `atomics locks`. Secara default, Laravel mengizinkan permintaan menggunakan session yang sama untuk dieksekusi secara bersamaan. Untuk beberapa kasus, kehilangan session data dapat terjadi di sebagian kecil aplikasi yang membuat permintaan bersamaan ke route yang berbeda yang keduanya menulis data ke session.<br>
