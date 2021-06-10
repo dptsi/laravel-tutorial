@@ -8,12 +8,12 @@ Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
 
 ## Konsep-konsep
 Session menyediakan cara untuk menyimpan informasi pengguna di beberapa permintaan di server. File Konfigurasi session disimpan di `config/session/php`. Secara default, Laravel dikonfigurasi untuk menggunakan `file` session driver yang kompatibel dengan banyak aplikasi. Konfigurasi Session driver menentukan dimana session data akan disimpan untuk setiap permintaan. Jenis backend popular untuk session driver antara lain :
-1. **File** - sessions yang disimpan di **storage/framework/sessions**.
-2. **Cookie** - sessions yang disimpan di secure, encrypted cookies.
-3. **Database** - sessions yang disimpan di relational database.
-4. **Memcached/redis** - sessions yang disimpan di salah satu penyimpanan berbasis cache.
-5. **Dynamodb** - sessions yang disimpan di **AWS DynamoDB**
-6. **Array** - sessions yang disimpan di PHP array.
+1. `File` - sessions yang disimpan di **storage/framework/sessions**.
+2. `Cookie` - sessions yang disimpan di secure, encrypted cookies.
+3. `Database` - sessions yang disimpan di relational database.
+4. `Memcached/redis` - sessions yang disimpan di salah satu penyimpanan berbasis cache.
+5. `Dynamodb` - sessions yang disimpan di **AWS DynamoDB**
+6. `Array` - sessions yang disimpan di PHP array.
 
 ## Driver Prerequisites
 ### Database
@@ -95,7 +95,7 @@ public function store (Request $request){
 }
 ```
 Hasil yang di dapatkan dari fungsi session diatas yaitu sebagai berikut :
-JPG - store
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/store.JPG)
 
 #### Memasukkan value ke array session
 Metode `push` bisa digunakan untuk memasukkan atau mendorong sebuah value baru ke dalam session array. Misalnya, **nama** disini berisi sebuah array dari nama-nama user, kita dapat memasukkan sebuah value baru ke dalam array seperti ini :
@@ -108,7 +108,7 @@ public function push(Request $request){
 }
 ```
 Hasil yang di dapatkan setelah mengoperasikan fungsi session diatas yaitu sebagai berikut :
-JPG - push
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/push.JPG)
  
 ### Langkah ketiga : Mengambil Data
 Untuk mengambil item dari session, maka dapat menggunakan metode `get` seperti di bawah ini :
@@ -127,13 +127,13 @@ public function show(Request $request){
 }
 ```
 Metode ini akan menampilkan hasil data yang disimpan di dalam session. Hasil data session yang disimpan saat melakukan operasi `store tanpa array `di langkah pertama adalah sebagai berikut :
-JPG - SHOW
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/show_store.JPG)
 
 Hasil data session yang disimpan saat melakukan operasi `store menggunakan array` di langkah pertama adalah sebagai berikut :
-JPG - show array
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/show_store_array.JPG)
 
 Hasil dari `push` value di langkah pertama adalah sebagai berikut :
-JPG - show push
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/show_push.JPG)
 
 #### Mengambil semua session data 
 Jika ingin menampilkan semua data di dalam session, kita dapat menggunakan metode `all`:
@@ -144,7 +144,7 @@ public function all(Request $request){
 }
 ```
 Maka akan mendapatkan hasil tampilan seperti berikut :
-JPG - showall
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/show_all2.JPG)
 
 ### Langkat keempat : Menghapus Data
 #### Mengambil dan menghapus item
@@ -156,9 +156,8 @@ Terdapat 2 jenis metode untuk menghapus data atau item dari session. Cara pertam
     echo "Data telah dihapus semua";
 }
 ```
-JPG - flush.
-Maka semua data akan terhapus semua :
-JPG - flush show
+JPG - flush. ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flush.JPG)
+Maka semua data akan terhapus dan penyimpanan di dalam session akan kosong kembali.
 
 #### Menghapus item tertentu
 Cara kedua adalah dengan metode `forget` yang mana akan menghapus data dalam item tertentu. Disini kita bisa melakukan penyimpanan data kembali ke dalam session sesuai dengan tahapan yang telah dijelaskan sebelumnya, yaitu `put` dan `push` dalam bentuk array. Lalu, kita coba untuk menghapus item `nama` dari session dengan menggunakan metode `forget` :
@@ -173,9 +172,9 @@ public function delete(Request $request){
      echo "Data telah dihapus";
 }
 ```
-JPG - delete
-dan jika kita ingin menampilkan data yang sekarang ada di dalam session dengan metode `get` :
-JPG - delete show
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/delete.JPG)
+Dan jika kita ingin menampilkan data yang sekarang ada di dalam session dengan metode `get` , maka akan menampilkan data item `alamat`:
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/delete_show.JPG)
 
 #### Memeriksa keberadaan item di dalam session
 Untuk memeriksa keberadaan item, kita bisa menggunakan metode `has`. Metode ini mengembalikan `true` jika item ada dan tidak bernilai `null`. Sedangkan, metode kebalikan dari `has` adalah metode `missing`. Metode ini mengembalikan nilai `true` jika item tidak ada di dalam session atau bernilai `null`. Disini saya mencoba memeriksa item `nama` di dalam session :
@@ -191,10 +190,10 @@ public function hasMis(Request $request){
 }
 ```
 Karena item `nama` telah di-pull sebelumnya, maka hasil yang didapatkan :
-JPG - has
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/has.JPG)
 
 Dan jika item diganti menjadi item `alamat`, maka hasil yang akan didapatkan : 
-JPG - has2
+![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/has2.JPG)
 
 #### Mengambil dan menghapus data 
 Metode `pull` akan mengambil dan menghapus item yang dituju dari session :
@@ -205,7 +204,7 @@ public function pull(Request $request){
 }
 ```
 Disini saya akan melakukan `pull` pada item `nama` :
-JPG - PULL
+JPG - PULL ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/pull.JPG)
 
 ## Langkah Lainnya 
 ### Flash Data
@@ -260,13 +259,13 @@ public function flash(){
 }
 ```
 Potongan code pertama akan menampilkan: `Ini Pesan Berhasil~` dengan `mode alert: success` :
-JPG - flash success
+JPG - flash success ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flash_success.JPG)
 
 Potongan code kedua akan menampilkan: `Ini Pesan error!` dengan `mode alert: error` :
-JPG - flash error
+JPG - flash error ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flash_error.JPG)
 
 Potongan code ketiga akan menampilkan: `Ini Pesan warning!!!` dengan `mode alert: warning` :
-JPG - flash warning
+JPG - flash warning ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/flash_warning.JPG)
 
 ### Increment dan Decrement Values
 Jika session data berisi integer yang ingin ditambah atau dikurangi, kita dapat menggunakan metode `increment` dan `decrement` :
@@ -288,17 +287,17 @@ public function decrement(Request $request){
 }
 ```
 Saat melakukan running pada fungsi `increment` di code baris pertama, hasil pertama yang keluar adalah angka 1. Jika kita melakukan refresh, maka akan menjadi angka 2, dan seterusnya. 
-JPG - increment
-JPG - increment2
+JPG - increment ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/increment.JPG)
+JPG - increment2 ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/increment2.JPG)
 
 Sedangkan pada code baris kedua di fungsi `increment`, angka yang dihasilkan akan bertambah 2 setiap kali di refresh :
-jpg - increment6
+jpg - increment6 ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/increment4.JPG)
 
 Disini saya menambah angka hingga menghasilkan angka 10. Kemudian, saya mencoba melakukan running fungsi `decrement` pada code baris pertama sehingga angka akan berkurang 1 menjadi angka 9 :
-jpg - decrement
+jpg - decrement ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/decrement.JPG)
 
 Sedangkan pada code baris kedua di fungsi `decrement`, angka yang muncul adalah hasil angka sebelumnya dikurangi 3 setelah melakukan refresh :
-jpg - decrement2
+jpg - decrement2 ![alt text](https://github.com/qqdnada/laravel-tutorial/blob/master/Laravel-session-and-caching/images/decrement2.JPG)
 
 ### Regenerating Session ID
 Regenerasi session ID sering dilakukan untuk mencegah pengguna jahat dalam mengeksploitasi serangan fiksasi sesi pada aplikasi kita. Laravel secara otomatis membuat ulang ID sesi selama otentikasi jika kita menggunakan salah satu starter kit aplikasi Laravel atau Laravel Fortify. Namun, jika kita perlu membuat ulang ID sesi secara manual, kita dapat menggunakan metode `regenerate`:
@@ -310,6 +309,17 @@ Jika kita perlu membuat ulang ID sesi dan menghapus semua data dari session dala
 $request->session()->invalidate();
 ```
 ## Session Blocking
+Untuk memanfaatkan session blocking, kita bisa menggunakan driver `cache` yang mendukung `atomics locks`. Secara default, Laravel mengizinkan permintaan menggunakan session yang sama untuk dieksekusi secara bersamaan. Untuk beberapa kasus, kehilangan session data dapat terjadi di sebagian kecil aplikasi yang membuat permintaan bersamaan ke route yang berbeda yang keduanya menulis data ke session.<br>
+Untuk mengurangi ini, Laravel menyediakan fungsionalitas yang memungkinkan kita membatasi permintaan bersamaan untuk session tertentu. Untuk memulai, kita cukup menghubungkan metode `block` ke route kita. Saat penguncian ini ditahan, setiap permintaan yang masuk ke `/profile` atau `/order` pada contoh di bawah ini yang berbagi session ID yang sama akan menunggu permintaan pertama selesai dieksekusi sebelum melanjutkan eksekusinya:  
+```php
+Route::post('/profile', function () {
+    //
+})->block($lockSeconds = 10, $waitSeconds = 10)
+
+Route::post('/order', function () {
+    //
+})->block($lockSeconds = 10, $waitSeconds = 10)
+```
 
 ## Custom Session Drivers
 ### Langkah pertama : Mengimplementasikan driver
