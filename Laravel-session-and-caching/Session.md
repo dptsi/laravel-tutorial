@@ -3,8 +3,7 @@
 [Kembali](readme.md)
 
 ## Latar belakang topik
-
-Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
+Secara umum, session adalah data yang bersifat sementara dan disimpan pada server. Salah satau contoh penggunaan session secara umum adalah membuat proses login dan pengencekan login. Pada proses login, biasanya session menjadi kunci penanda pengguna untuk mengakses ke dalam sistem yang dibuat. Selain itu, penggunaan session juga diterapkan pada pesan notifikasi sekali pakai.
 
 ## Konsep-konsep
 Session menyediakan cara untuk menyimpan informasi pengguna di beberapa permintaan di server. File Konfigurasi session disimpan di `config/session/php`. Secara default, Laravel dikonfigurasi untuk menggunakan `file` session driver yang kompatibel dengan banyak aplikasi. Konfigurasi Session driver menentukan dimana session data akan disimpan untuk setiap permintaan. Jenis backend popular untuk session driver antara lain :
