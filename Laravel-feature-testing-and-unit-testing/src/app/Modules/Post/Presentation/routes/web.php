@@ -14,4 +14,4 @@ use App\Modules\Post\Presentation\Controllers\BaseController;
 |
 */
 
-Route::get('/', [BaseController::class, 'index']);
+Route::resource('/', BaseController::class);
