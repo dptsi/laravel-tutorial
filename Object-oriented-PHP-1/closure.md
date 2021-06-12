@@ -146,7 +146,7 @@ Output yang dihasilkan pada langkah ini akan sama dengan output pada langkah ket
 Selain value dan key, kita juga dapat passing parameter lain, seperti associative array fruits. Namun, urutannya harus tetap, value diletakkan di awal dan diikuti dengan key.
 
 ```php
-<? php
+<?php
 
 $fruits = ["a" => "Apel", "b" => "Belimbing", "c" => "Cerry"];
 
@@ -155,7 +155,7 @@ array_walk($fruits, function($value, $key, $fruits) {
  var_dump($fruits);
 }, $fruits);
 
->
+?>
 ```
 
 Pada langkah ini, output yang dihasilkan adalah sebagai berikut.
