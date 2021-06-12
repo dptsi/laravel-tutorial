@@ -100,7 +100,7 @@ Pada langkah ini, output yang dihasilkan adalah `Hello!`.
 
 ### Langkah ketujuh
 
-Buat associative array (array dengan named key) `fruits` dan panggil fungsi `array_walk` dengan parameter fruits dan closure. Fungsi array_walk merupakan fungsi yang menjalankan setiap elemen array dalam fungsi yang ditentukan pengguna. Value dan key array adalah parameter dalam fungsi dan tidak dapat diubah urutannya, namun untuk mengganti nama variabelnya diperbolehkan.
+Buat associative array (array dengan named key) `fruits` dan panggil fungsi `array_walk` dengan parameter fruits dan closure. Fungsi array_walk merupakan fungsi yang menjalankan setiap elemen array dalam fungsi yang ditentukan pengguna. Value dan key array adalah parameter dalam fungsi dan dalam pengimplementasian array_walk, value dan key tidak dapat diubah urutannya, namun untuk mengganti nama variabelnya diperbolehkan.
 
 ```php
 <?php
@@ -140,3 +140,52 @@ array_walk($fruits, $print_fruits);
 ```
 
 Output yang dihasilkan pada langkah ini akan sama dengan output pada langkah ketujuh.
+
+### Langkah kesembilan
+
+Selain value dan key, kita juga dapat passing parameter lain, seperti associative array fruits. Namun, urutannya harus tetap, value diletakkan di awal dan diikuti dengan key.
+
+```php
+<? php
+
+$fruits = ["a" => "Apel", "b" => "Belimbing", "c" => "Cerry"];
+
+array_walk($fruits, function($value, $key, $fruits) {
+ echo $key . ". "  . $value . "\n";
+ var_dump($fruits);
+}, $fruits);
+
+>
+```
+
+Pada langkah ini, output yang dihasilkan adalah sebagai berikut.
+
+```
+a. Apel
+array(3) {
+  ["a"]=>
+  string(4) "Apel"
+  ["b"]=>
+  string(9) "Belimbing"
+  ["c"]=>
+  string(5) "Cerry"
+}
+b. Belimbing
+array(3) {
+  ["a"]=>
+  string(4) "Apel"
+  ["b"]=>
+  string(9) "Belimbing"
+  ["c"]=>
+  string(5) "Cerry"
+}
+c. Cerry
+array(3) {
+  ["a"]=>
+  string(4) "Apel"
+  ["b"]=>
+  string(9) "Belimbing"
+  ["c"]=>
+  string(5) "Cerry"
+}
+```
