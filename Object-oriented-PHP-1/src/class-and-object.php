@@ -34,4 +34,16 @@ $employee4->name = "Kevin";
 echo $employee4->name;
 echo "\n";
 
+function change_name($emp){
+  $emp->name = "Smith";
+}
+
+echo $employee1->get_name();
+echo "\n";
+
+change_name($employee1);
+
+echo $employee1->get_name();
+echo "\n";
+
 ?>
