@@ -11,7 +11,7 @@ Misalkan pada karyawan yang ada di suatu kantor, terdapat *Steven*, *Rudolf*, *S
 Kemiripan yang ada pada objek *Steven* dan objek *Rudolf* ialah sama-sama merupakan entitas karyawan maka bisa dibuat `Class` yang disebut dengan **Class Employee**. Sehingga pada Class Employee ini, terdapat 4 objek, yaitu employee1 yaitu *Steven*, employee2 yaitu *Rudolf*, employee3 yaitu *Smith*, dan employee4 yaitu *Kevin*. Maka bisa dibilang kalau, *Class* lah yang mencetak objek-objek.
 
 ## Konsep-konsep
-`Class` adalah template, cetakan yang mewakili entitas dunia nyata, dimana pada **Class** dibutuhkan `Atribute` dan `Method` agar dapat menghasilkan suatu `Object`. Maka, **Class** adalah kerangka dasar yang harus dibuat terlebih dahulu sebelum membuat suatu **Object**. 
+`Class` adalah template, cetakan yang mewakili entitas dunia nyata, dimana pada **Class** dibutuhkan `Atribute` dan `Method` agar dapat menghasilkan suatu `Object`. Maka, **Class** adalah kerangka dasar yang harus dibuat terlebih dahulu sebelum membuat suatu **Object**. Object merupakan _reference types_, sehingga apabila object di-passing ke sebuah fungsi, maka value dari attribute nya dapat berubah.
  
 ## Langkah-langkah tutorial
 
@@ -119,3 +119,26 @@ echo "\n";
 Hasil yang didapatkan
 
 ![Kevin](https://user-images.githubusercontent.com/80946219/118923519-dae1d200-b965-11eb-9070-226290d3b775.png)
+
+### Langkah keempat
+
+Passing object employee1 ke dalam fungsi change_name.
+
+```php
+function change_name($emp){
+  $emp->name = "Smith";
+}
+
+echo $employee1->get_name();
+echo "\n";
+
+change_name($employee1);
+
+echo $employee1->get_name();
+echo "\n";
+```
+
+Hasil yang didapatkan
+
+![change_name](https://user-images.githubusercontent.com/76677130/121764170-0ffbd180-cb6c-11eb-8570-124b84a802a8.png)
+
