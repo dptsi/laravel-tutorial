@@ -246,7 +246,7 @@ Pada langkah ini, method public `set_position` dapat dijalankan dengan baik, sed
 
 ### Langkah kesepuluh
 
-Coba akses method public `set_salary`, yang mengakses method private dari dalam class, beserta method private `get_position` dari object.
+Coba akses method public `set_salary`, yang mengakses method private dari dalam class, beserta method private `get_salary` dari object.
 
 ```php
 <?php
