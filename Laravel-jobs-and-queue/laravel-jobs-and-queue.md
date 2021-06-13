@@ -37,7 +37,9 @@ php artisan queue:work --queue=high,default
 
 ### Database
 Ketika menggunakan database queue driver, maka perlu membuat sebuah tabel atau migrasi untuk menyimpan jobs record.
+
  `php artisan queue:table`
+ 
  `php artisan migrate`
 
 
@@ -45,7 +47,7 @@ Ketika menggunakan database queue driver, maka perlu membuat sebuah tabel atau m
 
 ### Langkah pertama : Membuat Job
 
-Secara default, semua jobs yang dapat dimasukkan queue akan disimpan di direktori `app/Jobs`. Jika direktori tersebut tidak ada, maka akan dibuat saat menjalankan perintah `make:job` Artisan:
+Secara default, semua jobs yang dapat dimasukkan queue akan disimpan di direktori `app/Jobs`. Jika direktori tersebut tidak ada, maka akan dibuat saat menjalankan perintah Artisan `make:job` :
 
 ```
 php artisan make:job ProcessPodcast
