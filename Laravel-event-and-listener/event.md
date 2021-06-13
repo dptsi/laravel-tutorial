@@ -112,8 +112,8 @@ Dapat terlihat pada contoh, class event tidak menyimpan logika. Class event ini 
 
 ## Mendefinisikan Listener
 
-Event listener menerima instance event dalam method handle. Ketika kita menggunakan event:generate dan make:listener maka Artisan akan secara otomatis melakukan import class dari event dan type-hint event ke dalam method handle. Di dalam method handle ini kita melakukan aksi yang dibutuhkan ketika event terjadi
-Contohnya kita akan mendefinisikan aksi apa yang akan dilakukan ketiak event LoginHistory terjadi:
+Event listener menerima instance event dalam method handle. Ketika kita menggunakan `event:generate` dan `make:listener` maka Artisan akan secara otomatis melakukan import class dari event dan type-hint event ke dalam method handle. Di dalam method handle ini kita melakukan aksi yang dibutuhkan ketika event terjadi
+Contohnya kita akan mendefinisikan aksi apa yang akan dilakukan ketika event LoginHistory terjadi:
 
 ```php
 public function handle(LoginHistory $event)
@@ -138,7 +138,7 @@ Dapat terlihat pada contoh, kita memasukan aksi yang ingin terjadi ketika event 
 
 ## Dispatching Event
 
-Ketika ingin melakukan dispatch terhadapa sebuah event, kita dapat memanggil method dispatch yang dimiliki oleh class event. Method ini ada ketika kita menambahkan  trait Illuminate\Foundation\Events\Dispatchable pada class event kita. Pada contoh kita ingin memanggil event ketika ada seorang user yang melakukan login. Maka dari itu kita akan memanggil event pada app/Http/Requests/Auth/LoginRequest.php di dalam method authenticate(). Disini kita akan menambah 
+Ketika ingin melakukan dispatch terhadapa sebuah event, kita dapat memanggil method dispatch yang dimiliki oleh class event. Method ini ada ketika kita menambahkan  trait `Illuminate\Foundation\Events\Dispatchable` pada class event kita. Pada contoh kita ingin memanggil event ketika ada seorang user yang melakukan login. Maka dari itu kita akan memanggil event pada `app/Http/Requests/Auth/LoginRequest.php` di dalam method `authenticate()`. Disini kita akan menambah 
 
 ```
 $user = Auth::user();
@@ -151,7 +151,6 @@ $user = Auth::user();
 event(new LoginHistory($user));
 ```
 
-
 Dengan begitu, ketika ada user yang melakukan login, event LoginHistory akan terpanggil dan listener akan menyimpan data yang ada ke dalam database login_history
 
 ## Listener dengan Queue
@@ -159,5 +158,27 @@ Dengan begitu, ketika ada user yang melakukan login, event LoginHistory akan ter
 ### Langkah pertama
 
 ### Langkah kedua
+
+Apabila ingin mengubah koneksi queue, nama queue, atau waktu delay queue dari sebuah listener, kita dapat melakukannya dengan mendefinisikan properti `$connection`, `$queue`, atau `$delay` pada class listener.
+
+```php
+use App\Events\LoginHistory;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class StoreUserLoginHistory implements ShouldQueue
+{
+    public $connection = 'sqs';
+    public $queue = 'listeners';
+    public $delay = 10;
+}
+```
+
+Atau apabila ingin mendefinisikan nama queue listener saat runtime, dapat mendefinisikan fungsi `viaQueue`
+```php
+public function viaQueue()
+    {
+        return 'listeners';
+    }
+```
 
 ### Langkah ketiga
