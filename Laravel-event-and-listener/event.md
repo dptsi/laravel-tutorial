@@ -154,7 +154,9 @@ event(new LoginHistory($user));
 Dengan begitu, ketika ada user yang melakukan login, event LoginHistory akan terpanggil dan listener akan menyimpan data yang ada ke dalam database login_history
 
 ## Listener dengan Queue
+
 ### Membuat Queued Listener
+
 Listener dapat diqueue, listener yang diqueue berguna ketika kita ingin menjalankan task-task yang memerlukan waktu seperti mengirimkan email ataupun melakukan request http. Sebelum menggunakan queued listener kita harus mengkonfigurasi queue dan menjalanakan queue worker.
 
 Untuk membuat listener menjadi queue kita hanya perlu menambahkan ShouldQueue interface pada class listener. Listener yang di generate dari artisan sudah memiliki interface ShouldQueue terimport pada namespace. 
@@ -167,11 +169,9 @@ class StoreUserLoginHistory implements ShouldQueue
     //
 }
 ```
-
 Dengan begitu maka ketika event yang dihandle oleh listener ini terpanggil maka listener akan secara otomatis di queue menggunakan Laravel's queue system.
 
-
-### Langkah kedua
+### Menyesuaikan Queue
 
 Apabila ingin mengubah koneksi queue, nama queue, atau waktu delay queue dari sebuah listener, kita dapat melakukannya dengan mendefinisikan properti `$connection`, `$queue`, atau `$delay` pada class listener.
 
@@ -188,21 +188,23 @@ class StoreUserLoginHistory implements ShouldQueue
 ```
 
 Atau apabila ingin mendefinisikan nama queue listener saat runtime, dapat mendefinisikan fungsi `viaQueue`
+
 ```php
 public function viaQueue()
-    {
-        return 'listeners';
-    }
+{
+    return 'listeners';
+}
 ```
 
 ### Conditional Queue Listener
+
 Terkadang ada kondisi dimanan kita ingin me-queue listener berdasarkan suatu kondisi /data. Untuk mencapai hal tersebut kita dapat menambahkan method `shouldQueue` pada Listener dan dapat menentukan apakah listener akan di queue atau tidak di dalamnya. Ketika method shouldQueue mereturn false maka listener tidak akan diekesekusi.
 
 ```php
-  public function shouldQueue(LoginHistory $event)
-    {
-        return true;
-    }  
+public function shouldQueue(LoginHistory $event)
+{
+    return true;
+}  
 ```
 
 
