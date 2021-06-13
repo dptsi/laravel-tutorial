@@ -55,7 +55,7 @@ php artisan make:listener StoreUserLoginHistory --event=LoginHistory
 
 class event merupakan sebuah container data yang menyimpan informasi yang berhubungan dengan event tsb. Contohnya kita akan mendefinisikan class event LoginHistory seperti berikut
 
-```
+```php
 class LoginHistory
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -84,7 +84,7 @@ Dapat terlihat pada contoh, class event tidak menyimpan logika. Class event ini 
 Event listener menerima instance event dalam method handle. Ketika kita menggunakan event:generate dan make:listener maka Artisan akan secara otomatis melakukan import class dari event dan type-hint event ke dalam method handle. Di dalam method handle ini kita melakukan aksi yang dibutuhkan ketika event terjadi
 Contohnya kita akan mendefinisikan aksi apa yang akan dilakukan ketiak event LoginHistory terjadi:
 
-```
+```php
  public function handle(LoginHistory $event)
     {
         $current_timestamp = Carbon::now()->toDateTimeString();
