@@ -15,11 +15,9 @@ Pada aplikasi web, biasanya terdapat _task_ yang membutuhkan waktu lama untuk di
 Hal ini membuat user harus menunggu beberapa lama untuk dapat melanjutkan task yang lain. Dengan job queues (antrian tugas), tasks yang memakan banyak waktu tersebut dapat dipindah ke dalam _queue_ untuk dijalankan di latar belakang. Dengan demikian _response time_-nya dapat menjadi lebih cepat.
 
 Laravel queues memberikan queueing API untuk berbagai backend, seperti Amazon SQS, Redis, dan relational database. File Konfigurasi queue disimpan di `config/session.php`.  
-Misal: jelaskan mengenai pengertian, konsep, alur, dll.
 
 ## Konsep-konsep
-### Driver Notes & Prerequisites
-Sebelum memulai Laravel queue, penting untuk memahami perbedaan "connections" dan "queues". Dalam file konfigurasi `config/queue.php`, ada array konfigurasi `connections` yang menentukan koneksi ke backend queue seperti Amazon SQS, Beanstalk, atau Redis. Setiap konfigurasi connection mengandung atribut `queue`. Ini merupakan queue default untuk jobs yang dikirim ke connection tertentu. Sehingga, jika jobs dikirim tanpa menentukan queue mana tujuannya, maka jobs tersebut akan dimasukkan ke queue default tersebut.
+Dalam file konfigurasi `config/queue.php`, ada array konfigurasi `connections` yang menentukan koneksi ke backend queue seperti Amazon SQS, Beanstalk, atau Redis. Setiap konfigurasi connection mengandung atribut `queue`. Ini merupakan queue default untuk jobs yang dikirim ke connection tertentu. Sehingga, jika jobs dikirim tanpa menentukan queue mana tujuannya, maka jobs tersebut akan dimasukkan ke queue default tersebut.
 
 ```
 use App\Jobs\ProcessPodcast;
@@ -39,31 +37,67 @@ php artisan queue:work --queue=high,default
 
 ### Database
 Ketika menggunakan database queue driver, maka perlu membuat sebuah tabel atau migrasi untuk menyimpan jobs record.
-`php artisan queue:table`
-`php artisan migrate`
+ `php artisan queue:table`
+ `php artisan migrate`
 
 
 ## Langkah-langkah tutorial
 
-### Langkah pertama
+### Langkah pertama : Membuat Job
 
-Misal: Buat class `Contoh`
+Secara default, semua jobs yang dapat dimasukkan queue akan disimpan di direktori `app/Jobs`. Jika direktori tersebut tidak ada, maka akan dibuat saat menjalankan perintah `make:job` Artisan:
 
-```php
+```
+php artisan make:job ProcessPodcast
+```
+
+```
 <?php
 
+namespace App\Jobs;
 
-namespace DummyNamespace;
+use App\Models\Podcast;
+use App\Services\AudioProcessor;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
-
-class Contoh
+class ProcessPodcast implements ShouldQueue
 {
-    public function fungsi($request)
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * The podcast instance.
+     *
+     * @var \App\Models\Podcast
+     */
+    protected $podcast;
+
+    /**
+     * Create a new job instance.
+     *
+     * @param  App\Models\Podcast  $podcast
+     * @return void
+     */
+    public function __construct(Podcast $podcast)
     {
-        ...
+        $this->podcast = $podcast;
     }
 
+    /**
+     * Execute the job.
+     *
+     * @param  App\Services\AudioProcessor  $processor
+     * @return void
+     */
+    public function handle(AudioProcessor $processor)
+    {
+        // Process uploaded podcast...
+    }
 }
 ```
 
-### Langkah kedua
+### Langkah kedua : Job Middleware
+
