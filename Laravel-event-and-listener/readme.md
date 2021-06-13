@@ -4,4 +4,4 @@
 
 ## Daftar isi
 
-- [Laravel event](event.md)
+- [Laravel event and listener](event.md)
