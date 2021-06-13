@@ -207,4 +207,23 @@ public function shouldQueue(LoginHistory $event)
 }  
 ```
 
+## Event Subscriber
+
+Event subscriber adalah......
+
+### Membuat Event Subscriber
+
+### Register Event Subscriber
+
+Untuk melakukan register subscriber, dapat dilakukan dengan mendefinisikan properti `$subscribe` pada `EventServiceProvider`.
+
+```php
+use App\Listeners\UserEventSubscriber;
+
+class EventServiceProvider extends ServiceProvider
+{
+    protected $subscribe = [
+        UserEventSubscriber::class,
+    ];
+```
 
