@@ -209,9 +209,49 @@ public function shouldQueue(LoginHistory $event)
 
 ## Event Subscriber
 
-Event subscriber adalah......
+Event subscriber adalah sebuah class yang berisikan multiple events. Dengan adanya subscriber, kita dapat mendefinisikan beberapa handle (listener handle) dalam sebuah class. 
 
 ### Membuat Event Subscriber
+
+Karena event subscriber berisikan handle listener, maka kita dapat membuat event subscriber pada `App\Listeners`. Di dalam subscriber kita akan mendefenisikan method `subscribe`
+. Method ini akan di pass kedalam event dispatcher instance. Contohnya:
+
+```php
+class UserEventSubscriber
+{
+    
+    public function storeUserLogin($event) {
+        $current_timestamp = Carbon::now()->toDateTimeString();
+
+        $userinfo = $event->user;
+
+        $saveHistory = DB::table('login_history')->insert(
+            [
+                'name' => $userinfo->name,
+                'email' => $userinfo->email,
+                'created_at' => $current_timestamp,
+                'updated_at' => $current_timestamp
+            ]
+        );
+        return $saveHistory;
+    }
+
+    /**
+     * Register the listeners for the subscriber.
+     *
+     * @param  \Illuminate\Events\Dispatcher  $events
+     * @return void
+     */
+    public function subscribe($events)
+    {
+        $events->listen(
+            LoginHistory::class,
+            [UserEventSubscriber::class, 'storeUserLogin']
+        );
+    }
+}
+```
+Dari contoh dapat terlihat kita membuat method storeUserLogin. Method ini merupakan handle yang akan dijalankan ketika event LoginHistory terpanggil. Di bagian subscribe kita menghubungkan event LoginHistory dengan method storeUserLogin tadi.
 
 ### Register Event Subscriber
 
