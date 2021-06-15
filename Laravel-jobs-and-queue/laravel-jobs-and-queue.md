@@ -43,34 +43,48 @@ Ketika menggunakan database queue driver, maka perlu membuat sebuah tabel atau m
  `php artisan migrate`
 
 ## Settingan Awal
-Sebelum membuat jobs yang dapat di queue maka harus mengubah setinggan di ```.env``` pada bagian ```QUEUE_CONNECTION=sync``` menjadi ```QUEUE_CONNECTION=database```.
-jika tidak dilakukan maka jobs tidak akan dikirim ke queue melainkan langsung dijalankan di foreground.
+Sebelum membuat jobs yang dapat di queue ada 2 hal yang harus dilakukan :
+1. Mengubah pengaturan di ```.env``` pada bagian ```QUEUE_CONNECTION=sync``` menjadi ```QUEUE_CONNECTION=database```. (jika tidak dilakukan maka jobs tidak akan dikirim ke queue melainkan langsung dijalankan di foreground).
+2. Terhubung dengan database yang aktif.
+
+![Singkat0](./img/tots0.JPG)
+
 ## Langkah-langkah tutorial 
 ## Singkat
-### Langkah pertama : Membuat queue job
+Pada toturial ini hanya memperlihatkan cara minimal menggunakan jobs dan queue
+### S 1 : Membuat queue job
+
 ```
 php artisan queue:table
 ```
-### Langkah kedua : Mengupdate database
+![Singkat1](./img/tots1.JPG)
+### S 2 : Mengupdate database
 ```
 php artisan migrate
 ```
-### Langkah ketiga : Membuat Job
+![Singkat2](./img/tots2.JPG)
+### S 3 : Membuat Job
 ```
 php artisan make:job JobSingkat
 ```
-### Langkah keempat : Memanggil Job
-misal : menambah route di ```routes\web.php```
+![Singkat3](./img/tots3.JPG)
+### S 4 : Memanggil Job
+misal : menambah route di ```routes\web.php``` dan mengaksesnya
 ```php
 Route::get('testingJob',function(){
     dispatch(new App\Jobs\JobSingkat());
 });
 ```
-### Langkah kelima : Menjalankan Job
+![Singkat4](./img/tots4.JPG)
+### S 5 : Menjalankan Job
 ```
 php artisan queue:work
 ```
+![Singkat5](./img/tots5.JPG)
 ## Biasa
+Pada bagian ini akan mendefinisikan lebih dalam dan memberikan kemungkinan yang terjadi pada jobs tersebut
+### FlowChart Jobs Simple
+![notsoconfusing](./img/notsoconfusing.jpg)
 ### Langkah pertama : Membuat Job
 
 Secara default, semua jobs yang dapat dimasukkan queue akan disimpan di direktori `app/Jobs`. Jika direktori tersebut tidak ada, maka akan dibuat saat menjalankan perintah Artisan `make:job` :
