@@ -42,9 +42,35 @@ Ketika menggunakan database queue driver, maka perlu membuat sebuah tabel atau m
  
  `php artisan migrate`
 
-
-## Langkah-langkah tutorial
-
+## Settingan Awal
+Sebelum membuat jobs yang dapat di queue maka harus mengubah setinggan di ```.env``` pada bagian ```QUEUE_CONNECTION=sync``` menjadi ```QUEUE_CONNECTION=database```.
+jika tidak dilakukan maka jobs tidak akan dikirim ke queue melainkan langsung dijalankan di foreground.
+## Langkah-langkah tutorial 
+## Singkat
+### Langkah pertama : Membuat queue job
+```
+php artisan queue:table
+```
+### Langkah kedua : Mengupdate database
+```
+php artisan migrate
+```
+### Langkah ketiga : Membuat Job
+```
+php artisan make:job JobSingkat
+```
+### Langkah keempat : Memanggil Job
+misal : menambah route di ```routes\web.php```
+```php
+Route::get('testingJob',function(){
+    dispatch(new App\Jobs\JobSingkat());
+});
+```
+### Langkah kelima : Menjalankan Job
+```
+php artisan queue:work
+```
+## Biasa
 ### Langkah pertama : Membuat Job
 
 Secara default, semua jobs yang dapat dimasukkan queue akan disimpan di direktori `app/Jobs`. Jika direktori tersebut tidak ada, maka akan dibuat saat menjalankan perintah Artisan `make:job` :
