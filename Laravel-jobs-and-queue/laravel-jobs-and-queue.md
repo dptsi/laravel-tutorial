@@ -53,6 +53,8 @@ Secara default, semua jobs yang dapat dimasukkan queue akan disimpan di direktor
 php artisan make:job ProcessPodcast
 ```
 
+##### Class Structure : 
+
 ```
 <?php
 
@@ -102,4 +104,57 @@ class ProcessPodcast implements ShouldQueue
 ```
 
 ### Langkah kedua : Job Middleware
+
+
+
+### Langkah ketiga : Dispatching Jobs
+Setelah selesai menulis job class, selanjutnya adalah melakukan dispatch job dengan metode `dispatch`.
+
+```
+    public function store(Request $request)
+    {
+        $podcast = Podcast::create(...);
+
+        // ...
+
+        ProcessPodcast::dispatch($podcast);
+    }
+
+```
+Jika ingin memberikan condition saat melakukan dispatch, dapat menggunakan metode `dispatchIf` atau `dispatchUnless`
+
+`ProcessPodcast::dispatchIf($accountActive, $podcast);`
+
+`ProcessPodcast::dispatchUnless($accountSuspended, $podcast);`
+
+
+### Langkah keempat : Job Batching
+Sebelum memulai, diharuskan membuat database untuk membuat tabel yang berisi meta-information mengenai kumpulan job yang kita miliki, seperti persentasi penyelesaian dan sebagainya.
+
+`php artisan queue:batches-table`
+
+`php artisan migrate`
+
+### Langkah kelima : Running The Queue Worker
+Untuk memulai queue worker dan memproses jobs baru saat dimasukkan ke queue menggunaan command 
+
+`php artisan queue:work`
+
+command ini akan berjalan hingga dihentikan secara manual atau ketika terminal dimatikan.
+
+### Langkah keenam : Dealing With Failed Jobs
+Ketika job sudah melebihi maksimal attempts yang ditentukan, maka akan dimasukan ke tabel databasi `failed_jobs`. Sebelum itu, jangan lupa membuat tabel tersebut. Attempts maksimal dapat ditentukan dengan `--tries` saat menjalankan command `queue:work`
+
+`php artisan queue:work redis --tries=3`
+
+### Langkah ketujuh : Clearing Jobs From Queues
+Saat ada job yang failed, dapat dituliskan apa yang akan terjadi pada metode `failed` di job class
+
+```
+    public function failed(Throwable $exception)
+    {
+        // Send user notification of failure, etc...
+    }
+```
+### Job Events
 
