@@ -20,13 +20,13 @@ Laravel queues memberikan queueing API untuk berbagai backend, seperti Amazon SQ
 Dalam file konfigurasi `config/queue.php`, ada array konfigurasi `connections` yang menentukan koneksi ke backend queue seperti Amazon SQS, Beanstalk, atau Redis. Setiap konfigurasi connection mengandung atribut `queue`. Ini merupakan queue default untuk jobs yang dikirim ke connection tertentu. Sehingga, jika jobs dikirim tanpa menentukan queue mana tujuannya, maka jobs tersebut akan dimasukkan ke queue default tersebut.
 
 ```
-use App\Jobs\ProcessPodcast;
+use App\Jobs\JobSingkat;
 
 // This job is sent to the default connection's default queue...
-ProcessPodcast::dispatch();
+JobSingkat::dispatch();
 
 // This job is sent to the default connection's "emails" queue...
-ProcessPodcast::dispatch()->onQueue('emails');
+JobSingkat::dispatch()->onQueue('emails');
 ```
 
 Beberapa aplikasi mungkin tidak memerlukan banyak queue, cukup satu queue saja. Namun mengirimkan jobs ke beberapa queue dapat berguna untuk aplikasi yang ingin memprioritaskan atau mengelompokkan bagaimana jobs diproses. Misalnya, mengirimkan job ke queue dengan prioritas `high` akan memberikan prioritas memrosesan lebih tinggi ke job tersebut.
@@ -35,19 +35,20 @@ Beberapa aplikasi mungkin tidak memerlukan banyak queue, cukup satu queue saja. 
 php artisan queue:work --queue=high,default
 ```
 
-### Database
-Ketika menggunakan database queue driver, maka perlu membuat sebuah tabel atau migrasi untuk menyimpan jobs record.
-
- `php artisan queue:table`
- 
- `php artisan migrate`
-
 ## Settingan Awal
 Sebelum membuat jobs yang dapat di queue ada 2 hal yang harus dilakukan :
 1. Mengubah pengaturan di ```.env``` pada bagian ```QUEUE_CONNECTION=sync``` menjadi ```QUEUE_CONNECTION=database```. (jika tidak dilakukan maka jobs tidak akan dikirim ke queue melainkan langsung dijalankan di foreground).
 2. Terhubung dengan database yang aktif.
 
 ![Singkat0](./img/tots0.JPG)
+
+3. Membuat sebuah tabel atau migrasi untuk menyimpan jobs record.
+
+```
+ php artisan queue:table
+ 
+ php artisan migrate
+```
 
 ## Langkah-langkah tutorial 
 ## Singkat
