@@ -42,12 +42,6 @@ Sebelum membuat jobs yang dapat di queue ada 2 hal yang harus dilakukan :
 
 ![Singkat0](./img/tots0.JPG)
 
-3. Membuat sebuah tabel atau migrasi untuk menyimpan jobs record.
-
-```php artisan queue:table```
- 
-```php artisan migrate```
-
 ## Langkah-langkah tutorial 
 ## Singkat
 Pada toturial ini hanya memperlihatkan cara minimal menggunakan jobs dan queue
@@ -71,6 +65,7 @@ Secara default, semua jobs yang dapat dimasukkan queue akan disimpan di direktor
 ```
 php artisan make:job JobSingkat
 ```
+
 ![Singkat3](./img/tots3.JPG)
 
 ### S 4 : Memanggil Job
@@ -105,12 +100,14 @@ php artisan queue:table
 ```
 php artisan migrate
 ```
+
 ![TotF01](./img/tots2.JPG)
 
 ### Langkah Pertama : Membuat Job
 ```
 php artisan make:job PekerjaanBiasa
 ```
+
 ![TotF1](./img/tots3.JPG)
 
 Mendefinisikan apa yang akan dilakukan jobs di fungsi handle. handle ini dipanggil ketika job diproses pada queue. misal:
@@ -139,6 +136,9 @@ atau dengan menambahkan jobs dan memanggilnya
 ```php
 PekerjaanBiasa::dispatch();
 ```
+Isi dari Queue job
+
+![TotF21](./img/TotF2.jpg)
 
 Additional command:
 - Jobs dapat dispesifikasikan lokasi databasenya dengan `onConnection()` seperti `PekerjaanBiasa::dispatch()->onConnection('redis')` more connection on `config/queue`
@@ -151,14 +151,17 @@ Queue dapat dijalankan dengan melakukan command sebagai berikut
 ```
 php artisan queue:work
 ```
+
 ![TotF3](./img/tots5.JPG)
+
+![TotF30](./img/TotF3.jpg)
 
 Perlu diingat bahwa command ini akan berjalan terus hingga dihentikan secara manual atau terminal dimatikan.
 
 Additional command:
 - Jika mengganti isi dari job dan job masih berjalan maka harus melakukan `php artisan queue:restart` agar perubahan dapat dikenali worker
 - Jika menjalankan `php artisan queue:listen` maka tidak perlu melakukan `queue:restart` tapi lebih lambat daripada `queue:work`
-- Worker dapat dispesifikasikan queue yang akan dijalankanya dengan menambahkan `--queue='nama_queue'` contoh: `php artisan queue:work --queue=default,Penting`, jika tidak dispesifikasikan akan menjalankan `default`
+- Worker dapat dispesifikasikan queue yang akan dijalankanya dengan menambahkan `--queue='nama_queue'` contoh: `php artisan queue:work --queue=Penting, default, sekunder`*in this order*, jika tidak dispesifikasikan akan menjalankan `default`
 - Untuk database langsung menambahkan nama databasenya contoh:`php aritsan queue:work redis`
 
 ### Langkah 3.1 : Clearing Queued Job
@@ -166,15 +169,19 @@ Jika ingin membersihkan queue yang akan dijalankan maka dapat melakukan command 
 ```
 php artisan queue:clear
 ```
+
+![TotF31](./img/TotF31.jpg)
+
 ### langkah Keempat : Retry Failed Job
 Ketika job sudah melebihi maksimal attempts yang ditentukan, maka akan dimasukan ke tabel database `failed_jobs`. Jika pada tabel Failed Job ada queue yang ingin coba ulang dapat melakukan command sebagai berikut
 ```
 php artisan queue:retry [id]
 ```
 
+![TotF40](./img/TotF4.jpg)
+
 Additional command:
 - Untuk mencoba ulang semua jobs dapat melakukan `php artisan queue:retry all`
-- Jobs dapat langsung diulang ketika dijalankan dengan menjalankan worker dengan `--tries=[number]` contoh : `php artisan queue:work --tries=3`
 
 ### Langkah 4.1 : Flushing Failed Job
 Jika ingin membersihkan tabel Failed Job dapat melakukan command sebagai berikut
@@ -182,12 +189,18 @@ Jika ingin membersihkan tabel Failed Job dapat melakukan command sebagai berikut
 php artisan queue:forget [id]
 ```
 
+![TotF41](./img/TotF41.jpg)
+
 Additional command:
 - Untuk menghilangkan semua job yang gagal dapat menjalankan `php artisan queue:flush`
 
 ## More on Jobs
+### More Flowchart
+
+![MoreConfusingOne](./img/MoreConfusingOne.jpg)
 
 ### Unique Job : Memastikan tidak ada jobs ganda pada queue
+*database need to be supported with lock*
 Job hanya akan dipush ke queue ketika tidak ada job dengan key yang sama pada queue tersebut jika ada maka tidak akan dipush 
 
 ```php
