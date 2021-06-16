@@ -19,13 +19,13 @@ Laravel queues memberikan queueing API untuk berbagai backend, seperti Amazon SQ
 ## Konsep-konsep
 Dalam file konfigurasi `config/queue.php`, ada array konfigurasi `connections` yang menentukan koneksi ke backend queue seperti Amazon SQS, Beanstalk, atau Redis. Setiap konfigurasi connection mengandung atribut `queue`. Ini merupakan queue default untuk jobs yang dikirim ke connection tertentu. Sehingga, jika jobs dikirim tanpa menentukan queue mana tujuannya, maka jobs tersebut akan dimasukkan ke queue default tersebut.
 
-```
+```php
 use App\Jobs\JobSingkat;
 
-// This job is sent to the default connection's default queue...
+// Masuk ke default queue
 JobSingkat::dispatch();
 
-// This job is sent to the default connection's "emails" queue...
+// Masuk ke default queue "emails"
 JobSingkat::dispatch()->onQueue('emails');
 ```
 
@@ -44,11 +44,9 @@ Sebelum membuat jobs yang dapat di queue ada 2 hal yang harus dilakukan :
 
 3. Membuat sebuah tabel atau migrasi untuk menyimpan jobs record.
 
-```
- php artisan queue:table
+```php artisan queue:table```
  
- php artisan migrate
-```
+```php artisan migrate```
 
 ## Langkah-langkah tutorial 
 ## Singkat
@@ -206,7 +204,8 @@ class UpdateSearchIndex implements ShouldQueue, ShouldBeUnique
 
 ##### Unique hingga sebuah proses dimulai
 Secara default, unique jobs di-"unlock" setelah sebuah job selesai diproses atau failed saat retry attempt. Jika ingin meng-"unlock" segera sebelum diproses, dapat menggunakan ```ShouldBeUniqueUntilProcessing``` daripada ```ShouldBeUnique```.
-```
+
+```php
 class UpdateSearchIndex implements ShouldQueue, ShouldBeUniqueUntilProcessing
 {
     // ...
@@ -215,7 +214,7 @@ class UpdateSearchIndex implements ShouldQueue, ShouldBeUniqueUntilProcessing
 
 ### Job Middleware : Membuat Custom Logic
 Jika ingin menambahkan logic sendiri maka laravel tidak mespesifikasikan path dan dapat bebas membuat pathnya misalnya `App\Middleware` atau `App\Jobs\Middleware`. Setelah membut middleware, jangan lupa menambahkannya secara manual di job class, misal :
-```
+```php
 use App\Jobs\Middleware\RateLimited;
 
 public function middleware()
