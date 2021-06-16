@@ -85,116 +85,160 @@ php artisan queue:work
 Pada bagian ini akan mendefinisikan lebih dalam dan memberikan kemungkinan yang terjadi pada jobs tersebut
 ### FlowChart Jobs Simple
 ![notsoconfusing](./img/notsoconfusing.jpg)
-### Langkah pertama : Membuat Job
+### Fase 0 Membuat Queue 
+#### Membuat Queue Job
+dibuat sebagai letak dari queue yang akan dikerjakan, akan diletakan pada `database/migrations`
+```
+php artisan queue:table
+```
+![TotF00](./img/tots1.JPG)
+
+#### Migrasi Database
+mengupdate database sehingga dapat menerima job yang akan dijalankan
+```
+php artisan migrate
+```
+![TotF01](./img/tots2.JPG)
+
+### Langkah Pertama : Membuat Job
 
 Secara default, semua jobs yang dapat dimasukkan queue akan disimpan di direktori `app/Jobs`. Jika direktori tersebut tidak ada, maka akan dibuat saat menjalankan perintah Artisan `make:job` :
 
 ```
-php artisan make:job ProcessPodcast
+php artisan make:job PekerjaanBiasa
+```
+![TotF1](./img/tots3.JPG)
+
+Mendefinisikan apa yang akan dilakukan jobs di fungsi handle. misal:
+```php
+public function handle()
+    {
+        echo("jobs");
+    }
 ```
 
-##### Class Structure : 
-
+### Langkah Kedua : Memanggil Job
+Jobs dapat dipanggil dengan melakukan `dispatch()` pada job tersebut 
+misal : menambah route di ```routes\web.php``` dan mengaksesnya
+```php
+Route::get('testingJob',function(){
+    dispatch(new App\Jobs\JobSingkat());
+});
 ```
+![TotF2](./img/tots4.JPG)
+
+atau dengan menambahkan jobs dan memanggilnya
+```php
+ use App\Jobs\PerkerjaanBiasa;
+```
+```php
+PekerjaanBiasa::dispatch();
+```
+additional command:
+- Jobs dapat dispesifikasikan lokasi databasenya dengan `onConnection()` seperti `PekerjaanBiasa::dispatch()->onConnection('redis')` more connection on `config/queue`
+- Jobs juga dapat dispesifikasikan lokasi queuenya dengan `onQueue()`seperti `PekerjaanBiasa::dispatch()->onQueue('Penting')`
+- Jika mengganti `dispatch()` menjadi `dispatchSync()` maka jobs tidak akan diqueue melainkan langsung dijalankan
+- Jobs dapat ditunda dengan menambahkan `delay(now()->addMinutes([number])` contoh: `PekerjaanBiasa::dispatch()->delay(now()->addMinutes(10))`
+
+### Langkah Ketiga : Menjalankan Queued Job
+Queue dapat dijalankan dengan  melakukan command sebagai berikut
+```
+php artisan queue:work
+```
+![TotF3](./img/tots5.JPG)
+
+additional command:
+- Jika mengganti isi dari job dan job masih berjalan maka harus melakukan `php artisan queue:restart` agar perubahan dapat dikenali worker
+- Jika menjalankan `php artisan queue:listen` maka tidak perlu melakukan `queue:restart` tapi lebih lambat daripada `queue:work`
+- Worker dapat dispesifikasikan queue yang akan dijalankanya dengan menambahkan `--queue='nama_queue'` contoh: `php artisan queue:work --queue=default,Penting`, jika tidak dispesifikasikan akan menjalankan `default`
+- untuk database langsung menambahkan nama databasenya contoh:`php aritsan queue:work redis`
+### Langkah 3.1 : Clearing Queued Job
+Jika ingin membersihkan queue yang akan dijalankan maka dapat melakukan command sebagai berikut
+```
+php artisan queue:clear
+```
+### langkah Keempat : Retry Failed Job
+jika pada tabel Failed Job ada queue yang ingin coba ulang dapat melakukan command sebagai berikut
+```
+php artisan queue:retry [id]
+```
+additional command:
+- untuk mencoba ulang semua jobs dapat melakukan `php artisan queue:retry all`
+- jobs dapat langsung diulang ketika dijalankan dengan menjalankan worker dengan `--tries=[number]` contoh : `php artisan queue:work --tries=3`
+
+### Langkah 4.1 : Flushing Failed Job
+Jika ingin membersihkan tabel Failed Job dapat melakukan command sebagai berikut
+```
+php artisan queue:forget [id]
+```
+additional command:
+- untuk menghilangkan semua job yang gagal dapat menjalankan `php artisan queue:flush`
+
+## More on Jobs
+
+### Unique : Memastikan tidak ada jobs ganda pada queue
+Job hanya akan dipush ke queue ketika tidak ada job dengan key yang sama pada queue tersebut jika ada maka tidak akan dipush 
+```php
 <?php
 
-namespace App\Jobs;
-
-use App\Models\Podcast;
-use App\Services\AudioProcessor;
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class ProcessPodcast implements ShouldQueue
+class UpdateSearchIndex implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * The podcast instance.
-     *
-     * @var \App\Models\Podcast
-     */
-    protected $podcast;
-
-    /**
-     * Create a new job instance.
-     *
-     * @param  App\Models\Podcast  $podcast
-     * @return void
-     */
-    public function __construct(Podcast $podcast)
-    {
-        $this->podcast = $podcast;
-    }
-
-    /**
-     * Execute the job.
-     *
-     * @param  App\Services\AudioProcessor  $processor
-     * @return void
-     */
-    public function handle(AudioProcessor $processor)
-    {
-        // Process uploaded podcast...
-    }
+    ...
 }
 ```
 
-### Langkah kedua : Job Middleware
+### Middleware : Membuat Custom Logic
+Jika ingin menambahkan logic sendiri maka laravel tidak mespesifikasikan path dan dapat bebas membuat pathnya misalnya `App\Middleware` atau `App\Jobs\Middleware`
 
+### Job Chaining : Membuat Job yang berjalan urut
+Job Chaining dilakukan ketika job yang dilakukan harus urut dan jika ada bagian yang gagal maka job dalam chain tidak akan dilakukan.
+```php
+use App\Jobs\Job1;
+use App\Jobs\Job2;
+use App\Jobs\Job4;
+use Illuminate\Support\Facades\Bus;
 
-
-### Langkah ketiga : Dispatching Jobs
-Setelah selesai menulis job class, selanjutnya adalah melakukan dispatch job dengan metode `dispatch`.
-
+Bus::chain([
+    new Job1,
+    new Job2,
+    new Job4,
+])->dispatch();
 ```
-    public function store(Request $request)
-    {
-        $podcast = Podcast::create(...);
-
-        // ...
-
-        ProcessPodcast::dispatch($podcast);
-    }
-
+### Jobs Batching : membuat Jobs yang dapat dilacak
+fitur ini memungkinkan mengjalankan batch dan melakukan aksi ketika batch sudah selesai dilakukan
+#### 1 : Membuat Table Batch
+perlu membuat tablenya telebih dahulu
 ```
-Jika ingin memberikan condition saat melakukan dispatch, dapat menggunakan metode `dispatchIf` atau `dispatchUnless`
+php artisan queue:batches-table
 
-`ProcessPodcast::dispatchIf($accountActive, $podcast);`
-
-`ProcessPodcast::dispatchUnless($accountSuspended, $podcast);`
-
-
-### Langkah keempat : Job Batching
-Sebelum memulai, diharuskan membuat database untuk membuat tabel yang berisi meta-information mengenai kumpulan job yang kita miliki, seperti persentasi penyelesaian dan sebagainya.
-
-`php artisan queue:batches-table`
-
-`php artisan migrate`
-
-### Langkah kelima : Running The Queue Worker
-Untuk memulai queue worker dan memproses jobs baru saat dimasukkan ke queue menggunaan command 
-
-`php artisan queue:work`
-
-command ini akan berjalan hingga dihentikan secara manual atau ketika terminal dimatikan.
-
-### Langkah keenam : Dealing With Failed Jobs
-Ketika job sudah melebihi maksimal attempts yang ditentukan, maka akan dimasukan ke tabel databasi `failed_jobs`. Sebelum itu, jangan lupa membuat tabel tersebut. Attempts maksimal dapat ditentukan dengan `--tries` saat menjalankan command `queue:work`
-
-`php artisan queue:work redis --tries=3`
-
-### Langkah ketujuh : Clearing Jobs From Queues
-Saat ada job yang failed, dapat dituliskan apa yang akan terjadi pada metode `failed` di job class
-
+php artisan migrate
 ```
-    public function failed(Throwable $exception)
-    {
-        // Send user notification of failure, etc...
-    }
-```
-### Job Events
+#### 2 : Create Batch
+perlu menambahkan`Illuminate\Bus\Batchable` dan dalam class `use Batchable`
+#### 3 : Dispatch Batch
+sebagai contoh:
+```php
+use App\Jobs\ImportCsv;
+use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
+use Throwable;
 
+$batch = Bus::batch([
+    new ImportCsv(1, 100),
+    new ImportCsv(101, 200),
+    new ImportCsv(201, 300),
+    new ImportCsv(301, 400),
+    new ImportCsv(401, 500),
+])->then(function (Batch $batch) {
+    // All jobs completed successfully...
+})->catch(function (Batch $batch, Throwable $e) {
+    // First batch job failure detected...
+})->finally(function (Batch $batch) {
+    // The batch has finished executing...
+})->dispatch();
+
+return $batch->id;
+```
