@@ -4,13 +4,13 @@
 
 ## Latar belakang topik
 
-Konfigurasi entri cron digunakan untuk menjadwalkan task-task seperti mengirim email atau mengunduh file dari internet di waktu tertentu. Namun, konfigurasi cron dalam sebuah server terkadang tidak nyaman. Jadwal task tidak lagi berada dalam source control. Untuk melihat entri cron yang ada atau menambah entri cron yang baru, perlu dilakukan SSH ke server.
+Konfigurasi entri cron digunakan untuk menjadwalkan tugas-tugas seperti mengirim email atau mengunduh file dari internet di waktu tertentu. Namun, konfigurasi cron dalam sebuah server terkadang tidak nyaman. Jadwal tugas tidak lagi berada dalam source control. Untuk melihat entri cron yang ada atau menambah entri cron yang baru, perlu dilakukan SSH ke server.
 
-Laravel menyediakan pendekatan dalam mengelola task-task terjadwal. Command scheduler milik Laravel memungkinkan penentuan jadwal command dalam aplikasi Laravel. Penggunaan scheduler ini hanya memerlukan satu entri cron dalam Server. Jadwal task didefinisikan dalam method **schedule** milik file **app/Console/Kernel.php**
+Laravel menyediakan pendekatan dalam mengelola tugas-tugas terjadwal. Command scheduler milik Laravel memungkinkan penentuan jadwal command dalam aplikasi Laravel. Penggunaan scheduler ini hanya memerlukan satu entri cron dalam Server. Jadwal tugas didefinisikan dalam method **schedule** milik file **app/Console/Kernel.php**
 
 ## Konsep-konsep
 
-Semua task yang terjadwal dapat didefinisikan dalam method **schedule** dari class **App\Console\Kernel**.
+Semua tugas yang terjadwal dapat didefinisikan dalam method **schedule** dari class **App\Console\Kernel**.
 
 Di bawah ini terdapat beberapa contoh penerapan method **schedule** dalam Laravel.
 
@@ -51,7 +51,7 @@ class Kernel extends ConsoleKernel
 }
 ```
 
-Artisan command **schedule:list** dapat digunakan untuk melihat semua task yang terjadwal serta melihat kapan task tersebut akan dijalankan.
+Artisan command **schedule:list** dapat digunakan untuk melihat semua tugas yang terjadwal serta melihat kapan tugas tersebut akan dijalankan.
 
 ```
 php artisan schedule:list
@@ -90,7 +90,7 @@ $schedule->exec('node /home/forge/script.js')->daily();
 
 ### Schedule Frequency Option
 
-Terdapat banyak frekuensi task schedule yang bisa diberikan kepada sebuah task.
+Terdapat banyak frekuensi task schedule yang bisa diberikan kepada sebuah tugas.
 
 | Method                            | Description                                                   |
 | --------------------------------- | ------------------------------------------------------------- |
@@ -227,13 +227,13 @@ protected function scheduleTimezone()
 
 ### Mencegah Task Overlap
 
-Secara default, task terjadwal akan dijalankan meskipun instance dari task tersebut masih berjalan. Untuk mencegah ini, dapat digunakan method **withoutOverlapping**
+Secara default, tugas terjadwal akan dijalankan meskipun instance dari tugas tersebut masih berjalan. Untuk mencegah ini, dapat digunakan method **withoutOverlapping**
 
 ```php
 $schedule->command('emails:send')->withoutOverlapping();
 ```
 
-Method ini berguna dalam kasus dimana terdapat banyak task dengan waktu eksekusi yang bervariasi. Tidak diperlukan prediksi terhadap seberapa lama task bekerja.
+Method ini berguna dalam kasus dimana terdapat banyak tugas dengan waktu eksekusi yang bervariasi. Tidak diperlukan prediksi terhadap seberapa lama tugas bekerja.
 Jike diperlukan, method ini dapat ditentukan berapa menit yang diperlukan agar kunci withoutOverlapping dilepas. Secara default, kunci berakhir setelah 24 jam.
 
 ```php
@@ -326,3 +326,79 @@ $schedule->command('report:generate')
          ->emailOutputOnFailure('taylor@example.com');
 ```
 
+## Task Hook
+
+Dengan method **before** dan **after**, kode dapat diatur untuk dijalankan sebelum dan sesudah tugas terjadwal dieksekusi.
+
+```php
+$schedule->command('emails:send')
+         ->daily()
+         ->before(function () {
+             // The task is about to execute...
+         })
+         ->after(function () {
+             // The task has executed...
+         });
+```
+
+Method **onSuccess** dan **onFailure** dapat mengatur kode agar dapat dijalankan ketika tugas terjadwal berhasil atau gagal dijalankan.
+
+```php
+$schedule->command('emails:send')
+         ->daily()
+         ->onSuccess(function () {
+             // The task succeeded...
+         })
+         ->onFailure(function () {
+             // The task failed...
+         });
+```
+
+Jika terdapat output, isi output dapat diakses dari **after**, **onSuccess**, dan **onFailure** menggunakan instance use Illuminate\Support\Stringable sebagai argumen **$output**.
+
+```php
+use Illuminate\Support\Stringable;
+
+$schedule->command('emails:send')
+         ->daily()
+         ->onSuccess(function (Stringable $output) {
+             // The task succeeded...
+         })
+         ->onFailure(function (Stringable $output) {
+             // The task failed...
+         });
+```
+
+### Ping URL
+
+Method **pingBefore** an **thenPing** dapat digunakan untuk untuk secara otomatis ping URL yang diberikan sebelum atau sesudah task dijalankan. Method ini berguna dalam mengingatkan servis luar, seperti Envoyer, bahwa tugas telah dimulai atau selesai.
+
+```php
+$schedule->command('emails:send')
+         ->daily()
+         ->pingBefore($url)
+         ->thenPing($url);
+```
+
+Method **pingBeforeIf** an **thenPingIf** digunakan untuk ping URL jika kondisi yang diberikan return nilai true
+
+```php
+$schedule->command('emails:send')
+         ->daily()
+         ->pingBeforeIf($condition, $url)
+         ->thenPingIf($condition, $url);
+```
+
+Method **pingOnSuccess** dan **pingOnFailure** hanya akan berjalan ketika tugas berhasil atau gagal berjalan.
+
+```php
+$schedule->command('emails:send')
+         ->daily()
+         ->pingOnSuccess($successUrl)
+         ->pingOnFailure($failureUrl);
+```
+
+Ping method memerlukan library Guzzle HTTP.
+```
+composer require guzzlehttp/guzzle
+```
