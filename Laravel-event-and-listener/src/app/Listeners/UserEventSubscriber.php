@@ -8,9 +8,7 @@ use App\Events\LoginHistory;
 
 class UserEventSubscriber
 {
-    /**
-     * Handle user login events.
-     */
+    
     public function storeUserLogin($event) {
         $current_timestamp = Carbon::now()->toDateTimeString();
 
@@ -18,7 +16,7 @@ class UserEventSubscriber
 
         $saveHistory = DB::table('login_history')->insert(
             [
-                'name' => $userinfo->name,
+                'name' => 'subscriber',
                 'email' => $userinfo->email,
                 'created_at' => $current_timestamp,
                 'updated_at' => $current_timestamp
@@ -27,12 +25,7 @@ class UserEventSubscriber
         return $saveHistory;
     }
 
-    /**
-     * Register the listeners for the subscriber.
-     *
-     * @param  \Illuminate\Events\Dispatcher  $events
-     * @return void
-     */
+   
     public function subscribe($events)
     {
         $events->listen(

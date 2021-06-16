@@ -1,3 +1,3 @@
-require('./bootstrap');
+import './bootstrap';
 
-require('alpinejs');
+import 'alpinejs';

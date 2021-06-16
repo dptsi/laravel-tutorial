@@ -10,12 +10,13 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Log;
 
+//class StoreUserLoginHistory 
 class StoreUserLoginHistory implements ShouldQueue
 {
-    
+   
     //public $queue = 'listeners';
-    public $delay = 10;
-    //public $tries = 2;
+    //public $delay = 10;
+
    
     public function __construct()
     {
@@ -38,36 +39,29 @@ class StoreUserLoginHistory implements ShouldQueue
             ]
         );
         return $saveHistory;
-        //$this->release(10);
+       
     }
 
-    public function shouldQueue(LoginHistory $event)
+    /*public function shouldQueue(LoginHistory $event)
     {
         return true;
-    }
+    }*/
 
-    // public function viaQueue()
-    // {
-    //     return 'listeners';
-    // }
-
+    /* public function viaQueue()
+     {
+         return 'listeners';
+     }
+    */
+    /*
     public function failed(LoginHistory $event, $exception)
     {
-        $current_timestamp = Carbon::now()->toDateTimeString();
-        $userinfo = $event->user;
         
-        DB::table('login_history')->insert(
-        [
-            'name' => $userinfo->name,
-            'email' => $userinfo->email,
-            'created_at' => $current_timestamp,
-            'updated_at' => $current_timestamp
-        ]
-        );
     }
+    */
 
+    /*
     public function retryUntil()
     {
         return now()->addSeconds(5);
-    }
+    }*/
 }

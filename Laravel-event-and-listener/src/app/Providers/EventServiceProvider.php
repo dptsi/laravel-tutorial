@@ -20,26 +20,31 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-       
-        /*LoginHistory::class => [
+        //normal
+        
+        LoginHistory::class => [
             StoreUserLoginHistory::class,
-        ]*/
+        ]
+        
         
     ];
-  
+    //subscriber
+    /*
     protected $subscribe = [
         UserEventSubscriber::class,
     ];
+    */
 
     public function boot()
     {
+        
         /*
         Event::listen(
             LoginHistory::class,
             [StoreUserLoginHistory::class, 'handle']
         );
-        */
-        
+       */
+        //manual
         /*
         Event::listen(function (LoginHistory $event) {
             $current_timestamp = Carbon::now()->toDateTimeString();
@@ -48,7 +53,7 @@ class EventServiceProvider extends ServiceProvider
 
             $saveHistory = DB::table('login_history')->insert(
                 [
-                    'name' => $userinfo->name,
+                    'name' => 'manual',
                     'email' => $userinfo->email,
                     'created_at' => $current_timestamp,
                     'updated_at' => $current_timestamp
@@ -56,7 +61,7 @@ class EventServiceProvider extends ServiceProvider
             );
             return $saveHistory;
         });
-        */
+       */
 
     }
 }
