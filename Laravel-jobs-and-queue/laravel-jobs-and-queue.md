@@ -54,21 +54,27 @@ Sebelum membuat jobs yang dapat di queue ada 2 hal yang harus dilakukan :
 ## Singkat
 Pada toturial ini hanya memperlihatkan cara minimal menggunakan jobs dan queue
 ### S 1 : Membuat queue job
-
+Dibuat sebagai letak dari queue yang akan dikerjakan, akan diletakan pada `database/migrations`
 ```
 php artisan queue:table
 ```
 ![Singkat1](./img/tots1.JPG)
+
 ### S 2 : Mengupdate database
+Mengupdate database sehingga dapat menerima job yang akan dijalankan
 ```
 php artisan migrate
 ```
 ![Singkat2](./img/tots2.JPG)
+
 ### S 3 : Membuat Job
+Secara default, semua jobs yang dapat dimasukkan queue akan disimpan di direktori `app/Jobs`. Jika direktori tersebut tidak ada, maka akan dibuat saat menjalankan perintah Artisan `make:job`. Kelas yang telah di-generate akan mengimplementasi interface ```Illuminate\Contracts\Queue\ShouldQueue```, yang artinya job tersebut akan dipush ke queue untuk dijalankan secara asinkronus :
+
 ```
 php artisan make:job JobSingkat
 ```
 ![Singkat3](./img/tots3.JPG)
+
 ### S 4 : Memanggil Job
 misal : menambah route di ```routes\web.php``` dan mengaksesnya
 ```php
@@ -77,40 +83,39 @@ Route::get('testingJob',function(){
 });
 ```
 ![Singkat4](./img/tots4.JPG)
+
 ### S 5 : Menjalankan Job
 ```
 php artisan queue:work
 ```
 ![Singkat5](./img/tots5.JPG)
+
 ## Biasa
-Pada bagian ini akan mendefinisikan lebih dalam dan memberikan kemungkinan yang terjadi pada jobs tersebut
+Pada bagian ini akan mendefinisikan lebih dalam dan memberikan kemungkinan yang terjadi pada jobs tersebut.
+
 ### FlowChart Jobs Simple
 ![notsoconfusing](./img/notsoconfusing.jpg)
+
 ### Fase 0 Membuat Queue 
 #### Membuat Queue Job
-dibuat sebagai letak dari queue yang akan dikerjakan, akan diletakan pada `database/migrations`
 ```
 php artisan queue:table
 ```
 ![TotF00](./img/tots1.JPG)
 
 #### Migrasi Database
-mengupdate database sehingga dapat menerima job yang akan dijalankan
 ```
 php artisan migrate
 ```
 ![TotF01](./img/tots2.JPG)
 
 ### Langkah Pertama : Membuat Job
-
-Secara default, semua jobs yang dapat dimasukkan queue akan disimpan di direktori `app/Jobs`. Jika direktori tersebut tidak ada, maka akan dibuat saat menjalankan perintah Artisan `make:job` :
-
 ```
 php artisan make:job PekerjaanBiasa
 ```
 ![TotF1](./img/tots3.JPG)
 
-Mendefinisikan apa yang akan dilakukan jobs di fungsi handle. misal:
+Mendefinisikan apa yang akan dilakukan jobs di fungsi handle. handle ini dipanggil ketika job diproses pada queue. misal:
 ```php
 public function handle()
     {
@@ -119,8 +124,9 @@ public function handle()
 ```
 
 ### Langkah Kedua : Memanggil Job
-Jobs dapat dipanggil dengan melakukan `dispatch()` pada job tersebut 
-misal : menambah route di ```routes\web.php``` dan mengaksesnya
+Jobs dapat dipanggil dengan melakukan `dispatch()` pada job tersebut. 
+Misal : menambah route di ```routes\web.php``` dan mengaksesnya
+
 ```php
 Route::get('testingJob',function(){
     dispatch(new App\Jobs\JobSingkat());
@@ -135,50 +141,57 @@ atau dengan menambahkan jobs dan memanggilnya
 ```php
 PekerjaanBiasa::dispatch();
 ```
-additional command:
+
+Additional command:
 - Jobs dapat dispesifikasikan lokasi databasenya dengan `onConnection()` seperti `PekerjaanBiasa::dispatch()->onConnection('redis')` more connection on `config/queue`
 - Jobs juga dapat dispesifikasikan lokasi queuenya dengan `onQueue()`seperti `PekerjaanBiasa::dispatch()->onQueue('Penting')`
 - Jika mengganti `dispatch()` menjadi `dispatchSync()` maka jobs tidak akan diqueue melainkan langsung dijalankan
 - Jobs dapat ditunda dengan menambahkan `delay(now()->addMinutes([number])` contoh: `PekerjaanBiasa::dispatch()->delay(now()->addMinutes(10))`
 
 ### Langkah Ketiga : Menjalankan Queued Job
-Queue dapat dijalankan dengan  melakukan command sebagai berikut
+Queue dapat dijalankan dengan melakukan command sebagai berikut
 ```
 php artisan queue:work
 ```
 ![TotF3](./img/tots5.JPG)
 
-additional command:
+Perlu diingat bahwa command ini akan berjalan terus hingga dihentikan secara manual atau terminal dimatikan.
+
+Additional command:
 - Jika mengganti isi dari job dan job masih berjalan maka harus melakukan `php artisan queue:restart` agar perubahan dapat dikenali worker
 - Jika menjalankan `php artisan queue:listen` maka tidak perlu melakukan `queue:restart` tapi lebih lambat daripada `queue:work`
 - Worker dapat dispesifikasikan queue yang akan dijalankanya dengan menambahkan `--queue='nama_queue'` contoh: `php artisan queue:work --queue=default,Penting`, jika tidak dispesifikasikan akan menjalankan `default`
-- untuk database langsung menambahkan nama databasenya contoh:`php aritsan queue:work redis`
+- Untuk database langsung menambahkan nama databasenya contoh:`php aritsan queue:work redis`
+
 ### Langkah 3.1 : Clearing Queued Job
 Jika ingin membersihkan queue yang akan dijalankan maka dapat melakukan command sebagai berikut
 ```
 php artisan queue:clear
 ```
 ### langkah Keempat : Retry Failed Job
-jika pada tabel Failed Job ada queue yang ingin coba ulang dapat melakukan command sebagai berikut
+Ketika job sudah melebihi maksimal attempts yang ditentukan, maka akan dimasukan ke tabel database `failed_jobs`. Jika pada tabel Failed Job ada queue yang ingin coba ulang dapat melakukan command sebagai berikut
 ```
 php artisan queue:retry [id]
 ```
-additional command:
-- untuk mencoba ulang semua jobs dapat melakukan `php artisan queue:retry all`
-- jobs dapat langsung diulang ketika dijalankan dengan menjalankan worker dengan `--tries=[number]` contoh : `php artisan queue:work --tries=3`
+
+Additional command:
+- Untuk mencoba ulang semua jobs dapat melakukan `php artisan queue:retry all`
+- Jobs dapat langsung diulang ketika dijalankan dengan menjalankan worker dengan `--tries=[number]` contoh : `php artisan queue:work --tries=3`
 
 ### Langkah 4.1 : Flushing Failed Job
 Jika ingin membersihkan tabel Failed Job dapat melakukan command sebagai berikut
 ```
 php artisan queue:forget [id]
 ```
-additional command:
-- untuk menghilangkan semua job yang gagal dapat menjalankan `php artisan queue:flush`
+
+Additional command:
+- Untuk menghilangkan semua job yang gagal dapat menjalankan `php artisan queue:flush`
 
 ## More on Jobs
 
-### Unique : Memastikan tidak ada jobs ganda pada queue
+### Unique Job : Memastikan tidak ada jobs ganda pada queue
 Job hanya akan dipush ke queue ketika tidak ada job dengan key yang sama pada queue tersebut jika ada maka tidak akan dipush 
+
 ```php
 <?php
 
@@ -191,11 +204,29 @@ class UpdateSearchIndex implements ShouldQueue, ShouldBeUnique
 }
 ```
 
-### Middleware : Membuat Custom Logic
-Jika ingin menambahkan logic sendiri maka laravel tidak mespesifikasikan path dan dapat bebas membuat pathnya misalnya `App\Middleware` atau `App\Jobs\Middleware`
+##### Unique hingga sebuah proses dimulai
+Secara default, unique jobs di-"unlock" setelah sebuah job selesai diproses atau failed saat retry attempt. Jika ingin meng-"unlock" segera sebelum diproses, dapat menggunakan ```ShouldBeUniqueUntilProcessing``` daripada ```ShouldBeUnique```.
+```
+class UpdateSearchIndex implements ShouldQueue, ShouldBeUniqueUntilProcessing
+{
+    // ...
+}
+```
+
+### Job Middleware : Membuat Custom Logic
+Jika ingin menambahkan logic sendiri maka laravel tidak mespesifikasikan path dan dapat bebas membuat pathnya misalnya `App\Middleware` atau `App\Jobs\Middleware`. Setelah membut middleware, jangan lupa menambahkannya secara manual di job class, misal :
+```
+use App\Jobs\Middleware\RateLimited;
+
+public function middleware()
+{
+    return [new RateLimited];
+}
+```
 
 ### Job Chaining : Membuat Job yang berjalan urut
-Job Chaining dilakukan ketika job yang dilakukan harus urut dan jika ada bagian yang gagal maka job dalam chain tidak akan dilakukan.
+Job Chaining dilakukan ketika job yang dilakukan harus urut dan jika ada bagian yang gagal maka job dalam chain tidak akan dilakukan. Untuk menjalankan job chain, menggunkan method `chain` dan facade `Bus`. Misal :
+
 ```php
 use App\Jobs\Job1;
 use App\Jobs\Job2;
@@ -208,19 +239,23 @@ Bus::chain([
     new Job4,
 ])->dispatch();
 ```
+
 ### Jobs Batching : membuat Jobs yang dapat dilacak
-fitur ini memungkinkan mengjalankan batch dan melakukan aksi ketika batch sudah selesai dilakukan
+Fitur ini memungkinkan mengjalankan batch dan melakukan aksi ketika batch sudah selesai dilakukan
+
 #### 1 : Membuat Table Batch
-perlu membuat tablenya telebih dahulu
+Perlu membuat tablenya telebih dahulu
 ```
 php artisan queue:batches-table
 
 php artisan migrate
 ```
+
 #### 2 : Create Batch
-perlu menambahkan`Illuminate\Bus\Batchable` dan dalam class `use Batchable`
+Perlu menambahkan`Illuminate\Bus\Batchable` dan dalam class `use Batchable`
+
 #### 3 : Dispatch Batch
-sebagai contoh:
+Sebagai contoh:
 ```php
 use App\Jobs\ImportCsv;
 use Illuminate\Bus\Batch;
