@@ -207,14 +207,41 @@ public function shouldQueue(LoginHistory $event)
 }  
 ```
 
+## Mengatasi Job yang Gagal
+
+Mungkin saja suatu saat listener dengan queue yang dijalankan gagal. Apabila listener mencapai batas maksimum percobaan gagal maka fungsi `failed` akan terpanggil. Batas maksimum percobaan dapat diatur dengan mendefinisikan properti `$tries`.
+
+```php
+use App\Events\LoginHistory;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class StoreUserLoginHistory implements ShouldQueue
+{
+    public $tries = 2;
+
+    public function failed(OrderShipped $event, $exception)
+    {
+        // logic yang ingin dijalankan ketika gagal
+    }
+}
+```
+
+Sebagai alternatif untuk mendefinisikan batas percobaan, dapat menggunakan waktu sebagai batasannya. Batas waktu ini akan bekerja dengan mengizinkan listener melakukan percobaan berulang-kali hingga batas waktu tertentu. Batas waktu tersebut didefinisikan dalam fungsi `retryUntil()`
+
+```php
+public function retryUntil()
+{
+    return now()->addSeconds(5);
+}
+```
+
 ## Event Subscriber
 
 Event subscriber adalah sebuah class yang berisikan multiple events. Dengan adanya subscriber, kita dapat mendefinisikan beberapa handle (listener handle) dalam sebuah class. 
 
 ### Membuat Event Subscriber
 
-Karena event subscriber berisikan handle listener, maka kita dapat membuat event subscriber pada `App\Listeners`. Di dalam subscriber kita akan mendefenisikan method `subscribe`
-. Method ini akan di pass kedalam event dispatcher instance. Contohnya:
+Karena event subscriber berisikan handle listener, maka kita dapat membuat event subscriber pada `App\Listeners`. Di dalam subscriber kita akan mendefenisikan method `subscribe`. Method ini akan di pass kedalam event dispatcher instance. Contohnya:
 
 ```php
 class UserEventSubscriber
