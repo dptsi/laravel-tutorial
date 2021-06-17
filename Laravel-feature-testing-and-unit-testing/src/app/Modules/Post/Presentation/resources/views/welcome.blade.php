@@ -62,7 +62,7 @@
     @foreach ($posts ?? [] as $post)
         <div class="sm:grid grid-cols-2 gap-20 w-4/5 mx-auto py-15 border-b">
             <div>
-                <img src="{{ asset('images/' . $post->image_path) }}" alt="">
+                <img src="https://cdn.pixabay.com/photo/2015/03/26/10/25/apple-691323_960_720.jpg" alt="">
             </div>
             <div>
                 <h2 class="text-gray-700 font-bold text-5xl pb-4">
@@ -77,7 +77,7 @@
                     {{ $post->description }}
                 </p>
 
-                <a href="/post/{{ $post->slug }}"
+                <a href="{{route('post.show', ['post' => $post->slug])}}"
                     class="uppercase bg-blue-500 text-gray-100 text-lg font-extrabold py-4 px-8 rounded-3xl">
                     Keep Reading
                 </a>

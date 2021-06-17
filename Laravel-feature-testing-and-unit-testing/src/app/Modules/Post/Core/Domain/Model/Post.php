@@ -12,15 +12,15 @@ class Post extends Model
   use Sluggable;
 
   protected $fillable = [
-    'title', 'slug', 'description', 'image_path'
+    'title', 'slug', 'description',
   ];
 
   public function sluggable(): array
   {
-      return [
-          'slug' => [
-              'source' => 'title'
-          ]
-      ];
+    return [
+      'slug' => [
+        'source' => 'title'
+      ]
+    ];
   }
 }

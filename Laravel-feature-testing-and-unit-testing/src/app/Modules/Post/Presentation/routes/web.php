@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Modules\Post\Presentation\Controllers\BaseController;
+use App\Modules\Post\Presentation\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +14,4 @@ use App\Modules\Post\Presentation\Controllers\BaseController;
 |
 */
 
-Route::resource('/', BaseController::class);
+Route::resource('post', PostController::class);

@@ -9,8 +9,7 @@
         </div>
     </div>
     <div class="w-4/5 m-auto mb-5 pt-20 border-b border-gray-200">
-        <span class="text-gray-500">
-            By <span class="font-bold-italic text-gray-800">{{ $post->user->name }}</span>,
+        <span class="text-gray-500">            
             Created on {{ date('jS M Y', strtotime($post->updated_at)) }}
         </span>
 
