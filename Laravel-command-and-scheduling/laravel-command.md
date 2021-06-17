@@ -123,7 +123,7 @@ public function handle()
 
 Selanjutnya kita test, maka akan muncul seperti ini :
 
-<!-- img -->
+> ![image](screenshots/1.JPG)
 
 Kita juga bisa menambahkan **positional argumen** pada perintah yang kita buat seperti dibawah ini
     
@@ -153,7 +153,7 @@ public function handle()
 
 maka ketika command dipanggil akan muncul seperti dibawah ini
 
-<!-- img -->
+> ![image](screenshots/2.JPG)
 
 Kita juga bisa membuat nilai **default** untuk argumen yang ada seperti ini :
 
@@ -200,7 +200,7 @@ public function handle()
 }
 ```
 
-<!-- img -->
+> ![image](screenshots/3.JPG)
 
 Apabila kita ingin mengambil semua argumen ataupun semua option sebagai sebuah array dapat sebagai berikuts 
 
@@ -246,9 +246,13 @@ Misalkan kita ingin menjalankan perintah Artisan dari route atau contoller. kita
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/user/{user}/welcome', function ($user) {
-    Artisan::call('welcome:user', [
+    $exitCode=Artisan::call('welcome:user', [
         'name_argument' => $user, '--org_option' => 'ITS'
     ]);
+
+    if(!$exitCode){
+        echo "command sukses";
+    }
 });
 ```
 
