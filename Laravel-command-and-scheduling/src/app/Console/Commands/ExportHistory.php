@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Exports\HistoryExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 class ExportHistory extends Command
 {
@@ -39,6 +40,8 @@ class ExportHistory extends Command
      */
     public function handle()
     {
-        Excel::store(new HistoryExport(), 'history.xlsx');
+        $timestamp = Carbon::now()->format('Y-m-d_H-i-s');
+        $filename = 'history_' . $timestamp . '.xlsx';
+        Excel::store(new HistoryExport(), $filename);
     }
 }
