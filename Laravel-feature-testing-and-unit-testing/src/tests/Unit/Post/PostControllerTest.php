@@ -54,6 +54,6 @@ class PostControllerTest extends TestCase
     {
         $response = $this->get('/post/dasar');
         $response->assertStatus(200);
-        $response->assertSeeText('Dasar');
+        $response->assertSeeText('dasar');
     }
 }
