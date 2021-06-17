@@ -15,7 +15,7 @@ class PostControllerTest extends TestCase
      * @return void
      */
 
-    public function testStoreDataPost()
+    public function testStoreDataSuccessfullyPost()
     {
         $repo = Mockery::mock(MySQLPostRepository::class);
 
@@ -54,6 +54,43 @@ class PostControllerTest extends TestCase
     {
         $response = $this->get('/post/dasar');
         $response->assertStatus(200);
-        $response->assertSeeText('Dasar');
+        $response->assertSeeText('dasar');
+    }
+
+    public function testRenderShowEditPostPage()
+    {
+        $response = $this->get('/post/dasar/edit');
+        $response->assertStatus(200);
+        $response->assertSeeText('Edit Post');
+    }
+
+    public function testEditDataSuccessfullyPost()
+    {
+        $repo = Mockery::mock(MySQLPostRepository::class);
+
+        $repo->shouldReceive('store')->once();
+        app()->instance(PostRepository::class, $repo);
+        $response = $this->put('/post/dasar');
+        $response = $this->post('/post', [
+            '_token' => csrf_token(),
+            'title' => 'dasar1',
+            'description' => 'description'
+        ]);
+        $response->assertStatus(302);
+        $response->assertRedirect('/post');
+    }
+
+    public function testEditDataFailedPost()
+    {
+        $repo = Mockery::mock(MySQLPostRepository::class);
+
+        $repo->shouldReceive('store');
+        app()->instance(PostRepository::class, $repo);
+        $response = $this->put('/post/dasar');
+        $response = $this->post('/post', [
+            '_token' => csrf_token(),
+        ]);
+        $response->assertStatus(302);
+        $response->assertRedirect('/');
     }
 }

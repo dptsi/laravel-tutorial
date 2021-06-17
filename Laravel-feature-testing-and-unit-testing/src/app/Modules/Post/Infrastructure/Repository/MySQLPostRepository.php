@@ -36,6 +36,29 @@ class MySQLPostRepository implements PostRepository
     $statement->execute();
   }
 
+  public function update($oldSlug, $post)
+  {
+    $pdo = DB::getPdo();
+    $query = "UPDATE posts 
+      SET title = :title, description = :description, slug = :slug
+      WHERE slug = :old_slug";
+    $statement = $pdo->prepare($query);
+    $statement->bindParam(':title', $post['title']);
+    $statement->bindParam(':description', $post['description']);
+    $statement->bindParam(':slug', $post['slug']);
+    $statement->bindParam(':old_slug', $oldSlug);
+    $statement->execute();
+  }
+
+  public function deleteBySlug($slug)
+  {
+    $pdo = DB::getPdo();
+    $query = "DELETE posts WHERE slug = :slug";
+    $statement = $pdo->prepare($query);
+    $statement->bindParam(':slug', $slug);
+    $statement->execute();
+  }
+
   public function findBySlug($slug)
   {
     $pdo = DB::getPdo();

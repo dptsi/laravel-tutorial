@@ -8,5 +8,7 @@ interface PostRepository
 {
   public function getAll();
   public function store($post);
+  public function update($oldSlug, $post);
+  public function deleteBySlug($slug);
   public function findBySlug($slug);
 }

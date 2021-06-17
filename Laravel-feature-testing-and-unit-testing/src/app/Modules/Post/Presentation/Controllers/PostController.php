@@ -80,7 +80,7 @@ class PostController extends BaseController
    */
   public function edit($slug)
   {
-    // $post = Post::where('slug', $slug)->first();
+    $post = $this->postRepository->findBySlug($slug);;
     return view('Post::edit')
       ->with('post', $post);
   }
@@ -95,23 +95,16 @@ class PostController extends BaseController
   public function update(Request $request, $slug)
   {
     // $post = Post::where('slug', $slug)->first();
-    $request->validate([
+    $data = $request->validate([
       'title' => 'required',
       'description' => 'required',
-      'image' => 'required|mimes:jpg,png,jpeg|max:5048'
     ]);
 
-    $newImageName = uniqid() . '-' . $request->title . '.' . $request->image->extension();
-
-    // $request->image->move(public_path('images'), $newImageName);
-
-    // $post->update([
-    //     'title' => $request->input('title'),
-    //     'description' => $request->input('description'),
-    //     'slug' => SlugService::createSlug(Post::class, 'slug', $request->title),
-    //     'image_path' => $newImageName,
-    //     'user_id' => auth()->user()->id
-    // ]);
+    $post = new Post();
+    $post->title = $data['title'];
+    $post->description = $data['description'];
+    $post->slug = SlugService::createSlug(Post::class, 'slug', $data['title']);
+    $this->postRepository->update($slug, $post->toArray());
 
     return redirect('/post')->with('message', 'Your post has been updated');
   }
@@ -124,9 +117,7 @@ class PostController extends BaseController
    */
   public function destroy(Request $request, $slug)
   {
-    // $post = Post::where('slug', $slug)->first();
-    // $post->delete();
-
+    $this->postRepository->deleteBySlug($slug);
     return redirect('/post')->with('message', 'Your post has been deleted');
   }
 }
