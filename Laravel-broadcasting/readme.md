@@ -4,5 +4,8 @@
 
 ## Daftar isi
 
-- [Topik 1](topic-1.md)
-- [Topik 2](topic-2.md)
+-   [Langkah 1] daftar pusher
+-   [Langkah 2] setup environment
+-   [Langkah 3] setup event
+-   [Langkah 4] setup setup endpoint authentication
+-   [Langkah 5] setup frontend
