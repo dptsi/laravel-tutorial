@@ -67,3 +67,13 @@ function event_cb(data) {
   document.doby.appendChild(e);
 }
 ```
+
+
+Contoh Pengunaan pada Public Channel
+![PBKK Public](https://user-images.githubusercontent.com/55318172/122701288-175f6100-d277-11eb-8b4c-25a76f2e20d7.gif)
+
+Contoh pada private channel
+![PBKK Private](https://user-images.githubusercontent.com/55318172/122701297-1b8b7e80-d277-11eb-9e3a-2f2125fbb7cd.gif)
+Dapat kita lihat bahwa message yang dikirimkan ke channel berbeda, tidak akan masuk ke channel lain.
+
+
