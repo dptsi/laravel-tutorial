@@ -21,4 +21,28 @@ class PostTest extends DuskTestCase
                 ->assertSee('Post');
         });
     }
+
+    public function testCreateReturnPath()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/post')
+                ->clickLink('Create post')
+                ->type('title', "TestCreatePost")
+                ->type('description', "TestCreatePostDescription")
+                ->press('submit-post')
+                ->assertPathIs('/post');
+        });
+    }
+
+    public function testCreateVisible()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/post')
+                ->clickLink('Create post')
+                ->type('title', "TestCreatePost2")
+                ->type('description', "TestCreatePostDescription2")
+                ->press('submit-post')
+                ->assertSee('TestCreatePost2');
+        });
+    }
 }

@@ -20,13 +20,13 @@
         </div>
     @endif
     <div class="w-4/5 m-auto pt-20">
-        <form action="{{route('post.store')}}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="text" name="title" placeholder="Title..."
                 class="bg-transparent block border-b-2 w-full h-20 text-6xl outline-none">
             <textarea name="description" placeholder="Description..."
                 class="py-20 bg-transparent block border-b-2 w-full h-60 text-xl outline-none"></textarea>
-            <button type="submit"
+            <button type="submit" name="submit-post"
                 class="uppercase mt-15 bg-blue-500 text-gray-100 text-lg font-extrabold py-4 px-8 rounded-3xl">
                 Submit Post
             </button>
