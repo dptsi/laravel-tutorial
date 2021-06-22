@@ -28,13 +28,13 @@ HTTP tests adalah cara kita menguji HTTP route dan request aplikasi kita, sepert
 
 Untuk membuat Feature Testing di Laravel, dapat menggunakan perintah berikut:
 
-```
+```bash
 php artisan make:test PostTest
 ```
 
 Lalu masukkan kode dibawah ini didalam file PostTest yang telah dibuat.
 
-```
+```php
 <?php
 
 namespace Tests\Feature;
@@ -61,7 +61,7 @@ class PostTest extends TestCase
 ```
 Untuk menjalankan test file ini, dapat menjalankan perintah
 
-```
+```bash
 php artisan test
 ```
 Jika ada kesalahan atau error, cek lagi versi laravel atau lihat [dokumentasi](https://laravel.com/docs/8.x/http-tests)
