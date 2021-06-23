@@ -4,13 +4,13 @@
 
 ## Daftar isi
 
--   [Langkah 1] daftar pusher
--   [Langkah 2] setup environment
--   [Langkah 3] setup event
--   [Langkah 4] setup setup endpoint
--   [Langkah 5] setup frontend
+-   [Langkah 1] Daftar Pusher
+-   [Langkah 2] Setup Environment
+-   [Langkah 3] Setup Event
+-   [Langkah 4] Setup Endpoint
+-   [Langkah 5] Setup Frontend
 
-### [langkah 1] Daftar Pusher
+## [Langkah 1] Daftar Pusher
 
 Mendaftarkan akun di pusher.com
 
@@ -27,13 +27,13 @@ Setelah channel pusher dibuat langkah selanjutnya adalah memasukan key kedalam f
 
 ![daftar4](./src/pusher/daftar_pusher_4.png)
 
-### [langkah 2] Setup Environment
+## [Langkah 2] Setup Environment
 
 Copy key yang sudah di dapat dari langkah sebelumnya kedalam file ".env"
 
 ![environment1](./src/environment/environment_1.png)
 
-### [langkah 3] Setup Event
+## [langkah 3] Setup Event
 
 Membuat sebuah event untuk trigger broadcast menggunakan command
 
@@ -126,7 +126,7 @@ class MessageSent implements ShouldBroadcast
 }
 ```
 
-### [Langkah 4] Setup Endpoint
+## [Langkah 4] Setup Endpoint
 
 Menyiapkan endpoint untuk broadcast event
 
@@ -228,19 +228,34 @@ data yang di dalam user_info berisi terserah yang nanti bisa digunakan oleh fron
 
 "<socket_id>:<channel_name>:<user_data>"
 
-### Setup Frontend
+## [Langkah 5] Setup Frontend
 
-Untuk frontend, langkah" yang dilakukan adalah pertama dengan melakukan inisialisasi pusher ke cluster dan sesuai app_key yang di tentukan, dan juga melakukan setup untuk authEndpoint dan auth headers. Jika ada authentikasi, kita dapat meletakkan token sebagai Authorization bearer di `headers`.
+### Public & Private Channels
+Untuk frontend, langkah" yang dilakukan adalah pertama dengan melakukan inisialisasi pusher ke cluster dan sesuai app_key yang di tentukan.
 
+Library yang harus diinstall adalah `pusher-js` atau menggunakan command
+```
+yarn add pusher-js
+```
+
+Jika kita ingin menginisialisasi untuk **public**, maka inisialisasi hanya perlu sebagai berikut:
+```js
+const pusher = new Pusher(PUSHER_APP_KEY, {
+  cluster: PUSHER_APP_CLUSTER,
+  encrypted: true,
+});
+```
+
+Sedangkan jika kita menggunakan **private**, maka harus menambahkan setup untuk authEndpoint dan auth headers. Jika ada authentikasi, kita dapat meletakkan token sebagai Authorization bearer di `headers`.
 ```js
 // Only for React, pass csrf token in head.meta tags
 const token = document.head.querySelector('meta[name="csrf-token"]').content;
 
 const pusher = new Pusher(PUSHER_APP_KEY, {
-    cluster: PUSHER_APP_CLUSTER,
-    encrypted: true,
-    authEndpoint: "/broadcasting/auth",
-    auth: { headers: { "X-CSRF-Token": token } },
+  cluster: PUSHER_APP_CLUSTER,
+  encrypted: true,
+  authEndpoint: '/broadcasting/auth',
+  auth: { headers: { 'X-CSRF-Token': token } },
 });
 ```
 
@@ -254,16 +269,16 @@ Setelah melakukan init, kita harus melakukan subscription ke channel. Jika chann
 
 ```js
 // Channel Name
-const channel = pusher.subscribe("message-notification");
+const channel = pusher.subscribe('message-notification');
 ```
 
 Kemudian, membind dengan event yang akan masuk, nama event bisa langsung dikustomisasi dan kita bisa memilih event apa yang ingin kita bind sehingga kita mendapat data yang tidak tercampur". Fungsi callback pada `channel.bind`, akan terinvoke setiap kali ada event yang masuk ke pusher.
 
 ```js
 // Event Name (new_product, new_friend_request)
-channel.bind("message_created_boi", (data) => {
-    // Set the data
-    setChats((chats) => [...chats, data]);
+channel.bind('message_created_boi', (data) => {
+  // Set the data
+  setChats((chats) => [...chats, data]);
 });
 ```
 
@@ -273,8 +288,8 @@ Setelah menjalankan subscription dan bind event, maka kita bisa mendapatkan akse
 const [chats, setChats] = useState<Chats[]>([]);
 
 interface Chats {
-    name_from: string;
-    message: string;
+  name_from: string;
+  message: string;
 }
 ```
 
@@ -282,18 +297,80 @@ Jika tidak menggunakan framework JS, maka bisa melakukan AJAX dan membuat dom no
 
 ```js
 function event_cb(data) {
-    const e = document.createElement("div");
-    e.innerHTML = data.message;
-    document.doby.appendChild(e);
+  const e = document.createElement('div');
+  e.innerHTML = data.message;
+  document.doby.appendChild(e);
 }
 ```
 
 
-Contoh Pengunaan pada Public Channel
+#### Demo pada Public Channel
 ![PBKK Public](https://user-images.githubusercontent.com/55318172/122701288-175f6100-d277-11eb-8b4c-25a76f2e20d7.gif)
 
-Contoh pada private channel
+#### Demo pada Private channel
 ![PBKK Private](https://user-images.githubusercontent.com/55318172/122701297-1b8b7e80-d277-11eb-9e3a-2f2125fbb7cd.gif)
 Dapat kita lihat bahwa message yang dikirimkan ke channel berbeda, tidak akan masuk ke channel lain.
 
+### Presence Channel
+
+Sedangkan pada presence channel, ada event" yang bisa kita akses yang diberikan dari pusher yaitu:
+- `pusher:subscription_succeeded` → triggered ketika berhasil subscribe
+- `pusher:member_added` → triggered ketika ada user baru yang melakukan subscribe
+- `pusher:member_removed` → triggered ketika ada user yang keluar
+- `pusher:subscription_error` → triggered ketika gagal melakukan subscribe
+
+Dengan event" di atas, maka kita bisa mem-bind dengan event tersebut dan melakukan update members, contoh code dibawah ini akan menggunakan React.js
+```jsx
+const [members, setMembers] = useState([]);
+
+useEffect(() => {
+  const token = document.head.querySelector(
+    'meta[name="csrf-token"]'
+  ).content;
+
+  const username = window.prompt('Username (Presence): ', 'Anonymous');
+  setUsername(username);
+
+  // Disini karena kami tidak menggunakan auth, maka kami mengirimkan nama, jika ada authentication, maka bisa mengirimkan JWT token
+  const pusher = new Pusher(PUSHER_APP_KEY, {
+    cluster: PUSHER_APP_CLUSTER,
+    encrypted: true,
+    authEndpoint: '/broadcasting/auth',
+    auth: { headers: { 'X-CSRF-Token': token, 'X-Name': username } },
+  });
+
+  const channel = pusher.subscribe('presence-message-notification');
+  
+  // Mendapatkan user online ketika pertama kali masuk
+  channel.bind('pusher:subscription_succeeded', (member) => {
+    const succeedMember = Object.keys(member.members);
+    const cleanMember = succeedMember.filter((m) => m !== member.myID);
+    setMembers(cleanMember);
+  });
+
+  // Menambahkan user baru pada members state
+  channel.bind('pusher:member_added', (member) => {
+    setMembers((prev) => [...prev, member.id]);
+  });
+
+  // Menghapus user yang keluar pada members state
+  channel.bind('pusher:member_removed', (member) => {
+    setMembers((prev) =>
+      prev.filter((memberState) => memberState !== member.id)
+    );
+  });
+
+  // Log jika subscription gagal
+  channel.bind('pusher:subscription_error', (error) => {
+    console.log(error);
+  });
+
+  channel.bind('message_created_boi', (data) => {
+    setChats((chats) => [...chats, data]);
+  });
+}, []);
+```
+
+#### Demo pada Presence channel
+![Presence Demo Pusher](https://user-images.githubusercontent.com/55318172/123104839-7f719b00-d461-11eb-9ed9-585d85cf3f24.gif)
 
