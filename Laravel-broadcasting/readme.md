@@ -10,6 +10,10 @@
 -   [Langkah 4] Setup Endpoint
 -   [Langkah 5] Setup Frontend
 
+## Resource
+- Frontend Source Code https://github.com/theodorusclarence/pbkk-broadcast-fe
+- Backend Source Code https://github.com/gsihaj5/pbkk_broadcasting
+
 ## [Langkah 1] Daftar Pusher
 
 Mendaftarkan akun di pusher.com
@@ -229,8 +233,6 @@ data yang di dalam user_info berisi terserah yang nanti bisa digunakan oleh fron
 "<socket_id>:<channel_name>:<user_data>"
 
 ## [Langkah 5] Setup Frontend
-
-Source code lengkap untuk Frontend menggunakan Next.js dapat dilihat pada https://github.com/theodorusclarence/pbkk-broadcast-fe
 
 ### Public & Private Channels
 Untuk frontend, langkah" yang dilakukan adalah pertama dengan melakukan inisialisasi pusher ke cluster dan sesuai app_key yang di tentukan.
