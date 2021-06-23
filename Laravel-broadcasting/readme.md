@@ -230,6 +230,8 @@ data yang di dalam user_info berisi terserah yang nanti bisa digunakan oleh fron
 
 ## [Langkah 5] Setup Frontend
 
+Source code lengkap untuk Frontend menggunakan Next.js dapat dilihat pada https://github.com/theodorusclarence/pbkk-broadcast-fe
+
 ### Public & Private Channels
 Untuk frontend, langkah" yang dilakukan adalah pertama dengan melakukan inisialisasi pusher ke cluster dan sesuai app_key yang di tentukan.
 
