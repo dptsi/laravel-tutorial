@@ -13,6 +13,5 @@ class DependencyServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(PostRepository::class, MySQLPostRepository::class);
-        $this->app->bind(PostService::class, PostServiceImpl::class);
     }
 }
