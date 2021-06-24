@@ -144,7 +144,7 @@ Kita ingin mengendalikan fungsi store di MySQLPostRepository, karena pada contro
 
 Arti dari `$repo->shouldReceive('store')->once();` adalah kita ingin memastikan fungsi mock `store` terpanggil sekali yang menandakan bahwa pada controller telah terjadi penyimpanan database. Lalu `app()->instance(PostRepository::class, $repo);` berarti kita menginject interface `PostRepository` dengan object mock `$repo`, sehingga interface `PostRepository` tidak mengimplementasikan `MySQLPostRepository`.
 
-```
+```php
 $response = $this->post('/post', [
     '_token' => csrf_token(),
     'title' => 'test',
@@ -212,7 +212,7 @@ Fungsi `testRenderShowOnePostPage()` juga memiliki implementasi yang hampir sama
 
 Fungsi `testEditDataSuccessfullyPost()` memiliki implementasi yang sama dengan `testEditDataFailedPost()`. Perbedaanya adalah ketika ingin mengendalikan fungsi `update`, `$repo->shouldReceive('update')->once();` kita ingin memastikan agar fungsinya terpanggil sekali, yang menandakan bahwa fungsi tersebut telah dieksekusi dan proses update berhasil.
 
-```
+```php
 $response = $this->put('/post/dasar', [
     '_token' => csrf_token(),
     'title' => 'dasar',
@@ -222,7 +222,7 @@ $response = $this->put('/post/dasar', [
 
 Ketika ingin mengirim request juga, kita mengirimnya sesuai dengan yang divalidasi pada controllernya. Namun pada `testEditDataFailedPost()`, kita mengirim request sebagai berikut:
 
-```
+```php
 $response = $this->put('/post/dasar', [
     '_token' => csrf_token(),
 ]);
@@ -230,7 +230,7 @@ $response = $this->put('/post/dasar', [
 
 Sehingga nantinya request gagal karena tidak tervalidasi dengan baik.
 
-```
+```php
 public function testDeleteDataSuccessfullyPost()
 {
     $repo = Mockery::mock(MySQLPostRepository::class);
