@@ -13,4 +13,3 @@
 - [Models & Migrations](models-migrations.md)
 - [Controller, Route, View](controller-route-view.md)
 - [Events & Listeners](events-listeners.md)
-- [Middleware](middleware.md)
