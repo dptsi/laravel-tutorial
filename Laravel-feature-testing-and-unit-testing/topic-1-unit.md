@@ -243,3 +243,15 @@ public function testDeleteDataSuccessfullyPost()
 ```
 
 pada fungsi diatas, kita ingin menghapus sebuah post. Kita membuat mock seperti biasa, dan kita mengatur agar fungsi `deleteBySlug` dipastikan terpanggil sekali, yang berarti bahwa fungsi tersebut telah dieksekusi dan berhasil menghapus sebuah post.
+
+Untuk menjalankan test pada laravel dapat menggunakan
+
+```php
+php artisan test
+```
+
+Untuk menjalankan test, spesifik pada unit test dapat menggunakan
+
+```php
+php artisan test --testsuite=Unit
+```
