@@ -15,7 +15,12 @@ class TestPostSeeder extends Seeder
      */
     public function run()
     {
-        $fakePost = Post::factory()->count(5)->make();
-        DB::table('posts')->insert($fakePost);
+        // $fakePost = Post::factory()->count(5)->make();
+        // DB::table('posts')->insert($fakePost);
+        DB::table('posts')->insert([
+            'title' => 'dasar',
+            'description' => 'dasar description',
+            'slug' => 'dasar'
+        ]);
     }
 }

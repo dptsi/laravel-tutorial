@@ -80,7 +80,7 @@ class PostController extends BaseController
    */
   public function edit($slug)
   {
-    $post = $this->postRepository->findBySlug($slug);;
+    $post = $this->postRepository->findBySlug($slug);
     return view('Post::edit')
       ->with('post', $post);
   }
@@ -115,7 +115,7 @@ class PostController extends BaseController
    * @param  string  $slug
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Request $request, $slug)
+  public function destroy($slug)
   {
     $this->postRepository->deleteBySlug($slug);
     return redirect('/post')->with('message', 'Your post has been deleted');

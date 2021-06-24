@@ -53,7 +53,7 @@ class MySQLPostRepository implements PostRepository
   public function deleteBySlug($slug)
   {
     $pdo = DB::getPdo();
-    $query = "DELETE posts WHERE slug = :slug";
+    $query = "DELETE FROM posts WHERE slug = :slug";
     $statement = $pdo->prepare($query);
     $statement->bindParam(':slug', $slug);
     $statement->execute();
