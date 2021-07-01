@@ -4,5 +4,8 @@
 
 ## Daftar isi
 
-- [Topik 1](topic-1.md)
-- [Topik 2](topic-2.md)
+- [Class dan Object](class-object.md)
+- [Access Modifier](access-modifier.md)
+- [Inheritance](inheritance.md)
+- [Constructor](constructor.md)
+- [Closure](closure.md)
