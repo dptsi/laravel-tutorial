@@ -4,5 +4,5 @@
 
 ## Daftar isi
 
-- [Topik 1](topic-1.md)
-- [Topik 2](topic-2.md)
+- [Session](Session.md)
+- [Cache](cache.md)
