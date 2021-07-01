@@ -4,5 +4,5 @@
 
 ## Daftar isi
 
-- [Topik 1](topic-1.md)
-- [Topik 2](topic-2.md)
+- [Laravel Command](laravel-command.md)
+- [Laravel Scheduling](laravel-scheduling.md)
