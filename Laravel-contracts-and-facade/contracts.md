@@ -4,15 +4,13 @@
 
 ## Latar belakang topik
 
-Misal: jelaskan mengenai latar belakang, alasan penggunaan, dll.
-
-## Konsep-konsep
-
-**Contract** adalah nama lain dari `php interfaces`. Hal ini  dipakai untuk membantu kita membuat loosely coupled code base. Pencipta Laravel, Taylor Otwell menghadirkan fitur luar biasa di Laravel 5 yang disebut Kontrak. Kontrak adalah seperangkat antarmuka yang membantu pengembang untuk membuat kode yang *loosely coupled* ATAU dalam istilah lain kita dapat mengatakan bahwa Kontrak adalah antarmuka yang menyediakan *core services*.
+**Contract** adalah nama lain dari `php interfaces`. Hal ini dipakai untuk membantu kita membuat loosely coupled code base. Pencipta Laravel, Taylor Otwell menghadirkan fitur luar biasa di Laravel 5 yang disebut Kontrak. Kontrak adalah seperangkat antarmuka yang membantu pengembang untuk membuat kode yang *loosely coupled* ATAU dalam istilah lain kita dapat mengatakan bahwa Kontrak adalah antarmuka yang menyediakan *core services*.
 
 Jadi secara umum, Laravel Contracts adalah pembungkus antarmuka berbeda yang dimiliki oleh `illuminate/contracts`.
 
 ![Basic-of-Laravel-Contracts](src/Basic-of-Laravel-Contracts.jpg)
+
+## Konsep-konsep
 
 Di sini, terdapat contoh code yang tidak menggunakan `Contracts`. Kapan saja kita *instantiate* `Repository` kita memberikan instance `\SomePackage\Cache\Memcached` untuk memenuh dependency `Repository`. Cara ini menghasilkan code yang *tightly coupled* dengan `\SomePackage\Cache\Memcached`. Contoh: 
 
@@ -373,13 +371,15 @@ Masukkan code yang menggunakan class menus
 
 ```php
 <?php
+
+namespace App\Modules\Kontrak\Controllers;
+
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Contracts\BladeMenu;
 use App\Menus\FirstMenu;
 use App\Menus\SecondMenu;
 use App\Menus\NotMenu;
-
 
 class KontrakController extends Controller
 {
@@ -403,3 +403,4 @@ class KontrakController extends Controller
 ## Referensi
 https://stackoverflow.com/questions/41994778/create-contracts-in-laravel-5-4
 https://addwebsolution.com/blog/understand-basic-laravel-contracts
+https://laravel.com/docs/8.x/contracts#contract-reference
